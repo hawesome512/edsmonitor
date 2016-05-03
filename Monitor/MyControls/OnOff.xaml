@@ -7,7 +7,7 @@
 	mc:Ignorable="d"
 	x:Class="Monitor.OnOff"
 	x:Name="UserControl"
-	d:DesignWidth="98" d:DesignHeight="37">
+	d:DesignWidth="98" d:DesignHeight="37" SizeChanged="UserControl_SizeChanged">
 	<UserControl.Resources>
 		        <LinearGradientBrush x:Key="CheckedStateBrush"
                              EndPoint="0,1"

@@ -3,153 +3,156 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
+    xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+    xmlns:Chr="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
 	mc:Ignorable="d"
 	x:Class="Monitor.Tab"
 	x:Name="UserControl"
 	d:DesignWidth="700" d:DesignHeight="500">
-	<UserControl.Resources>
-		<SolidColorBrush x:Key="TabControl.HeaderBackGround" Color="#FF10a8ab" />
-    <SolidColorBrush x:Key="TabControl.ActivedItemHeaderBackground" Color="#FF454545" />
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="TabControl.HeaderBackGround" Color="#FF10a8ab" />
+        <SolidColorBrush x:Key="TabControl.ActivedItemHeaderBackground" Color="#FF454545" />
 
-    <Style TargetType="{x:Type TabControl}" BasedOn="{StaticResource {x:Type TabControl}}">
-        <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type TabControl}">
-                    <Grid>
-                        <Border Background="Transparent" BorderThickness="1" BorderBrush="Black" CornerRadius="10" Margin="-1">
-                            <Border.Effect>
-                                <BlurEffect />
-                            </Border.Effect>
-                        </Border>
+        <Style TargetType="{x:Type TabControl}" BasedOn="{StaticResource {x:Type TabControl}}">
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+                        <Grid>
+                            <Border Background="Transparent" BorderThickness="1" BorderBrush="Black" CornerRadius="10" Margin="-1">
+                                <Border.Effect>
+                                    <BlurEffect />
+                                </Border.Effect>
+                            </Border>
 
-                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="10" ClipToBounds="True" SnapsToDevicePixels="True">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Name="ROW0" />
-                                    <RowDefinition Name="ROW1" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Name="COL0" />
-                                    <ColumnDefinition Name="COL1" />
-                                </Grid.ColumnDefinitions>
+                            <Border BorderBrush="Black" BorderThickness="1" CornerRadius="10" ClipToBounds="True" SnapsToDevicePixels="True">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Name="ROW0" />
+                                        <RowDefinition Name="ROW1" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Name="COL0" />
+                                        <ColumnDefinition Name="COL1" />
+                                    </Grid.ColumnDefinitions>
 
-                                <Border Background="{StaticResource TabControl.HeaderBackGround}" Name="Mask" CornerRadius="10,10,0,0" />
+                                    <Border Background="{StaticResource TabControl.HeaderBackGround}" Name="Mask" CornerRadius="10,10,0,0" />
 
-                                <Border Padding="10,5" Name="TP">
-                                    <TabPanel IsItemsHost="True">
-                                        <TabPanel.OpacityMask>
-                                            <VisualBrush Visual="{Binding ElementName=Mask}" />
-                                        </TabPanel.OpacityMask>
-                                    </TabPanel>
-                                </Border>
-
-                                <Grid Grid.Row="0" Name="TC">
-                                    <Border Name="EB" Margin="-1" BorderThickness="0,1,0,0" BorderBrush="#CC000000">
-                                        <Border.Effect>
-                                            <BlurEffect Radius="5" />
-                                        </Border.Effect>
+                                    <Border Padding="10,5" Name="TP">
+                                        <TabPanel IsItemsHost="True">
+                                            <TabPanel.OpacityMask>
+                                                <VisualBrush Visual="{Binding ElementName=Mask}" />
+                                            </TabPanel.OpacityMask>
+                                        </TabPanel>
                                     </Border>
-                                    <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="10" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+
+                                    <Grid Grid.Row="0" Name="TC">
+                                        <Border Name="EB" Margin="-1" BorderThickness="0,1,0,0" BorderBrush="#CC000000">
+                                            <Border.Effect>
+                                                <BlurEffect Radius="5" />
+                                            </Border.Effect>
+                                        </Border>
+                                        <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="10" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
-                        </Border>
-                    </Grid>
+                            </Border>
+                        </Grid>
 
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="TabStripPlacement" Value="Top">
-                            <Setter TargetName="ROW0" Property="Height" Value="auto" />
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="TabStripPlacement" Value="Top">
+                                <Setter TargetName="ROW0" Property="Height" Value="auto" />
 
-                            <Setter TargetName="Mask" Property="Grid.Row" Value="0" />
-                            <Setter TargetName="Mask" Property="Grid.Column" Value="0" />
-                            <Setter TargetName="Mask" Property="Grid.ColumnSpan" Value="2" />
-                            <Setter TargetName="Mask" Property="CornerRadius" Value="10,10,0,0" />
+                                <Setter TargetName="Mask" Property="Grid.Row" Value="0" />
+                                <Setter TargetName="Mask" Property="Grid.Column" Value="0" />
+                                <Setter TargetName="Mask" Property="Grid.ColumnSpan" Value="2" />
+                                <Setter TargetName="Mask" Property="CornerRadius" Value="10,10,0,0" />
 
-                            <Setter TargetName="TP" Property="Grid.Row" Value="0" />
-                            <Setter TargetName="TP" Property="Grid.Column" Value="0" />
-                            <Setter TargetName="TP" Property="Grid.ColumnSpan" Value="2" />
+                                <Setter TargetName="TP" Property="Grid.Row" Value="0" />
+                                <Setter TargetName="TP" Property="Grid.Column" Value="0" />
+                                <Setter TargetName="TP" Property="Grid.ColumnSpan" Value="2" />
 
-                            <Setter TargetName="TC" Property="Grid.Column" Value="0" />
-                            <Setter TargetName="TC" Property="Grid.Row" Value="1" />
-                            <Setter TargetName="TC" Property="Grid.ColumnSpan" Value="2" />
+                                <Setter TargetName="TC" Property="Grid.Column" Value="0" />
+                                <Setter TargetName="TC" Property="Grid.Row" Value="1" />
+                                <Setter TargetName="TC" Property="Grid.ColumnSpan" Value="2" />
 
-                            <Setter TargetName="EB" Property="BorderThickness" Value="0,1,0,0" />
-                        </Trigger>
+                                <Setter TargetName="EB" Property="BorderThickness" Value="0,1,0,0" />
+                            </Trigger>
 
-                        <Trigger Property="TabStripPlacement" Value="Bottom">
-                            <Setter TargetName="ROW1" Property="Height" Value="auto" />
+                            <Trigger Property="TabStripPlacement" Value="Bottom">
+                                <Setter TargetName="ROW1" Property="Height" Value="auto" />
 
-                            <Setter TargetName="Mask" Property="Grid.Row" Value="1" />
-                            <Setter TargetName="Mask" Property="Grid.Column" Value="0" />
-                            <Setter TargetName="Mask" Property="Grid.ColumnSpan" Value="2" />
-                            <Setter TargetName="Mask" Property="CornerRadius" Value="0,0,10,10" />
+                                <Setter TargetName="Mask" Property="Grid.Row" Value="1" />
+                                <Setter TargetName="Mask" Property="Grid.Column" Value="0" />
+                                <Setter TargetName="Mask" Property="Grid.ColumnSpan" Value="2" />
+                                <Setter TargetName="Mask" Property="CornerRadius" Value="0,0,10,10" />
 
-                            <Setter TargetName="TP" Property="Grid.Row" Value="1" />
-                            <Setter TargetName="TP" Property="Grid.Column" Value="0" />
-                            <Setter TargetName="TP" Property="Grid.ColumnSpan" Value="2" />
+                                <Setter TargetName="TP" Property="Grid.Row" Value="1" />
+                                <Setter TargetName="TP" Property="Grid.Column" Value="0" />
+                                <Setter TargetName="TP" Property="Grid.ColumnSpan" Value="2" />
 
-                            <Setter TargetName="TC" Property="Grid.Column" Value="0" />
-                            <Setter TargetName="TC" Property="Grid.Row" Value="0" />
-                            <Setter TargetName="TC" Property="Grid.ColumnSpan" Value="2" />
+                                <Setter TargetName="TC" Property="Grid.Column" Value="0" />
+                                <Setter TargetName="TC" Property="Grid.Row" Value="0" />
+                                <Setter TargetName="TC" Property="Grid.ColumnSpan" Value="2" />
 
-                            <Setter TargetName="EB" Property="BorderThickness" Value="0,0,0,1" />
-                        </Trigger>
+                                <Setter TargetName="EB" Property="BorderThickness" Value="0,0,0,1" />
+                            </Trigger>
 
-                        <Trigger Property="TabStripPlacement" Value="Left">
-                            <Setter TargetName="COL0" Property="Width" Value="auto" />
+                            <Trigger Property="TabStripPlacement" Value="Left">
+                                <Setter TargetName="COL0" Property="Width" Value="auto" />
 
-                            <Setter TargetName="Mask" Property="Grid.Row" Value="0" />
-                            <Setter TargetName="Mask" Property="Grid.Column" Value="0" />
-                            <Setter TargetName="Mask" Property="Grid.RowSpan" Value="2" />
-                            <Setter TargetName="Mask" Property="CornerRadius" Value="10,0,0,10" />
+                                <Setter TargetName="Mask" Property="Grid.Row" Value="0" />
+                                <Setter TargetName="Mask" Property="Grid.Column" Value="0" />
+                                <Setter TargetName="Mask" Property="Grid.RowSpan" Value="2" />
+                                <Setter TargetName="Mask" Property="CornerRadius" Value="10,0,0,10" />
 
-                            <Setter TargetName="TP" Property="Grid.Row" Value="0" />
-                            <Setter TargetName="TP" Property="Grid.Column" Value="0" />
-                            <Setter TargetName="TP" Property="Grid.RowSpan" Value="2" />
+                                <Setter TargetName="TP" Property="Grid.Row" Value="0" />
+                                <Setter TargetName="TP" Property="Grid.Column" Value="0" />
+                                <Setter TargetName="TP" Property="Grid.RowSpan" Value="2" />
 
-                            <Setter TargetName="TC" Property="Grid.Column" Value="1" />
-                            <Setter TargetName="TC" Property="Grid.Row" Value="0" />
-                            <Setter TargetName="TC" Property="Grid.RowSpan" Value="2" />
+                                <Setter TargetName="TC" Property="Grid.Column" Value="1" />
+                                <Setter TargetName="TC" Property="Grid.Row" Value="0" />
+                                <Setter TargetName="TC" Property="Grid.RowSpan" Value="2" />
 
-                            <Setter TargetName="EB" Property="BorderThickness" Value="1,0,0,0" />
-                        </Trigger>
+                                <Setter TargetName="EB" Property="BorderThickness" Value="1,0,0,0" />
+                            </Trigger>
 
 
-                        <Trigger Property="TabStripPlacement" Value="Right">
-                            <Setter TargetName="COL1" Property="Width" Value="auto" />
+                            <Trigger Property="TabStripPlacement" Value="Right">
+                                <Setter TargetName="COL1" Property="Width" Value="auto" />
 
-                            <Setter TargetName="Mask" Property="Grid.Row" Value="0" />
-                            <Setter TargetName="Mask" Property="Grid.Column" Value="1" />
-                            <Setter TargetName="Mask" Property="Grid.RowSpan" Value="2" />
-                            <Setter TargetName="Mask" Property="CornerRadius" Value="0,10,10,0" />
+                                <Setter TargetName="Mask" Property="Grid.Row" Value="0" />
+                                <Setter TargetName="Mask" Property="Grid.Column" Value="1" />
+                                <Setter TargetName="Mask" Property="Grid.RowSpan" Value="2" />
+                                <Setter TargetName="Mask" Property="CornerRadius" Value="0,10,10,0" />
 
-                            <Setter TargetName="TP" Property="Grid.Row" Value="0" />
-                            <Setter TargetName="TP" Property="Grid.Column" Value="1" />
-                            <Setter TargetName="TP" Property="Grid.RowSpan" Value="2" />
+                                <Setter TargetName="TP" Property="Grid.Row" Value="0" />
+                                <Setter TargetName="TP" Property="Grid.Column" Value="1" />
+                                <Setter TargetName="TP" Property="Grid.RowSpan" Value="2" />
 
-                            <Setter TargetName="TC" Property="Grid.Column" Value="0" />
-                            <Setter TargetName="TC" Property="Grid.Row" Value="0" />
-                            <Setter TargetName="TC" Property="Grid.RowSpan" Value="2" />
+                                <Setter TargetName="TC" Property="Grid.Column" Value="0" />
+                                <Setter TargetName="TC" Property="Grid.Row" Value="0" />
+                                <Setter TargetName="TC" Property="Grid.RowSpan" Value="2" />
 
-                            <Setter TargetName="EB" Property="BorderThickness" Value="0,0,1,0" />
-                        </Trigger>
+                                <Setter TargetName="EB" Property="BorderThickness" Value="0,0,1,0" />
+                            </Trigger>
 
-                    </ControlTemplate.Triggers>
+                        </ControlTemplate.Triggers>
 
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-    <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
-        <Setter Property="TextBlock.Foreground" Value="White" />
-        <Setter Property="TextBlock.FontSize" Value="14" />
-        <Setter Property="TextBlock.FontWeight" Value="Bold" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type TabItem}">
-                    <Border Padding="2" x:Name="bbb" SnapsToDevicePixels="True" ClipToBounds="True" CornerRadius="15" >
-                        <ContentPresenter x:Name="contentPresenter" 
+        <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
+            <Setter Property="TextBlock.Foreground" Value="White" />
+            <Setter Property="TextBlock.FontSize" Value="14" />
+            <Setter Property="TextBlock.FontWeight" Value="Bold" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabItem}">
+                        <Border Padding="2" x:Name="bbb" SnapsToDevicePixels="True" ClipToBounds="True" CornerRadius="15" >
+                            <ContentPresenter x:Name="contentPresenter" 
                                               ContentSource="Header"
                                               Focusable="False" 
                                               HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" 
@@ -158,58 +161,70 @@
                                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
                                               VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}">
 
-                        </ContentPresenter>
-                    </Border>
+                            </ContentPresenter>
+                        </Border>
 
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="bbb" Property="Background" Value="#FF333333" />
-                            <Setter TargetName="bbb" Property="Padding" Value="3" />
-                        </Trigger>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="bbb" Property="Background" Value="#FF333333" />
+                                <Setter TargetName="bbb" Property="Padding" Value="3" />
+                            </Trigger>
 
-                        <Trigger Property="TabStripPlacement" Value="Left">
-                            <Setter Property="LayoutTransform">
-                                <Setter.Value>
-                                    <RotateTransform Angle="-90" />
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
+                            <Trigger Property="TabStripPlacement" Value="Left">
+                                <Setter Property="LayoutTransform">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="-90" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
 
-                        <Trigger Property="TabStripPlacement" Value="Right">
-                            <Setter Property="LayoutTransform">
-                                <Setter.Value>
-                                    <RotateTransform Angle="90" />
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
+                            <Trigger Property="TabStripPlacement" Value="Right">
+                                <Setter Property="LayoutTransform">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="90" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
 
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-	</UserControl.Resources>
-	<Grid x:Name="LayoutRoot">
-		<TabControl Name="myTab">
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid x:Name="LayoutRoot">
+        <TabControl Name="myTab">
             <TabItem>
                 <TabItem.Header>
-                    <Label Foreground="White">Monitor</Label>
+                    <Label Foreground="White">遥测</Label>
                 </TabItem.Header>
                 <Grid Name="monitor">
                 </Grid>
-			</TabItem>
-			<TabItem>
-                <TabItem.Header>
-                    <Label Foreground="White" MouseDown="Label_MouseDown">Params</Label>
-                </TabItem.Header>
-				<Grid Name="param"/>
-			</TabItem>
+            </TabItem>
             <TabItem>
                 <TabItem.Header>
-                    <Label Foreground="White">Remote</Label>
+                    <Label Foreground="White" MouseDown="Label_MouseDown">遥调</Label>
+                </TabItem.Header>
+                <Grid Name="param"/>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <Label Foreground="White">遥控</Label>
                 </TabItem.Header>
                 <Grid Name="remote"/>
-			</TabItem>
-		</TabControl>
-	</Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <Label Foreground="White">记录</Label>
+                </TabItem.Header>
+                <Grid Name="history">
+                    <DatePicker Name="dt_day" Foreground="Black" Width="100" Height="30" Margin="0,0,0,0" VerticalAlignment="Top" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+                        <WindowsFormsHost Name="myHost" Margin="0,50,0,0">
+                            <Chr:Chart Name="myChart"/>
+                        </WindowsFormsHost>
+                    <Label HorizontalAlignment="Right" Foreground="Gray" Content="做演示用时本页为虚拟数值"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
 </UserControl>

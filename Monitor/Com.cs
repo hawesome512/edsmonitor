@@ -27,10 +27,9 @@ namespace Monitor
                 ComType cType;
                 bool disposed = false;
 
-                public Com(ComType type,string comAddr=null)
+                public Com(ComType type)
                 {
                         cType = type;
-                        strIp=strCom= comAddr;
                 }
 
                 ~Com()
@@ -57,8 +56,11 @@ namespace Monitor
                 /// </summary>
                 /// <param name="snd"></param>
                 /// <returns>Array.Length,0:通信失败；1:写入；2*n:读取</returns>
-                public byte[] Execute(byte[] snd)
+                public byte[] Execute(byte[] snd,string tag)
                 {
+                        //待优化
+                        strIp = tag;
+
                         if (cType == ComType.SP)
                                 return spCom(snd);
                         else
@@ -124,18 +126,21 @@ namespace Monitor
                                 sp = new SerialPort(strCom);
                                 sp.ReadTimeout = 200;
                                 sp.WriteTimeout = 200;
+                                sp.StopBits = StopBits.Two;
                                 sp.RtsEnable = true;
                                 sp.Open();
                         }
 
                         //频繁通信，排除可能残留未读取数据
                         byte[] rcv = new byte[256];
-                        if (sp.BytesToRead > 0)
+                        if(sp.BytesToRead > 0)
                         {
                                 sp.Read(rcv, 0, rcv.Length);
+                                rcv = new byte[256];
                         }
                         sp.Write(Tool.CRCck(snd), 0, snd.Length + 2);
-                        Thread.Sleep(200);
+                        Thread.Sleep(500);
+                        //Thread.Sleep(snd[1]==16?500:200);//写模式设置长时间，否则容易出错
                         if(sp.BytesToRead>0)
                                 sp.Read(rcv, 0, rcv.Length);
                         if (rcv[1] == 3)
@@ -171,6 +176,7 @@ namespace Monitor
                                 foreach (string port in ports)
                                 {
                                         sp = new SerialPort(port);
+                                        sp.StopBits = StopBits.Two;
                                         sp.ReadTimeout = 500;
                                         sp.WriteTimeout = 500;
                                         sp.RtsEnable = true;

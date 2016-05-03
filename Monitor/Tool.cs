@@ -7,6 +7,8 @@ using System.Windows.Data;
 using System.Windows;
 using System.Windows.Media;
 using System.Configuration;
+using System.Security;
+using System.Security.Cryptography;
 
 namespace Monitor
 {
@@ -82,14 +84,15 @@ namespace Monitor
                                 Cvt = d.Cvt,
                                 ShowValue = d.ShowValue,
                                 Tag = d.Tag,
-                                Unit = d.Unit
+                                Unit = d.Unit,
+                                Alias=d.Alias
                         };
                         return tmp;
                 }
 
                 public static string GetValid(string input)
                 {
-                        return System.Text.RegularExpressions.Regex.Replace(input, "[^0-9a-zA-Z]", "");
+                        return System.Text.RegularExpressions.Regex.Replace(input, "[^0-9a-zA-Z\u4e00-\u9fa5]", "");
                 }
 
                 /// <summary>
@@ -178,15 +181,39 @@ namespace Monitor
                         return isSub;
                 }
 
-                public static string GetCom()
+                public static string GetConfig(string key)
                 {
-                        return ConfigurationSettings.AppSettings["Com"];
+                        return ConfigurationSettings.AppSettings[key];
                 }
-                public static void SetCom(string com)
+                public static void SetConfig(string key,string value)
                 {
                         Configuration cfa = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                        cfa.AppSettings.Settings["Com"].Value = com;
+                        cfa.AppSettings.Settings[key].Value = value;
                         cfa.Save();
+                }
+
+                public static string MD5Cryp(string source)
+                {
+                        MD5 md5 = new MD5CryptoServiceProvider();
+                        byte[] palindata = Encoding.Default.GetBytes(source);
+                        byte[] encryptdata = md5.ComputeHash(palindata);
+                        //return Convert.ToBase64String(encryptdata);
+                        return BitConverter.ToString(encryptdata).Replace("-", "");
+                }
+
+                public static int MatchItems(System.Windows.Controls.ItemCollection items, string value)
+                {
+                        double dValue;
+                        if (double.TryParse(value, out dValue))
+                        {
+                                var array = items.Cast<object>().Select(s =>s).ToList().ConvertAll(s=>Convert.ToDouble(s));
+                                array = array.ConvertAll(s => Math.Abs(s - dValue));
+                                return array.FindIndex(s => s == array.Min());
+                        }
+                        else
+                        {
+                                return 0;
+                        }
                 }
         }
 }

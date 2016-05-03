@@ -1,0 +1,37 @@
+﻿<Window x:Class="Monitor.Account"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="360" d:DesignWidth="300" WindowStyle="None"
+	Title="Account" WindowStartupLocation="CenterScreen">
+
+    <Grid Height="360" Width="300">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Label Content="原用户名:" Margin="20,20,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" ></Label>
+            <TextBox x:Name="txt_user" VerticalAlignment="Top" Margin="90,20,20,0" FontSize="18" LostFocus="txt_user_LostFocus" GotFocus="txt_user_GotFocus"/>
+            <Label Content="原密码:" Margin="20,80,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" ></Label>
+            <PasswordBox Name="txt_pwd" VerticalAlignment="Top" Margin="90,80,20,0" LostFocus="txt_pwd_LostFocus"/>
+            <Label Name="txt_incorrect" Content="用户名或密码不正确" Foreground="#ff0000" FontSize="12" Margin="90,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Visibility="Hidden"></Label>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Line Stroke="Gray" StrokeThickness="1" X1="0" Y1="0" X2="360" Y2="0"/>
+            <Label Content="新用户名:" Margin="20,20,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" ></Label>
+            <TextBox x:Name="txt_user_new" VerticalAlignment="Top" Margin="90,20,20,0" FontSize="18"/>
+            <Label Content="新密码:" Margin="20,80,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" ></Label>
+            <PasswordBox Name="txt_pwd_new" VerticalAlignment="Top" Margin="90,80,20,0"/>
+            <Label Name="txt_incorrect_new" Content="用户名或密码不能为空" Foreground="#ff0000" FontSize="12" Margin="90,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Visibility="Hidden"></Label>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Label Content="*修改重启生效" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="Gray" Margin="0,0,20,0"/>
+            <Button Background="#B2DFDB" x:Name="btn_cancel" Content="取消" Margin="0,10,130,20" HorizontalAlignment="Right" Width="100" Click="btn_cancel_Click"></Button>
+            <Button Background="#00796B" x:Name="btn_save" Content="保存" Margin="0,10,20,20" HorizontalAlignment="Right" Width="100" Click="btn_save_Click"></Button>
+        </Grid>
+    </Grid>
+</Window>

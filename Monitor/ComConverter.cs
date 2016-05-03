@@ -10,6 +10,7 @@ namespace Monitor
                 byte[] source;
                 string extra;
                 int nInmFactor = 1;//ACB框架等级
+                //待优化——太多case
                 public string CvtRead(byte[] _source, int showType, string _extra)
                 {
                         source = _source;
@@ -22,6 +23,10 @@ namespace Monitor
                                         return cvtROne();
                                 case 2:
                                         return cvtRTwo();
+                                case 4:
+                                        return cvtRFour();
+                                case 5:
+                                        return cvtRFive();
                                 case 10:
                                         return cvtRTen();
                                 case 11:
@@ -32,10 +37,18 @@ namespace Monitor
                                         return cvtRThirteen();
                                 case 14:
                                         return cvtRFourteen();
-                                case 15:
-                                        return cvtRFifteen();
                                 case 21:
                                         return cvtRTwentyOne();
+                                case 22:
+                                        return cvtRTwentyTwo();
+                                case 30:
+                                        return cvtRThirty();
+                                case 31:
+                                        return cvtRThirtyOne();
+                                case 32:
+                                        return cvtRThirtyTwo();
+                                case 33:
+                                        return cvtRThirtyThree();
                                 default:
                                         return cvtRDefault();
                         }
@@ -51,6 +64,10 @@ namespace Monitor
                                         return cvtWEleven(value, _extra);
                                 case 12:
                                         return cvtWTwelve(value, _extra);
+                                case 32:
+                                        return cvtWThirtyTwo(value, _extra);
+                                case 33:
+                                        return cvtWThirtyThree(value,_extra);
                                 default:
                                         return cvtWDefault(value, _extra);
                         }
@@ -110,6 +127,25 @@ namespace Monitor
                         string value = (source[0] * 256 + source[1]).ToString();
                         int index =listExt.Contains(value)? listExt.IndexOf(value):0;
                         return listExt[index + 1];
+                }
+
+                /// <summary>
+                /// 控制器
+                /// </summary>
+                string cvtRFour()
+                {
+                        List<string> listExt = extra.Split('_').ToList();
+                        string value = source[0].ToString();
+                        int index = listExt.Contains(value) ? listExt.IndexOf(value) : 0;
+                        return string.Format("{0} {1}P", listExt[index + 1], source[1]);
+                } 
+                
+                /// <summary>
+                /// 软件版本
+                /// </summary>
+                string cvtRFive()
+                {
+                        return string.Format("V{0:x}.{1:x}", source[0], source[1]);
                 }
 
                 #region ACB
@@ -187,24 +223,79 @@ namespace Monitor
                         return string.Format("{0} {1}P",listExt[index + 1],source[1]);
                 }
 
-                /// <summary>
-                /// ACB软件
-                /// </summary>
-                string cvtRFifteen()
-                {
-                        return string.Format("V{0}.{1}", source[0], source[1]);
-                }
                 #endregion ACB
 
                 #region MCCB
                 /// <summary>
-                /// MCCB断路器型号
+                /// MCCB断路器型号_old
                 /// </summary>
                 /// <returns></returns>
                 private string cvtRTwentyOne()
                 {
                         return string.Format("{0} {1}P", Char.ConvertFromUtf32(source[0]), source[1]);
                 }
+
+                /// <summary>
+                /// MCCB断路器型号
+                /// </summary>
+                /// <returns></returns>
+                private string cvtRTwentyTwo()
+                {
+                        string breaker=null;
+                        string[] array = new string[] { "N", "E", "H", "R" };
+                        breaker += array[source[0] & 0x3];
+                        int p = (source[0] >> 2) & 0x3;
+                        breaker += " " + (p==2?"4P" : "3P");
+                        int z = (source[0] >> 4) & 0x3;
+                        if (z == 3)
+                        {
+                                breaker += " " + "ZSI";
+                        }
+                        int g = (source[0] >> 6) & 0x3;
+                        if (g == 3)
+                        {
+                                breaker += " " + "G";
+                        }
+                        int p1 = source[1] & 0x3;
+                        if (z == 3)
+                        {
+                                breaker += " " + "P";
+                        }
+
+                        return breaker;
+                }
                 #endregion MCCB
+
+                #region ATS
+                string cvtRThirty()
+                {
+                        return string.Format("{0} {1}", (char)source[0], (char)source[1]);
+                }
+
+                string cvtRThirtyOne()
+                {
+                        return Tool.isOne(source[1], 6) ? "Remote" : "Local";
+                }
+
+                string cvtRThirtyTwo()
+                {
+                        return cvtROne();
+                }
+                byte[] cvtWThirtyTwo(string value, string _extra)
+                {
+                        return cvtWOne(value, _extra);
+                }
+
+                string cvtRThirtyThree()
+                {
+                        int value = source[0] * 256 + source[1];
+                        double factor1 = double.Parse(extra.Split('_')[0]);
+                        return (value / factor1).ToString("0.0");
+                }
+                byte[] cvtWThirtyThree(string value, string _extra)
+                {
+                        return cvtWOne(value, _extra);
+                }
+                #endregion
         }
 }

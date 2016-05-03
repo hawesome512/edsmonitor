@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Devices>
+  <Device>
+    <Type>ACB</Type>
+    <Name>A-1</Name>
+    <Address>1</Address>
+    <Tag></Tag>
+  </Device>
+  <Device>
+    <Type>MCCB</Type>
+    <Name>M-1</Name>
+    <Address>2</Address>
+    <Tag></Tag>
+  </Device>
+  <Device>
+    <Type>ATS</Type>
+    <Name>T-1</Name>
+    <Address>3</Address>
+    <Tag></Tag>
+  </Device>
+</Devices>

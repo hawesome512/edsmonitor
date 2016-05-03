@@ -22,5 +22,12 @@ namespace Monitor
 		{
 			this.InitializeComponent();
 		}
+
+                private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+                {
+                        toggleSwitch.Width = e.NewSize.Width;
+                        toggleSwitch.Height = e.NewSize.Height;
+                        toggleSwitch.CornerRadius =new CornerRadius(e.NewSize.Height / 2);
+                }
 	}
 }

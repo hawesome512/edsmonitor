@@ -6,22 +6,27 @@
              xmlns:local="clr-namespace:Monitor" 
              xmlns:assembly="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="400" FontSize="15">
+             d:DesignHeight="450" d:DesignWidth="500" FontSize="15">
     <UserControl.Resources>
+        <local:UserToBoolConverter x:Key="UserToBoolConverter"/>
         <ObjectDataProvider x:Key="deviceTypeEnum" MethodName="GetValues" 
                             ObjectType="{x:Type assembly:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type Type="local:DeviceType"/>
+                <x:Type TypeName="local:DeviceType"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </UserControl.Resources>
-    <Grid Width="400" Height="400">
-        <DataGrid x:Name="dg_devices" CanUserAddRows="True" ItemsSource="{Binding}" SelectionUnit="FullRow"  AutoGenerateColumns="False" Margin="25,25,25,0" Height="280" VerticalAlignment="Top">
+    <UserControl.DataContext>
+        <local:Common/>
+    </UserControl.DataContext>
+    <Grid Width="500" Height="450">
+        <DataGrid x:Name="dg_devices" CanUserAddRows="True" ItemsSource="{Binding}" SelectionUnit="FullRow"  AutoGenerateColumns="False" Margin="25,60,25,0" Height="280" VerticalAlignment="Top">
             <DataGrid.Columns>
-                <DataGridComboBoxColumn Width="100" Header="Type" SelectedItemBinding="{Binding DvType}" ItemsSource="{Binding Source={StaticResource deviceTypeEnum}}"/>
-                <DataGridTextColumn Width="100" Header="Name"  Binding="{Binding Name}"/>
-                <DataGridTextColumn Width="100" Header="Address"  Binding="{Binding Address}"/>
-                <DataGridTemplateColumn Width="45" Header="Del">
+                <DataGridComboBoxColumn Width="90" Header="产品类型" SelectedItemBinding="{Binding DvType}" ItemsSource="{Binding Source={StaticResource deviceTypeEnum}}"/>
+                <DataGridTextColumn Width="90" Header="设备编号"  Binding="{Binding Name}"/>
+                <DataGridTextColumn Width="90" Header="通信地址"  Binding="{Binding Address}"/>
+                <DataGridTextColumn Width="130" Header="备注"  Binding="{Binding Tag}"/>
+                <DataGridTemplateColumn Width="45" Header="删除">
                         <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <local:ImageButton Width="25" Height="25" x:Name="btn_back" ImgPath="/Images/关闭.png" Command="Delete" Template="{StaticResource ImageButtonTemplate}"></local:ImageButton>
@@ -32,10 +37,12 @@
         </DataGrid>
         <local:ImageButton x:Name="btn_save" Width="80" Height="28" Margin="0,0,25,25" ImgPath="/Images/config.png" Template="{StaticResource ImageButtonTemplate}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="btn_save_Click">
             <local:ImageButton.Content>
-                <TextBlock x:Name="tb_save" Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="14" FontWeight="Bold"></TextBlock>
+                <TextBlock x:Name="tb_save" Text="保存" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="14" FontWeight="Bold"></TextBlock>
             </local:ImageButton.Content>
         </local:ImageButton>
         <ComboBox Name="cbox_coms" HorizontalAlignment="Left" Margin="25,0,0,25" Width="120" Height="28" VerticalAlignment="Bottom"  />
-        <TextBlock Text="Before Save,cursor should leave the editing row(Press Enter)." FontSize="13" Foreground="Red" Height="20" HorizontalAlignment="Left" Margin="25,0,0,65" Name="label1" VerticalAlignment="Bottom" TextDecorations="Underline"/>
+        <TextBlock Text="保存前请按【回车】键使光标离开正在编辑的那一行." FontSize="13" Foreground="Red" Height="20" HorizontalAlignment="Left" Margin="25,0,0,65" Name="label1" VerticalAlignment="Bottom" TextDecorations="Underline"/>
+        <RadioButton Name="rb_sp" Content="单机版" HorizontalAlignment="Left" Margin="25,25,0,0" VerticalAlignment="Top"/>
+        <RadioButton Name="rb_tcp" Content="网络版" HorizontalAlignment="Left" Margin="125,25,0,0" VerticalAlignment="Top"/>
     </Grid>
 </UserControl>

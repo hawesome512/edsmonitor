@@ -29,13 +29,27 @@ namespace Monitor
                         InitializeComponent();
                 }
 
-                public void InitDataGrid(List<Device> members)
+                public void InitDataGrid(List<Device> members,Common common)
                 {
+                        if (Common.ComType==ComType.SP)
+                        {
+                                rb_sp.IsChecked = true;
+                        }
+                        else
+                        {
+                                rb_tcp.IsChecked = true;
+                        }
                         deviceInfList=members.ConvertAll<DeviceInf>(m => new DeviceInf(m));
                         dg_devices.DataContext = deviceInfList;
                         List<string> ports = System.IO.Ports.SerialPort.GetPortNames().ToList();
                         cbox_coms.ItemsSource = ports;
-                        cbox_coms.SelectedIndex = ports.IndexOf(Tool.GetCom());
+                        cbox_coms.SelectedIndex = ports.IndexOf(Tool.GetConfig("Com"));
+
+                        Binding bind = new Binding();
+                        bind.Source = common;
+                        bind.Path = new PropertyPath("UserLevel");
+                        bind.Converter = new UserToBoolConverter();
+                        btn_save.SetBinding(ImageButton.IsEnabledProperty, bind);
                 }
 
                 private void btn_save_Click(object sender, RoutedEventArgs e)
@@ -52,15 +66,19 @@ namespace Monitor
                                 createNode(doc, node1, "Type", di.DvType.ToString());
                                 createNode(doc, node1, "Name", di.Name);
                                 createNode(doc, node1, "Address", di.Address.ToString());
+                                createNode(doc, node1, "Tag", di.Tag.ToString());
                                 root.AppendChild(node1);
                         }
-                        doc.Save(@"Devices/DeviceList.xml");
+                        doc.Save(@"DevicesConfig/DeviceList.xml");
 
                         if (cbox_coms.SelectedIndex == -1)
                                 cbox_coms.SelectedIndex = 0;
-                        Tool.SetCom(cbox_coms.SelectedValue.ToString());
+                        Tool.SetConfig("Com",cbox_coms.SelectedValue.ToString());
+                        bool isSp = (bool)rb_sp.IsChecked;
+                        Tool.SetConfig("ComType",isSp?"SP":"TCP");
+                        Common.ComType = isSp ? ComType.SP : ComType.TCP;
 
-                        var result=MsgBox.Show("Do you want to update the grid now?", "Saved", MsgBox.Buttons.YesNo, MsgBox.Icon.Shield, MsgBox.AnimateStyle.FadeIn);
+                        var result=MsgBox.Show("是否立即刷新配电网?", "保存成功", MsgBox.Buttons.YesNo, MsgBox.Icon.Shield, MsgBox.AnimateStyle.FadeIn);
                         if (result == System.Windows.Forms.DialogResult.Yes)
                         {
                                 ReloadDevices(this, new EventArgs());
@@ -79,12 +97,18 @@ namespace Monitor
                 public string Name{get;set;}
                 public DeviceType DvType{get;set;}
                 public byte Address{get;set;}
+                public string Tag
+                {
+                        get;
+                        set;
+                }
                 public DeviceInf() { }
                 public DeviceInf(Device device)
                 {
                         Name = device.Name;
                         Address = device.Address;
                         DvType = device.DvType;
+                        Tag = device.Tag;
                 }
 
                 public int CompareTo(object obj)

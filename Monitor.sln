@@ -1,7 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monitor", "Monitor\Monitor.csproj", "{c1e2c9b3-a161-474c-8e31-e74224445700}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monitor", "Monitor\Monitor.csproj", "{C1E2C9B3-A161-474C-8E31-E74224445700}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoSizeDemo", "AutoSizeDemo\AutoSizeDemo.csproj", "{4B5D11D9-5DAE-47A9-A34D-9543F0A20589}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetroStyles", "MetroStyles\MetroStyles.csproj", "{0A7C47BD-3FAA-42E4-BC15-6FA2A2D5C7ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,5 +17,16 @@ Global
 		{C1E2C9B3-A161-474C-8E31-E74224445700}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1E2C9B3-A161-474C-8E31-E74224445700}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1E2C9B3-A161-474C-8E31-E74224445700}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B5D11D9-5DAE-47A9-A34D-9543F0A20589}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B5D11D9-5DAE-47A9-A34D-9543F0A20589}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B5D11D9-5DAE-47A9-A34D-9543F0A20589}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B5D11D9-5DAE-47A9-A34D-9543F0A20589}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A7C47BD-3FAA-42E4-BC15-6FA2A2D5C7ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A7C47BD-3FAA-42E4-BC15-6FA2A2D5C7ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A7C47BD-3FAA-42E4-BC15-6FA2A2D5C7ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A7C47BD-3FAA-42E4-BC15-6FA2A2D5C7ED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

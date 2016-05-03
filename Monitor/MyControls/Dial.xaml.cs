@@ -16,5 +16,17 @@ namespace Monitor
                 {
                         this.InitializeComponent();
                 }
+
+                public void setSize(double len)
+                {
+                        this.Width = this.Height = len;
+                        myGauge2.Radius =100/200f*len;
+                        myGauge2.ScaleRadius = 75/200f * len;
+                        myGauge2.PointerLength = 70/200f * len;
+                        myGauge2.PointerCapRadius = 15/200f * len;
+                        myGauge2.RangeIndicatorRadius = 65/200f * len;
+                        myGauge2.ScaleLabelRadius = 85/200f * len;
+                        myGauge2.DialTextOffset = 60 / 200f * len;
+                }
         }
 }

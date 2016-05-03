@@ -17,18 +17,18 @@ namespace Monitor
         public partial class MainWindow : Window
         {
                 Com com;
-                List<Device> devices=null;
-                List<UIElement> mainContainer=null;
-                Thread threadRun=null;
+                Common common;
+                List<Device> devices = null;
+                List<UIElement> mainContainer = null;
+                Thread threadRun = null;
                 public MainWindow()
                 {
                         InitializeComponent();
-                        com = new Com(ComType.SP);
-                        //com = new Com(ComType.TCP, "172.16.66.124");
                         intitControls();
                         Thread t = new Thread(() =>
                         {
-                                this.Dispatcher.Invoke(new Action(() => {
+                                this.Dispatcher.Invoke(new Action(() =>
+                                {
                                         initDiagram();
                                 }));
                         });
@@ -37,6 +37,19 @@ namespace Monitor
 
                 private void intitControls()
                 {
+                        if (Tool.GetConfig("ComType") == "SP")
+                        {
+                                Common.ComType = ComType.SP;
+                        }
+                        else
+                        {
+                                Common.ComType = ComType.TCP;
+                        }
+                        common = new Common();
+                        //Test
+                        common.UserLevel = User.ADMIN;
+                        com = new Com(Common.ComType);
+
                         Binding bind = new Binding();
                         bind.Source = dvPage;
                         bind.Path = new PropertyPath("IsVisible");
@@ -49,23 +62,47 @@ namespace Monitor
                         bind.Converter = new BooleanToVisibilityConverter();
                         border_device.SetBinding(Border.VisibilityProperty, bind);
 
+                        bind = new Binding();
+                        bind.Source = common;
+                        bind.Path = new PropertyPath("UserLevel");
+                        txt_curuser.SetBinding(TextBlock.TextProperty, bind);
+
+                        bind = new Binding();
+                        bind.Source = common;
+                        bind.Path = new PropertyPath("UserLevel");
+                        bind.Converter = new UserToAccountText();
+                        txt_account.SetBinding(TextBlock.TextProperty, bind);
+
                         dvDevices.ReloadDevices += new EventHandler<EventArgs>(dvDevices_ReloadDevices);
 
-                        mainContainer = new List<UIElement>() { diagram, dvPage, dvDevices, img_link };
+                        loginPage.LoginSucceeded += loginPage_LoginSucceeded;
+
+                        mainContainer = new List<UIElement>() { diagram, dvPage, dvDevices, img_link, loginPage };
+                }
+
+                void loginPage_LoginSucceeded(object sender, EventArgs e)
+                {
+                        common.UserLevel = User.ADMIN;
+                        btn_run_Click(btn_run, null);
                 }
 
                 void dvDevices_ReloadDevices(object sender, EventArgs e)
                 {
+                        com.Dispose();
+                        com = new Com(Common.ComType);
                         initDiagram();
                         btn_run_Click(btn_run, new RoutedEventArgs());
                 }
 
                 private void initDiagram()
                 {
-                        if(threadRun!=null)
+                        if (threadRun != null)
                                 threadRun.Suspend();
                         loadDevices();
-                        testComs();
+                        if (Common.ComType == ComType.SP)
+                        {
+                                testComs();
+                        }
                         diagram.InitDevices(devices);
                         diagram.EnterDevice += new EventHandler<EnterDeviceArgs>(diagram_EnterDevice);
                         threadRun = new Thread(() =>
@@ -90,32 +127,43 @@ namespace Monitor
                 void diagram_EnterDevice(object sender, EnterDeviceArgs e)
                 {
                         setMainVisibility(dvPage);
-                        dvPage.InitDevice(e.Dv);
+                        dvPage.InitDevice(e.Dv, common);
+                        Common.SelectedAddress = dvPage.GetAddr();
                 }
-                
+
 
                 void loadDevices()
                 {
                         devices = new List<Device>();
-                        XmlElement xeR = Tool.GetXML(@"Devices/DeviceList.xml");
+                        XmlElement xeR = Tool.GetXML(@"DevicesConfig/DeviceList.xml");
                         foreach (XmlElement xe in xeR.ChildNodes)
                         {
                                 string type = xe.ChildNodes[0].InnerText;
                                 string name = xe.ChildNodes[1].InnerText;
                                 byte addr = byte.Parse(xe.ChildNodes[2].InnerText);
-                                Device device=null;
+                                string tag = xe.ChildNodes[3].InnerText;
+                                Device device = null;
                                 switch (type)
                                 {
                                         case "ACB":
-                                                device=new DvACB(addr, DeviceType.ACB, name);
+                                                device = new DvACB(addr, DeviceType.ACB, name, tag);
+                                                break;
+                                        case "ATS":
+                                                device = new DvATS(addr, DeviceType.ATS, name, tag);
                                                 break;
                                         case "MCCB":
-                                                device = new DvMCCB(addr, DeviceType.MCCB, name);
+                                                device = new DvMCCB(addr, DeviceType.MCCB, name, tag);
                                                 break;
                                 }
                                 device.MyCom = com;
-                                device.PreRemoteModify += (s, o) => { threadRun.Suspend(); };
-                                device.RemoteModified += (s, o) => { threadRun.Resume(); };
+                                device.PreRemoteModify += (s, o) =>
+                                {
+                                        threadRun.Suspend();
+                                };
+                                device.RemoteModified += (s, o) =>
+                                {
+                                        threadRun.Resume();
+                                };
                                 device.InitAddress();
                                 devices.Add(device);
                         }
@@ -125,14 +173,14 @@ namespace Monitor
                 {
                         foreach (var d in devices)
                         {
-                                string resultCom = com.TestCom(d.Address, Tool.GetCom());
+                                string resultCom = com.TestCom(d.Address, Tool.GetConfig("Com"));
                                 if (resultCom != null)
                                 {
-                                        Tool.SetCom(resultCom);
+                                        Tool.SetConfig("Com", resultCom);
                                         return;
                                 }
                         }
-                        MsgBox.Show("Please check serial ports and device's addresses.", "No Signal", MsgBox.Buttons.OK, MsgBox.Icon.Error, MsgBox.AnimateStyle.FadeIn);
+                        MsgBox.Show("请检查串口连接和设备通信地址是否正确.", "无信号", MsgBox.Buttons.OK, MsgBox.Icon.Error, MsgBox.AnimateStyle.FadeIn);
                 }
 
                 private void btn_close_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -148,21 +196,38 @@ namespace Monitor
 
                 private void btn_devices_Click(object sender, RoutedEventArgs e)
                 {
-                        img_here.Margin = (sender as ImageButton).Margin;
-                        dvDevices.InitDataGrid(devices);
+                        setHerePosition(sender);
+                        dvDevices.InitDataGrid(devices, common);
                         setMainVisibility(dvDevices);
                 }
 
                 private void btn_run_Click(object sender, RoutedEventArgs e)
                 {
-                        img_here.Margin = (sender as ImageButton).Margin;
+                        setHerePosition(sender);
                         setMainVisibility(diagram);
                 }
 
                 private void btn_link_Click(object sender, RoutedEventArgs e)
                 {
-                        img_here.Margin = (sender as ImageButton).Margin;
+                        setHerePosition(sender);
                         setMainVisibility(img_link);
+                }
+
+                private void btn_account_Click(object sender, RoutedEventArgs e)
+                {
+                        if (common.UserLevel == User.ADMIN)
+                        {
+                                common.UserLevel = User.UNKNOWN;
+                                return;
+                        }
+                        setHerePosition(sender);
+                        setMainVisibility(loginPage);
+                }
+
+                void setHerePosition(Object sender)
+                {
+                        img_here.Margin = (sender as ImageButton).Margin;
+                        img_here.HorizontalAlignment = (sender as ImageButton).HorizontalAlignment;
                 }
 
                 void setMainVisibility(UIElement ui)
@@ -171,11 +236,52 @@ namespace Monitor
                         {
                                 u.Visibility = (u == ui) ? Visibility.Visible : Visibility.Hidden;
                         }
+                        Common.SelectedAddress = -1;
                 }
 
                 private void btn_min_Click(object sender, RoutedEventArgs e)
                 {
                         this.WindowState = WindowState.Minimized;
+                }
+
+                private void btn_size_Click(object sender, RoutedEventArgs e)
+                {
+                        if (this.WindowState == WindowState.Normal)
+                        {
+                                this.WindowState = WindowState.Maximized;
+                        }
+                        else
+                        {
+                                this.WindowState = WindowState.Normal;
+                        }
+                }
+
+                private void btn_set_Click(object sender, RoutedEventArgs e)
+                {
+                        this.menu.IsOpen = true;
+                }
+
+                private void help_Click(object sender, RoutedEventArgs e)
+                {
+                        System.Diagnostics.Process.Start(System.AppDomain.CurrentDomain.BaseDirectory + "MonitorHelp.pdf");
+                }
+
+                private void psw_Click(object sender, RoutedEventArgs e)
+                {
+                        Account account = new Account();
+                        account.Height = 400;
+                        account.Width = 360;
+                        account.ShowDialog();
+                }
+
+                private void feedback_Click(object sender, RoutedEventArgs e)
+                {
+                        MsgBox.Show("Tel：0592-610-0660-322(分机号)\r\nEmail：haisheng.xu@xseec.cn", "联系方式", MsgBox.Buttons.OK, MsgBox.Icon.Info, MsgBox.AnimateStyle.FadeIn);
+                }
+
+                private void about_Click(object sender, RoutedEventArgs e)
+                {
+                        System.Diagnostics.Process.Start("http://www.xseec.cn/cn/index.asp");
                 }
         }
 }

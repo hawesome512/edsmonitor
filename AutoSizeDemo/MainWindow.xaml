@@ -1,0 +1,17 @@
+﻿<Window x:Class="AutoSizeDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:local="clr-namespace:AutoSizeDemo"
+        xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:Chr="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
+        Title="MainWindow" Height="700" Width="1000" WindowStartupLocation="CenterScreen" WindowStyle="None">
+    <Grid Name="home">
+        <Button Width="100" Height="50" Margin="0" VerticalAlignment="Top">A</Button>
+        <WindowsFormsHost Name="myHost" Margin="0,50,0,0">
+            <Chr:Chart Name="myChart"/>
+        </WindowsFormsHost>
+    </Grid>
+    
+</Window>
+
