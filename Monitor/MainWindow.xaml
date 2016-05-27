@@ -79,14 +79,21 @@
         <Grid Grid.Row="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"></RowDefinition>
-                <RowDefinition Height="6*" ></RowDefinition>
-                <RowDefinition Height="2*" ></RowDefinition>
+                <RowDefinition Height="6*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
             </Grid.RowDefinitions>
             <Image Name="img_here" Width="120" Height="14" Source="/Images/here.png" HorizontalAlignment="Left" Margin="15,0,0,0"></Image>
             <local:ImageButton Grid.Row="1" x:Name="btn_run" Width="120" Height="42" Margin="15,0,0,0" ImgPath="/Images/run.png" Template="{StaticResource ImageButtonTemplate}" HorizontalAlignment="Left" Click="btn_run_Click">
                 <local:ImageButton.Content>
                     <Border Height="34" Width="120">
                         <TextBlock x:Name="txt_run" Text="运行"  HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="18" FontWeight="Bold"></TextBlock>
+                    </Border>
+                </local:ImageButton.Content>
+            </local:ImageButton>
+            <local:ImageButton Grid.Row="1" x:Name="btn_energy" Width="120" Height="42" Margin="0,0,285,0" ImgPath="/Images/config.png" Template="{StaticResource ImageButtonTemplate}" Click="btn_energy_Click" HorizontalAlignment="Right">
+                <local:ImageButton.Content>
+                    <Border Height="34" Width="120">
+                        <TextBlock x:Name="txt_energy" Text="能耗"  HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="18" FontWeight="Bold"></TextBlock>
                     </Border>
                 </local:ImageButton.Content>
             </local:ImageButton>
@@ -110,7 +117,8 @@
             <Grid.Background>
                 <ImageBrush ImageSource="Images/content.jpg" Stretch="None"/>
             </Grid.Background>
-            <local:Diagram x:Name="diagram" Grid.Row="2"></local:Diagram>
+            <local:DiagramForBox x:Name="diagram"></local:DiagramForBox>
+            <local:Energy x:Name="energy" Visibility="Hidden"></local:Energy>
             <local:DevicePage x:Name="dvPage" Grid.Row="2" Visibility="Hidden"></local:DevicePage>
             <local:MyDataGrid x:Name="dvDevices" Grid.Row="2" Visibility="Hidden"></local:MyDataGrid>
             <Image x:Name="img_link" Grid.Row="2" Visibility="Hidden" Source="/Monitor;component/Images/指示图.png"></Image>

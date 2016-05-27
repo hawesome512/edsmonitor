@@ -14,17 +14,17 @@
             <RowDefinition Height="1*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            <Label Content="原用户名:" Margin="20,20,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" ></Label>
+            <Label Content="原用户名:" Margin="20,20,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"></Label>
             <TextBox x:Name="txt_user" VerticalAlignment="Top" Margin="90,20,20,0" FontSize="18" LostFocus="txt_user_LostFocus" GotFocus="txt_user_GotFocus"/>
-            <Label Content="原密码:" Margin="20,80,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" ></Label>
+            <Label Content="原密码:" Margin="20,80,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"></Label>
             <PasswordBox Name="txt_pwd" VerticalAlignment="Top" Margin="90,80,20,0" LostFocus="txt_pwd_LostFocus"/>
             <Label Name="txt_incorrect" Content="用户名或密码不正确" Foreground="#ff0000" FontSize="12" Margin="90,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Visibility="Hidden"></Label>
         </Grid>
         <Grid Grid.Row="1">
             <Line Stroke="Gray" StrokeThickness="1" X1="0" Y1="0" X2="360" Y2="0"/>
-            <Label Content="新用户名:" Margin="20,20,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" ></Label>
+            <Label Content="新用户名:" Margin="20,20,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"></Label>
             <TextBox x:Name="txt_user_new" VerticalAlignment="Top" Margin="90,20,20,0" FontSize="18"/>
-            <Label Content="新密码:" Margin="20,80,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" ></Label>
+            <Label Content="新密码:" Margin="20,80,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"></Label>
             <PasswordBox Name="txt_pwd_new" VerticalAlignment="Top" Margin="90,80,20,0"/>
             <Label Name="txt_incorrect_new" Content="用户名或密码不能为空" Foreground="#ff0000" FontSize="12" Margin="90,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Visibility="Hidden"></Label>
         </Grid>

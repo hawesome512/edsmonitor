@@ -24,6 +24,7 @@ namespace Monitor
                 public MainWindow()
                 {
                         InitializeComponent();
+
                         intitControls();
                         Thread t = new Thread(() =>
                         {
@@ -46,8 +47,6 @@ namespace Monitor
                                 Common.ComType = ComType.TCP;
                         }
                         common = new Common();
-                        //Test
-                        common.UserLevel = User.ADMIN;
                         com = new Com(Common.ComType);
 
                         Binding bind = new Binding();
@@ -77,7 +76,7 @@ namespace Monitor
 
                         loginPage.LoginSucceeded += loginPage_LoginSucceeded;
 
-                        mainContainer = new List<UIElement>() { diagram, dvPage, dvDevices, img_link, loginPage };
+                        mainContainer = new List<UIElement>() { diagram, dvPage, dvDevices, img_link, loginPage,energy };
                 }
 
                 void loginPage_LoginSucceeded(object sender, EventArgs e)
@@ -103,7 +102,7 @@ namespace Monitor
                         {
                                 testComs();
                         }
-                        diagram.InitDevices(devices);
+                        diagram.InitDiagram(devices);
                         diagram.EnterDevice += new EventHandler<EnterDeviceArgs>(diagram_EnterDevice);
                         threadRun = new Thread(() =>
                         {
@@ -112,6 +111,11 @@ namespace Monitor
                                         foreach (var dv in devices)
                                         {
                                                 dv.GetData();
+                                                if (Common.SelectedAddress != -1 && Common.SelectedAddress != dv.Address)
+                                                {
+                                                        Device dvSelected= (Device)devices.Find(d => d.Address == Common.SelectedAddress);
+                                                        dvSelected.GetData();
+                                                }
                                         }
                                 }
                         });
@@ -136,25 +140,16 @@ namespace Monitor
                 {
                         devices = new List<Device>();
                         XmlElement xeR = Tool.GetXML(@"DevicesConfig/DeviceList.xml");
-                        foreach (XmlElement xe in xeR.ChildNodes)
+                        for (int i = 0; i < xeR.ChildNodes.Count;i++ )
                         {
-                                string type = xe.ChildNodes[0].InnerText;
-                                string name = xe.ChildNodes[1].InnerText;
-                                byte addr = byte.Parse(xe.ChildNodes[2].InnerText);
-                                string tag = xe.ChildNodes[3].InnerText;
-                                Device device = null;
-                                switch (type)
-                                {
-                                        case "ACB":
-                                                device = new DvACB(addr, DeviceType.ACB, name, tag);
-                                                break;
-                                        case "ATS":
-                                                device = new DvATS(addr, DeviceType.ATS, name, tag);
-                                                break;
-                                        case "MCCB":
-                                                device = new DvMCCB(addr, DeviceType.MCCB, name, tag);
-                                                break;
-                                }
+                                string type = xeR.SelectNodes("//Type")[i].InnerText;
+                                string name = xeR.SelectNodes("//Name")[i].InnerText;
+                                byte addr = byte.Parse(xeR.SelectNodes("//Address")[i].InnerText);
+                                string tag = xeR.SelectNodes("//Tag")[i].InnerText;
+                                byte parent = byte.Parse(xeR.SelectNodes("//Parent")[i].InnerText);
+                                DeviceType dvType = (DeviceType)Enum.Parse(typeof(DeviceType), type);
+                                Device device = Activator.CreateInstance(Type.GetType("Monitor.Dv" + type)) as Device;
+                                device.InitDevice(addr, dvType, name, tag, parent);
                                 device.MyCom = com;
                                 device.PreRemoteModify += (s, o) =>
                                 {
@@ -166,6 +161,10 @@ namespace Monitor
                                 };
                                 device.InitAddress();
                                 devices.Add(device);
+                        }
+                        foreach (Device dv in devices)
+                        {
+                                dv.Dependence = Tool.FindParents(devices, dv.Address);
                         }
                 }
 
@@ -211,6 +210,12 @@ namespace Monitor
                 {
                         setHerePosition(sender);
                         setMainVisibility(img_link);
+                }
+
+                private void btn_energy_Click(object sender, RoutedEventArgs e)
+                {
+                        setHerePosition(sender);
+                        setMainVisibility(energy);
                 }
 
                 private void btn_account_Click(object sender, RoutedEventArgs e)

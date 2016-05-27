@@ -15,6 +15,11 @@ namespace Monitor
                         get;
                         set;
                 }
+                public byte ParentAddr
+                {
+                        get;
+                        set;
+                }
                 public DeviceType DvType
                 {
                         get;
@@ -30,16 +35,22 @@ namespace Monitor
                         get;
                         set;
                 }
+                public List<Device> Dependence
+                {
+                        get;
+                        set;
+                }
                 ComConverter comcvt = new ComConverter();
-                int nComFailed;
+                protected int nComFailed;
                 public event EventHandler<EventArgs> PreRemoteModify, RemoteModified;
 
-                public Device(byte addr, DeviceType type, string name,string tag)
+                public void InitDevice(byte addr, DeviceType type, string name,string tag,byte parent)
                 {
                         Address = addr;
                         DvType = type;
                         Name = name;
                         Tag = tag;
+                        ParentAddr = parent;
                 }
 
                 #region About Binding
@@ -128,10 +139,13 @@ namespace Monitor
                 /// <summary>
                 /// 获取设备数据(0-2片区)
                 /// </summary>
-                public void GetData()
+                public virtual void GetData()
                 {
                         if (nComFailed < 5)
                         {
+                                //第一片区：只读一次
+                                //第二片区：循环读取
+                                //第三片区：进入设备页时循环读取
                                 if (_basicData["Device"].ShowValue == null)
                                 {
                                         _basicData = getZoneData(_basicData);
@@ -145,7 +159,7 @@ namespace Monitor
                         }
                 }
 
-                private Dictionary<string, DValues> getZoneData(Dictionary<string, DValues> dic)
+                protected Dictionary<string, DValues> getZoneData(Dictionary<string, DValues> dic)
                 {
                         byte[] snd = { Address, 3, 0, 0, 0, 1 };
                         int addr = dic.First().Value.Addr;
@@ -201,7 +215,7 @@ namespace Monitor
                 #endregion
 
                 #region Init
-                public void InitAddress()
+                public virtual void InitAddress()
                 {
                         string path = string.Format("DevicesConfig\\{0}.xml", DvType);
                         XmlElement xeRoot = Tool.GetXML(path);
@@ -210,7 +224,7 @@ namespace Monitor
                         _params = initDic(2, xeRoot);
                 }
 
-                private Dictionary<string, DValues> initDic(int zone, XmlElement xeRoot)
+                protected Dictionary<string, DValues> initDic(int zone, XmlElement xeRoot)
                 {
                         Dictionary<string, DValues> dic = new Dictionary<string, DValues>();
                         foreach (XmlNode node in xeRoot.ChildNodes[zone].ChildNodes)

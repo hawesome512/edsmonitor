@@ -39,7 +39,7 @@ namespace Monitor
                 public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
                 {
                         DState state = (DState)value;
-                        Brush brush = Brushes.Gray;
+                        Brush brush = Brushes.SeaGreen;
                         switch (state.SwitchState)
                         {
                                 case Switch.Close:
@@ -54,6 +54,28 @@ namespace Monitor
                 }
 
                 public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+                {
+                        throw new NotImplementedException();
+                }
+        }
+
+        class MulStatesToLineStrokeConverter : IMultiValueConverter
+        {
+
+                public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+                {
+                        foreach (var value in values)
+                        {
+                                DState state = (DState)value;
+                                if (state.SwitchState != Switch.Close)
+                                {
+                                        return Brushes.SeaGreen;
+                                }
+                        }
+                        return Brushes.Red;
+                }
+
+                public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
                 {
                         throw new NotImplementedException();
                 }

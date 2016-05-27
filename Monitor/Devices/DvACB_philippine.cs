@@ -7,11 +7,6 @@ namespace Monitor
 {
         public class DvACB_philippine : Device
         {
-                public DvACB_philippine(byte addr, DeviceType type, string name,string tag)
-                        : base(addr, type, name,tag)
-                {
-
-                }
                 public override void updateState()
                 {
                         DState state = new DState();
@@ -20,7 +15,7 @@ namespace Monitor
                         if (int.TryParse(dv.ShowValue, out data))
                         {
                                 byte data1 = (Byte)(data % 256);
-                                if ((data1 >> 6 & 1) == 1)
+                                if ((data1>> 6 & 1) == 1)
                                         state.SwitchState = Switch.Open;
                                 else
                                         state.SwitchState = Switch.Close;
@@ -115,7 +110,7 @@ namespace Monitor
                                         switch (p.Key)
                                         {
                                                 case "Ir":
-                                                        int nIndex = ((nSwH / 256 % 32) & 0x1C) >> 2;
+                                                        int nIndex = ((nSwH / 256 % 32) & 0x1C)>> 2;
                                                         string[] curves = { "1", "EIT", "HVF", "DT", "SIT", "VIT" };
                                                         string tag = string.Join("_", curves);
                                                         DValues dvCurve = new DValues() { ShowValue = curves[nIndex + 1], Unit = "/", Tag = tag };
@@ -265,7 +260,7 @@ namespace Monitor
                 private string getTag(string tag, int index,int length)
                 {
                         List<string> tags = new List<string>(tag.Split('_'));
-                        tags=tags.Where((value, id) =>id==0||(id >= index && id < index + length)).ToList();
+                        tags=tags.Where((value, id) =>id==0||(id>= index && id < index + length)).ToList();
                         return string.Join("_", tags.ToArray());
                 }
         }

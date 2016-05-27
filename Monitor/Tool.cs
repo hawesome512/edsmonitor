@@ -34,9 +34,9 @@ namespace Monitor
                                 {
                                         SH = CRC_H;
                                         SL = CRC_L;
-                                        CRC_H = (byte)(CRC_H >> 1);      //高位右移一位
+                                        CRC_H = (byte)(CRC_H>> 1);      //高位右移一位
                                         //CRC_H = (byte)(CRC_H & 0x7F);
-                                        CRC_L = (byte)(CRC_L >> 1);      //低位右移一位 
+                                        CRC_L = (byte)(CRC_L>> 1);      //低位右移一位 
                                         //CRC_L = (byte)(CRC_L & 0x7F);
                                         if ((SH & 0x01) == 0x01) //如果高位字节最后一位为1 
                                         {
@@ -74,6 +74,17 @@ namespace Monitor
                         Binding binding = new Binding(path);
                         binding.Converter = converter;
                         return binding;
+                }
+
+                public static MultiBinding addMulBinding(List<string> sources)
+                {
+                        MultiBinding mulBinding = new MultiBinding();
+                        mulBinding.Converter = new MulStatesToLineStrokeConverter();
+                        foreach (string s in sources)
+                        {
+                                mulBinding.Bindings.Add(new Binding(s));
+                        }
+                        return mulBinding;
                 }
 
                 public static DValues CloneDValues(DValues d)
@@ -154,7 +165,7 @@ namespace Monitor
 
                 public static bool isOne(int raw, int index)
                 {
-                        raw = (int)(raw >> index & 1);
+                        raw = (int)(raw>> index & 1);
                         return raw == 1 ? true : false;
                 }
 
@@ -214,6 +225,19 @@ namespace Monitor
                         {
                                 return 0;
                         }
+                }
+
+                public static List<Device> FindParents(List<Device> devices, byte address)
+                {
+                        List<Device> parents = new List<Device>();
+                        Device dv = devices.Find(d => d.Address == address);
+                        parents.Add(dv);
+                        while (dv.ParentAddr != 0)
+                        {
+                                dv = devices.Find(d => d.Address == dv.ParentAddr);
+                                parents.Add(dv);
+                        }
+                        return parents;
                 }
         }
 }

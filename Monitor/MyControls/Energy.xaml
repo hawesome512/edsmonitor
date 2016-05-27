@@ -1,0 +1,123 @@
+﻿<UserControl x:Class="Monitor.Energy"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Monitor"        
+             xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
+            xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+            xmlns:Chr="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="1000" FontSize="14">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="255"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.RowSpan="2">
+            <Border BorderThickness="0,0,5,0" BorderBrush="#ddd"></Border>
+            <RadioButton Name="rb_today" Margin="10,10,0,0" Content="当日" Style="{DynamicResource RadioButtonStyle}"  Click="rb_Click"/>
+            <RadioButton Name="rb_week" Margin="90,10,0,0" Content="本周" Style="{DynamicResource RadioButtonStyle}" Click="rb_Click"/>
+            <RadioButton Name="rb_month" Margin="170,10,0,0" Content="本月" Style="{DynamicResource RadioButtonStyle}" Click="rb_Click"/>
+            <RadioButton Name="rb_other" BorderBrush="Transparent" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" Click="rb_Click">
+                <RadioButton.Template>
+                    <ControlTemplate>
+                        <Grid>
+                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="2"></Border>
+                            <DatePicker Name="dp1" Margin="5,0,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90" SelectedDateChanged="dp_SelectedDateChanged"/>
+                            <Label Content="—" Margin="90,00,0,0" HorizontalContentAlignment="Center" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="50"/>
+                            <DatePicker Name="dp2" Margin="140,0,5,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90" SelectedDateChanged="dp_SelectedDateChanged"/>
+                        </Grid>
+                    </ControlTemplate>
+                </RadioButton.Template>
+            </RadioButton>
+            <TreeView Name="tree_area" Margin="0,120,50,10">
+                <TreeViewItem Header="厦门士林电机有限公司" IsExpanded="True" Tag="0">
+                    <TreeViewItem Header="楼层一" Tag="1">
+                        <TreeViewItem Header="空调" Tag="2"/>
+                        <TreeViewItem Header="照明" Tag="2"/>
+                        <TreeViewItem Header="厂线一" Tag="2"/>
+                        <TreeViewItem Header="厂线二" Tag="2"/>
+                    </TreeViewItem>
+                    <TreeViewItem Header="楼层二" Tag="1">
+                        <TreeViewItem Header="空调" Tag="2"/>
+                        <TreeViewItem Header="照明" Tag="2"/>
+                        <TreeViewItem Header="厂线一" Tag="2"/>
+                        <TreeViewItem Header="厂线二" Tag="2"/>
+                    </TreeViewItem>
+                    <TreeViewItem Header="楼层三" Tag="1">
+                        <TreeViewItem Header="空调" Tag="2"/>
+                        <TreeViewItem Header="照明" Tag="2"/>
+                        <TreeViewItem Header="厂线一" Tag="2"/>
+                        <TreeViewItem Header="厂线二" Tag="2"/>
+                    </TreeViewItem>
+                    <TreeViewItem Header="楼层四" Tag="1">
+                        <TreeViewItem Header="空调" Tag="2"/>
+                        <TreeViewItem Header="照明" Tag="2"/>
+                        <TreeViewItem Header="设备" Tag="2"/>
+                    </TreeViewItem>
+                    <TreeViewItem Header="其他" Tag="1">
+                        <TreeViewItem Header="电梯" Tag="2"/>
+                        <TreeViewItem Header="机房" Tag="2"/>
+                        <TreeViewItem Header="室外照明" Tag="2"/>
+                    </TreeViewItem>
+                </TreeViewItem>
+            </TreeView>
+            <Button Name="btn_query" FontSize="40" Padding="0" Content="🔍"  Height="70" Width="50" HorizontalAlignment="Right" Margin="0,200,5,200" Click="btn_query_Click"/>
+        </Grid>
+        <Grid Grid.Column="1" Grid.ColumnSpan="2">
+            <Label Name="title" Content="能耗分析  (单位：kWh)" VerticalAlignment="Top" HorizontalAlignment="Center" Height="30"/>
+            <WindowsFormsHost Name="myHost1" Grid.Row="1" Margin="0,30,0,0">
+                <Chr:Chart Name="myChart"/>
+            </WindowsFormsHost>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Label Content="占比分析" VerticalAlignment="Top" HorizontalAlignment="Center" Height="30"/>
+            <Border BorderThickness="0,5,0,0" BorderBrush="#ddd"></Border>
+            <WindowsFormsHost Name="myHost2" Grid.Row="1" Margin="0,35,0,0">
+                <Chr:Chart Name="myChart"/>
+            </WindowsFormsHost>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="4*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Border BorderThickness="5,5,0,0" BorderBrush="#ddd" Grid.ColumnSpan="2" Grid.RowSpan="6"></Border>
+            <Label Grid.ColumnSpan="2" Content="运行趋势" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+            <Grid Grid.Row="1">
+                <Border BorderThickness="0,4,2,4" BorderBrush="#ddd" Grid.ColumnSpan="2" Grid.RowSpan="3"></Border>
+                <Label Content="同比值" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-50,0,0"/>
+                <Image Name="img_y2y" Width="50" Height="50" Margin="-50,50,0,0"/>
+                <Label Name="txt_y2y"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,50,-50,0"/>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Border BorderThickness="0,4,2,4" BorderBrush="#ddd" Grid.ColumnSpan="2" Grid.RowSpan="3"></Border>
+                <Label Content="环比值" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-50,0,0"/>
+                <Image Name="img_m2m"  Width="50" Height="50" Margin="-50,50,0,0"/>
+                <Label Name="txt_m2m" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,50,-50,0"/>
+            </Grid>
+            <Label Grid.Row="2" Content="最大值：" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <Label Grid.Row="3" Content="最小值：" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <Label Grid.Row="4" Content="平均值：" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <Label Grid.Row="5" Content="总值：" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <Label Name="txt_max" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <Label Name="txt_min" Grid.Row="3" Grid.Column="1"  VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <Label Name="txt_avg" Grid.Row="4" Grid.Column="1"  VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <Label Name="txt_sum" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        </Grid>
+    </Grid>
+</UserControl>

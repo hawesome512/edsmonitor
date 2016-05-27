@@ -242,12 +242,12 @@ namespace Monitor
                                         break;
 
                                 case MsgBox.AnimateStyle.ZoomIn:
-                                        if (_msgBox.Width > animate.FormSize.Width)
+                                        if (_msgBox.Width> animate.FormSize.Width)
                                         {
                                                 _msgBox.Width -= 17;
                                                 _msgBox.Invalidate();
                                         }
-                                        if (_msgBox.Height > animate.FormSize.Height)
+                                        if (_msgBox.Height> animate.FormSize.Height)
                                         {
                                                 _msgBox.Height -= 17;
                                                 _msgBox.Invalidate();
@@ -354,7 +354,7 @@ namespace Monitor
                 private void InitOKButton()
                 {
                         Button btnOK = new Button();
-                        btnOK.Text = "OK";
+                        btnOK.Text = "好的";
                         btnOK.Click += ButtonClick;
 
                         this._buttonCollection.Add(btnOK);
@@ -363,11 +363,11 @@ namespace Monitor
                 private void InitOKCancelButtons()
                 {
                         Button btnOK = new Button();
-                        btnOK.Text = "OK";
+                        btnOK.Text = "好的";
                         btnOK.Click += ButtonClick;
 
                         Button btnCancel = new Button();
-                        btnCancel.Text = "Cancel";
+                        btnCancel.Text = "取消";
                         btnCancel.Click += ButtonClick;
 
 
@@ -378,11 +378,11 @@ namespace Monitor
                 private void InitRetryCancelButtons()
                 {
                         Button btnRetry = new Button();
-                        btnRetry.Text = "OK";
+                        btnRetry.Text = "好的";
                         btnRetry.Click += ButtonClick;
 
                         Button btnCancel = new Button();
-                        btnCancel.Text = "Cancel";
+                        btnCancel.Text = "取消";
                         btnCancel.Click += ButtonClick;
 
 
@@ -393,11 +393,11 @@ namespace Monitor
                 private void InitYesNoButtons()
                 {
                         Button btnYes = new Button();
-                        btnYes.Text = "Yes";
+                        btnYes.Text = "是";
                         btnYes.Click += ButtonClick;
 
                         Button btnNo = new Button();
-                        btnNo.Text = "No";
+                        btnNo.Text = "否";
                         btnNo.Click += ButtonClick;
 
 
@@ -416,7 +416,7 @@ namespace Monitor
                         btnNo.Click += ButtonClick;
 
                         Button btnCancel = new Button();
-                        btnCancel.Text = "Cancel";
+                        btnCancel.Text = "取消";
                         btnCancel.Click += ButtonClick;
 
                         this._buttonCollection.Add(btnYes);
@@ -442,19 +442,19 @@ namespace Monitor
                                         _buttonResult = DialogResult.Ignore;
                                         break;
 
-                                case "OK":
+                                case "好的":
                                         _buttonResult = DialogResult.OK;
                                         break;
 
-                                case "Cancel":
+                                case "取消":
                                         _buttonResult = DialogResult.Cancel;
                                         break;
 
-                                case "Yes":
+                                case "是":
                                         _buttonResult = DialogResult.Yes;
                                         break;
 
-                                case "No":
+                                case "否":
                                         _buttonResult = DialogResult.No;
                                         break;
                         }
@@ -472,7 +472,7 @@ namespace Monitor
 
                         if (message.Length < 150)
                         {
-                                if ((int)size.Width > 350)
+                                if ((int)size.Width> 350)
                                 {
                                         width = (int)size.Width;
                                 }

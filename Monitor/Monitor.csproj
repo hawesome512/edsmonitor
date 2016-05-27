@@ -98,6 +98,10 @@
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Compile Include="Devices\DvACREL.cs" />
+    <Compile Include="MyControls\Breaker.xaml.cs">
+      <DependentUpon>Breaker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MyControls\Account.xaml.cs">
       <DependentUpon>Account.xaml</DependentUpon>
     </Compile>
@@ -115,12 +119,18 @@
       <DependentUpon>DevicePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Devices\DvACB.cs" />
+    <Compile Include="MyControls\Energy.xaml.cs">
+      <DependentUpon>Energy.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MyControls\ImageButton.cs" />
     <Compile Include="MyControls\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MyControls\ATSRemote.xaml.cs">
       <DependentUpon>ATSRemote.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControls\Messure.xaml.cs">
+      <DependentUpon>Messure.xaml</DependentUpon>
     </Compile>
     <Compile Include="MyControls\UIChart.cs" />
     <Compile Include="MyControls\MsgBox.cs">
@@ -129,10 +139,20 @@
     <Compile Include="MyControls\MyDataGrid.xaml.cs">
       <DependentUpon>MyDataGrid.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MyControls\DiagramForBox.xaml.cs">
+      <DependentUpon>DiagramForBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tool.cs" />
     <Compile Include="Devices\DvATS.cs" />
     <Compile Include="Devices\DvMCCB_old.cs" />
     <Compile Include="Devices\DvACB_philippine.cs" />
+    <Compile Include="MyControls\Triangle.xaml.cs">
+      <DependentUpon>Triangle.xaml</DependentUpon>
+    </Compile>
+    <Page Include="MyControls\Breaker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MyControls\Account.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -148,6 +168,10 @@
     <Page Include="MyControls\Diagram.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MyControls\Energy.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MyControls\LoginPage.xaml">
       <SubType>Designer</SubType>
@@ -176,6 +200,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="MyControls\Messure.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MyControls\MyDataGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -185,6 +213,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="MyControls\Tab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MyControls\Triangle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\DiagramForBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -217,6 +253,16 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="App.config" />
+    <Resource Include="DevicesConfig\MIC.xml" />
+    <Content Include="DevicesConfig\ACREL.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DevicesConfig\Grid.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Images\down.png" />
+    <Resource Include="Images\up.png" />
     <Content Include="MonitorHelp.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -240,6 +286,7 @@
   <ItemGroup>
     <Content Include="DevicesConfig\DeviceList.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="DevicesConfig\ATS.xml">
       <SubType>Designer</SubType>

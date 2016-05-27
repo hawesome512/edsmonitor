@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="Monitor.Messure"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="90" d:DesignWidth="160">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="60"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Grid.Row="1" Name="MyMessure">
+            <Ellipse Name="M_1" Width="20" Height="20" Stroke="SeaGreen" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0"/>
+            <Ellipse Name="M_2" Width="20" Height="20" Stroke="SeaGreen" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,5,0,0"/>
+            <Ellipse Name="M_3" Width="20" Height="20" Stroke="SeaGreen" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,5,0,0"/>
+            <Line Name="M_4" X1="10" Y1="0" X2="10" Y2="30" Stroke="SeaGreen"/>
+            <Line Name="M_5" X1="50" Y1="0" X2="50" Y2="30" Stroke="SeaGreen"/>
+        </Grid>
+        <Label Name="DeviceName" Grid.ColumnSpan="2" Content="ACR10E" HorizontalAlignment="Left" Margin="30,0,0,0" Style="{StaticResource LabelButton}"/>
+        <Label Name="I" Grid.Column="1" Grid.Row="0" Content="0.0" HorizontalAlignment="Right" Margin="0,0,35,0" Foreground="#DDF5810D" FontWeight="Bold"/>
+        <Label Grid.Column="1" Grid.Row="0" Content="A" Margin="60,0,0,0" Foreground="#DDF5810D" FontWeight="Bold"/>
+        <Label Name="U" Grid.Column="1" Grid.Row="1" Content="0.0" HorizontalAlignment="Right" Margin="0,0,35,0" Foreground="#DD0E9B21" FontWeight="Bold"/>
+        <Label  Grid.Column="1" Grid.Row="1" Content="V" Margin="60,0,0,0" Foreground="#DD0E9B21" FontWeight="Bold"/>
+        <Label Name="EP"  Grid.Column="1" Grid.Row="2" Content="0.0" HorizontalAlignment="Right" Margin="0,0,35,0" Foreground="#DDF00E0E" FontWeight="Bold"/>
+        <Label Grid.Column="1" Grid.Row="2" Content="kWh" Margin="60,0,0,0" Foreground="#DDF00E0E" FontWeight="Bold"/>
+    </Grid>
+</UserControl>

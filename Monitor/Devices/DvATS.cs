@@ -7,11 +7,6 @@ namespace Monitor
 {
         public class DvATS : Device
         {
-                public DvATS(byte addr, DeviceType type, string name,string tag)
-                        : base(addr, type, name,tag)
-                {
-
-                }
                 public override void updateState()
                 {
                         DState state = new DState();
@@ -46,7 +41,7 @@ namespace Monitor
                                 }
 
                                 data = int.Parse(RealData["SysErrType"].ShowValue);
-                                if (data > 0)
+                                if (data> 0)
                                         state.RunState = Run.Alarm;
                                 else
                                         state.RunState = Run.Normal;
@@ -151,7 +146,7 @@ namespace Monitor
                 private string getTag(string tag, int index, int length)
                 {
                         List<string> tags = new List<string>(tag.Split('_'));
-                        tags = tags.Where((value, id) => id == 0 || (id >= index && id < index + length)).ToList();
+                        tags = tags.Where((value, id) => id == 0 || (id>= index && id < index + length)).ToList();
                         return string.Join("_", tags.ToArray());
                 }
 

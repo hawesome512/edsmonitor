@@ -14,9 +14,9 @@
             <RowDefinition Height="1*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="#B2DFDB">
-            <Label Content="用户名:" Margin="40,40,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" ></Label>
+            <Label Content="用户名:" Margin="40,40,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"></Label>
             <TextBox x:Name="txt_user" VerticalAlignment="Top" Margin="130,40,40,0" FontSize="18"/>
-            <Label Content="密码:" Margin="40,100,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" ></Label>
+            <Label Content="密码:" Margin="40,100,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"></Label>
             <PasswordBox Name="txt_pwd" VerticalAlignment="Top" Margin="130,100,40,0"/>
             <Label Name="txt_incorrect" Content="用户名或密码不正确" Foreground="#ff0000" FontSize="12" Margin="20,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Visibility="Hidden"></Label>
         </Grid>

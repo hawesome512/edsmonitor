@@ -29,9 +29,9 @@ namespace Monitor
                         InitializeComponent();
                 }
 
-                public void InitDataGrid(List<Device> members,Common common)
+                public void InitDataGrid(List<Device> members, Common common)
                 {
-                        if (Common.ComType==ComType.SP)
+                        if (Common.ComType == ComType.SP)
                         {
                                 rb_sp.IsChecked = true;
                         }
@@ -39,7 +39,7 @@ namespace Monitor
                         {
                                 rb_tcp.IsChecked = true;
                         }
-                        deviceInfList=members.ConvertAll<DeviceInf>(m => new DeviceInf(m));
+                        deviceInfList = members.ConvertAll<DeviceInf>(m => new DeviceInf(m));
                         dg_devices.DataContext = deviceInfList;
                         List<string> ports = System.IO.Ports.SerialPort.GetPortNames().ToList();
                         cbox_coms.ItemsSource = ports;
@@ -67,48 +67,71 @@ namespace Monitor
                                 createNode(doc, node1, "Name", di.Name);
                                 createNode(doc, node1, "Address", di.Address.ToString());
                                 createNode(doc, node1, "Tag", di.Tag.ToString());
+                                byte parentAddr = 0;
+                                byte.TryParse(di.ParentAddr,out parentAddr);
+                                createNode(doc, node1, "Parent", di.ParentAddr);
                                 root.AppendChild(node1);
                         }
                         doc.Save(@"DevicesConfig/DeviceList.xml");
 
                         if (cbox_coms.SelectedIndex == -1)
                                 cbox_coms.SelectedIndex = 0;
-                        Tool.SetConfig("Com",cbox_coms.SelectedValue.ToString());
+                        Tool.SetConfig("Com", cbox_coms.SelectedValue.ToString());
                         bool isSp = (bool)rb_sp.IsChecked;
-                        Tool.SetConfig("ComType",isSp?"SP":"TCP");
+                        Tool.SetConfig("ComType", isSp ? "SP" : "TCP");
                         Common.ComType = isSp ? ComType.SP : ComType.TCP;
 
-                        var result=MsgBox.Show("是否立即刷新配电网?", "保存成功", MsgBox.Buttons.YesNo, MsgBox.Icon.Shield, MsgBox.AnimateStyle.FadeIn);
+                        var result = MsgBox.Show("是否立即刷新配电网?", "保存成功", MsgBox.Buttons.YesNo, MsgBox.Icon.Shield, MsgBox.AnimateStyle.FadeIn);
                         if (result == System.Windows.Forms.DialogResult.Yes)
                         {
                                 ReloadDevices(this, new EventArgs());
                         }
                 }
 
-                private static void createNode(XmlDocument doc, XmlNode node,string name, string value)
+                private static void createNode(XmlDocument doc, XmlNode node, string name, string value)
                 {
                         XmlElement xe = doc.CreateElement(name);
                         xe.InnerText = value;
                         node.AppendChild(xe);
                 }
         }
-        public class DeviceInf:IComparable
+        public class DeviceInf : IComparable
         {
-                public string Name{get;set;}
-                public DeviceType DvType{get;set;}
-                public byte Address{get;set;}
+                public string Name
+                {
+                        get;
+                        set;
+                }
+                public DeviceType DvType
+                {
+                        get;
+                        set;
+                }
+                public byte Address
+                {
+                        get;
+                        set;
+                }
+                public string ParentAddr
+                {
+                        get;
+                        set;
+                }
                 public string Tag
                 {
                         get;
                         set;
                 }
-                public DeviceInf() { }
+                public DeviceInf()
+                {
+                }
                 public DeviceInf(Device device)
                 {
                         Name = device.Name;
                         Address = device.Address;
                         DvType = device.DvType;
                         Tag = device.Tag;
+                        ParentAddr = device.ParentAddr==0?"---":device.ParentAddr.ToString();
                 }
 
                 public int CompareTo(object obj)
@@ -122,7 +145,7 @@ namespace Monitor
                         {
                                 if (Address < di.Address)
                                         return -1;
-                                else if(Address>di.Address)
+                                else if (Address > di.Address)
                                         return 1;
                                 else
                                 {

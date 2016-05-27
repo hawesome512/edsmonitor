@@ -7,11 +7,6 @@ namespace Monitor
 {
         public class DvMCCB:Device
         {
-                public DvMCCB(byte addr, DeviceType type, string name,string tag)
-                        : base(addr, type, name,tag)
-                {
-
-                }
                 public override void updateState()
                 {
                         DValues dv = RealData["CircuitCheck"];
@@ -20,7 +15,7 @@ namespace Monitor
                         if (int.TryParse(dv.ShowValue, out data))
                         {
                                 byte data1 = (Byte)(data / 256);
-                                if ((data1 >> 6 & 1) == 1)
+                                if ((data1>> 6 & 1) == 1)
                                         state.SwitchState = Switch.Close;
                                 else
                                         state.SwitchState = Switch.Open;
@@ -48,7 +43,7 @@ namespace Monitor
                         //注1111
                         state.Ia = str2int("Ia");
                         state.Ib = str2int("Ib");
-                        state.Ic = str2int("Ic");         
+                        state.Ic = str2int("Ic"); 
 
                         State = state;
                 }
@@ -57,8 +52,7 @@ namespace Monitor
                 {
                         double data;
                         double.TryParse(RealData[name].ShowValue, out data);
-                        Random r = new Random();
-                        return data + r.Next(1, 100) / 1000.0;
+                        return data;
                 }
 
                 protected override Dictionary<string, DValues> cvtBasic()
@@ -161,7 +155,7 @@ namespace Monitor
                 private string getTag(string tag, int index,int length)
                 {
                         List<string> tags = new List<string>(tag.Split('_'));
-                        tags=tags.Where((value, id) =>id==0||(id >= index && id < index + length)).ToList();
+                        tags=tags.Where((value, id) =>id==0||(id>= index && id < index + length)).ToList();
                         return string.Join("_", tags.ToArray());
                 }
         }

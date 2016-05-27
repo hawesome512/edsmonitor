@@ -242,7 +242,7 @@
 //                                s.YAxisType = AxisType.Primary;
 //                                s.ChartArea = s.Name;
 //                                MyChart.ChartAreas[s.Name].Visible = true;
-//                                if (i > 0)
+//                                if (i> 0)
 //                                {
 //                                        Series s1 = MyChart.Series[i - 1];
 //                                        if (isMatch(s.Name, s1.Name))

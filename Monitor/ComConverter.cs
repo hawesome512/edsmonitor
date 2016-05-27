@@ -41,6 +41,8 @@ namespace Monitor
                                         return cvtRTwentyOne();
                                 case 22:
                                         return cvtRTwentyTwo();
+                                case 23:
+                                        return cvtRTwentyThree();
                                 case 30:
                                         return cvtRThirty();
                                 case 31:
@@ -244,14 +246,14 @@ namespace Monitor
                         string breaker=null;
                         string[] array = new string[] { "N", "E", "H", "R" };
                         breaker += array[source[0] & 0x3];
-                        int p = (source[0] >> 2) & 0x3;
+                        int p = (source[0]>> 2) & 0x3;
                         breaker += " " + (p==2?"4P" : "3P");
-                        int z = (source[0] >> 4) & 0x3;
+                        int z = (source[0]>> 4) & 0x3;
                         if (z == 3)
                         {
                                 breaker += " " + "ZSI";
                         }
-                        int g = (source[0] >> 6) & 0x3;
+                        int g = (source[0]>> 6) & 0x3;
                         if (g == 3)
                         {
                                 breaker += " " + "G";
@@ -263,6 +265,11 @@ namespace Monitor
                         }
 
                         return breaker;
+                }
+
+                private string cvtRTwentyThree()
+                {
+                        return "V1.0";
                 }
                 #endregion MCCB
 

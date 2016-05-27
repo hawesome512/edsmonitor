@@ -32,7 +32,7 @@
                                     BorderThickness="2"
                                     CornerRadius="0"
                                     Background="Transparent"
-                                    BorderBrush="Transparent" >
+                                    BorderBrush="Transparent">
 
                                 <TextBlock TextAlignment="Center">
                                         <ContentPresenter />
@@ -278,7 +278,7 @@
                             <Border x:Name="BackgroundBorder" BorderThickness="0,1,0,1" 
                              BorderBrush="#e6dbba" 
                               Width="Auto">
-                                <Grid >
+                                <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
@@ -301,10 +301,10 @@
                 <Setter Property="Foreground" Value="Black" />
                 <Style.Triggers>
                     <!--隔行换色-->
-                    <Trigger Property="AlternationIndex" Value="0" >
+                    <Trigger Property="AlternationIndex" Value="0">
                         <Setter Property="Background" Value="#e7e7e7" />
                     </Trigger>
-                    <Trigger Property="AlternationIndex" Value="1" >
+                    <Trigger Property="AlternationIndex" Value="1">
                         <Setter Property="Background" Value="#f2f2f2" />
                     </Trigger>
                     <Trigger Property="IsMouseOver" Value="True">
@@ -321,7 +321,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="DataGridCell">
-                            <TextBlock TextAlignment="Center" VerticalAlignment="Center"  >
+                            <TextBlock TextAlignment="Center" VerticalAlignment="Center" >
                            <ContentPresenter />
                             </TextBlock>
                         </ControlTemplate>

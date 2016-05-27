@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<node type="factory" Name="厦门士林电机有限公司">
+  <node type="area" Name="楼层一">
+    <node type="use" Name="空调"></node>
+    <node type="use" Name="照明"></node>
+    <node type="use" Name="1#生产线"></node>
+    <node type="use" Name="2#生产线"></node>
+  </node>
+  <node type="area" Name="楼层二">
+    <node type="use" Name="空调"></node>
+    <node type="use" Name="照明"></node>
+    <node type="use" Name="1#生产线"></node>
+    <node type="use" Name="2#生产线"></node>
+  </node>
+  <node type="area" Name="楼层三">
+    <node type="use" Name="空调"></node>
+    <node type="use" Name="照明"></node>
+    <node type="use" Name="1#生产线"></node>
+    <node type="use" Name="2#生产线"></node>
+  </node>
+  <node type="area" Name="楼层四">
+    <node type="use" Name="空调"></node>
+    <node type="use" Name="照明"></node>
+    <node type="use" Name="设备"></node>
+  </node>
+  <node type="area" Name="其他">
+    <node type="use" Name="电梯"></node>
+    <node type="use" Name="机房"></node>
+    <node type="use" Name="室外照明"></node>
+  </node>
+
+</node>

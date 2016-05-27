@@ -7,11 +7,6 @@ namespace Monitor
 {
         public class DvMCCB_old:Device
         {
-                public DvMCCB_old(byte addr, DeviceType type, string name,string tag)
-                        : base(addr, type, name,tag)
-                {
-
-                }
                 public override void updateState()
                 {
                         DValues dv = RealData["CircuitCheck"];
@@ -20,7 +15,7 @@ namespace Monitor
                         if (int.TryParse(dv.ShowValue, out data))
                         {
                                 byte data1 = (Byte)(data % 256);
-                                if ((data1 >> 6 & 1) == 1)
+                                if ((data1>> 6 & 1) == 1)
                                         state.SwitchState = Switch.Close;
                                 else
                                         state.SwitchState = Switch.Open;
@@ -177,7 +172,7 @@ namespace Monitor
                 private string getTag(string tag, int index,int length)
                 {
                         List<string> tags = new List<string>(tag.Split('_'));
-                        tags=tags.Where((value, id) =>id==0||(id >= index && id < index + length)).ToList();
+                        tags=tags.Where((value, id) =>id==0||(id>= index && id < index + length)).ToList();
                         return string.Join("_", tags.ToArray());
                 }
         }

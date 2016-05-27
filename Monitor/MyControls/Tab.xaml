@@ -151,7 +151,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TabItem}">
-                        <Border Padding="2" x:Name="bbb" SnapsToDevicePixels="True" ClipToBounds="True" CornerRadius="15" >
+                        <Border Padding="2" x:Name="bbb" SnapsToDevicePixels="True" ClipToBounds="True" CornerRadius="15">
                             <ContentPresenter x:Name="contentPresenter" 
                                               ContentSource="Header"
                                               Focusable="False" 

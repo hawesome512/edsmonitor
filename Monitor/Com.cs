@@ -133,7 +133,7 @@ namespace Monitor
 
                         //频繁通信，排除可能残留未读取数据
                         byte[] rcv = new byte[256];
-                        if(sp.BytesToRead > 0)
+                        if(sp.BytesToRead> 0)
                         {
                                 sp.Read(rcv, 0, rcv.Length);
                                 rcv = new byte[256];

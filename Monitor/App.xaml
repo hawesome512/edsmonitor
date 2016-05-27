@@ -24,6 +24,25 @@
             <SolidColorBrush x:Key="BorderBrushSelected" Color="#1C97EA"/>
             <SolidColorBrush x:Key="BackgroundNormal" Color="#3F3F46"/>
             <SolidColorBrush x:Key="BorderBrushNormal" Color="#54545C"/>
+            <Style x:Key="LabelButton" TargetType="Label">
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="SeaGreen"/>
+                        <Setter Property="Foreground" Value="White"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="RadioButtonStyle" TargetType="RadioButton">
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="VerticalAlignment" Value="Top"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="RadioButton">
+                            <Button Content="{TemplateBinding Content}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" BorderBrush="{TemplateBinding BorderBrush}"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
             <Style x:Key="StandardButton" TargetType="Button">
                 <Setter Property="Visibility" Value="Visible"/>
                 <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
@@ -74,7 +93,7 @@
                                     BorderThickness="2"
                                     CornerRadius="0"
                                     Background="Transparent"
-                                    BorderBrush="Transparent" >
+                                    BorderBrush="Transparent">
 
                                 <TextBlock TextAlignment="Center">
                                         <ContentPresenter />
@@ -318,7 +337,7 @@
                             <Border x:Name="BackgroundBorder" BorderThickness="0,1,0,1" 
                              BorderBrush="#e6dbba" 
                               Width="Auto">
-                                <Grid >
+                                <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
@@ -341,10 +360,10 @@
                 <Setter Property="Foreground" Value="Black" />
                 <Style.Triggers>
                     <!--隔行换色-->
-                    <Trigger Property="AlternationIndex" Value="0" >
+                    <Trigger Property="AlternationIndex" Value="0">
                         <Setter Property="Background" Value="#e7e7e7" />
                     </Trigger>
-                    <Trigger Property="AlternationIndex" Value="1" >
+                    <Trigger Property="AlternationIndex" Value="1">
                         <Setter Property="Background" Value="#f2f2f2" />
                     </Trigger>
                     <Trigger Property="IsMouseOver" Value="True">
@@ -361,7 +380,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="DataGridCell">
-                            <TextBlock TextAlignment="Center" VerticalAlignment="Center"  >
+                            <TextBlock TextAlignment="Center" VerticalAlignment="Center" >
                            <ContentPresenter />
                             </TextBlock>
                         </ControlTemplate>

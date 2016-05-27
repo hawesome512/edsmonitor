@@ -11,6 +11,7 @@
   <!--15   ACB:软件版本 ※高位低位之间[.]-->
   <!--21   MCCB_old:断路器型号-->
   <!--22   MCCB:断路器型号-->
+  <!--23   MCCB软件版本，为下位机程序Bug而定，待优化-->
   <Zone length="13" address="0000">
     <Item>
       <Address>0000</Address>
@@ -126,7 +127,7 @@
       <Alias>软件版本</Alias>
       <Unit>/</Unit>
       <Authority>R</Authority>
-      <ShowType>5</ShowType>
+      <ShowType>23</ShowType>
       <Extra>1</Extra>
     </Item>
   </Zone>
