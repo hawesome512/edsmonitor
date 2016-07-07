@@ -46,7 +46,7 @@ namespace Monitor
                 {
                         get
                         {
-                                return (double)decimal.Round(decimal.Parse(_Ia.ToString()), 1);
+                                return Math.Round(_Ia,0);
                         }
                         set
                         {
@@ -58,7 +58,7 @@ namespace Monitor
                 {
                         get
                         {
-                                return (double)decimal.Round(decimal.Parse(_Ib.ToString()), 1);
+                                return Math.Round(_Ib, 0);
                         }
                         set
                         {
@@ -70,7 +70,7 @@ namespace Monitor
                 {
                         get
                         {
-                                return (double)decimal.Round(decimal.Parse(_Ic.ToString()), 1);
+                                return Math.Round(_Ic, 0);
                         }
                         set
                         {
@@ -82,7 +82,7 @@ namespace Monitor
                 {
                         get
                         {
-                                return (double)decimal.Round(decimal.Parse(_Ua.ToString()), 1);
+                                return Math.Round(_Ua,0);
                         }
                         set
                         {
@@ -94,7 +94,7 @@ namespace Monitor
                 {
                         get
                         {
-                                return (double)decimal.Round(decimal.Parse(_Ub.ToString()), 1);
+                                return Math.Round(_Ub, 0);
                         }
                         set
                         {
@@ -106,23 +106,83 @@ namespace Monitor
                 {
                         get
                         {
-                                return (double)decimal.Round(decimal.Parse(_Uc.ToString()), 1);
+                                return Math.Round(_Uc, 0);
                         }
                         set
                         {
                                 _Uc = value;
                         }
                 }
-                double _Ep;
-                public double Ep
+                double _PE;
+                public double PE
                 {
                         get
                         {
-                                return (double)decimal.Round(decimal.Parse(_Ep.ToString()),3);
+                                return Math.Round(_PE, 3);
                         }
                         set
                         {
-                                _Ep = value;
+                                _PE = value;
+                        }
+                }
+                double _QE;
+                public double QE
+                {
+                        get
+                        {
+                                return Math.Round(_QE, 3);
+                        }
+                        set
+                        {
+                                _QE = value;
+                        }
+                }
+                double _P;
+                public double P
+                {
+                        get
+                        {
+                                return Math.Round(_P, 3);
+                        }
+                        set
+                        {
+                                _P = value;
+                        }
+                }
+                double _Q;
+                public double Q
+                {
+                        get
+                        {
+                                return Math.Round(_Q, 3);
+                        }
+                        set
+                        {
+                                _Q = value;
+                        }
+                }
+                double _FR;
+                public double FR
+                {
+                        get
+                        {
+                                return Math.Round(_FR, 3);
+                        }
+                        set
+                        {
+                                _FR = value;
+                        }
+                }
+                double _PF;
+                public double PF
+                {
+                        get
+                        {
+                                return Math.Round(_PF, 3);
+                        }
+                        set
+                        {
+                                _PF = value;
                         }
                 }
         }
@@ -137,8 +197,11 @@ namespace Monitor
                 Unknown,
                 Close,
                 Open,
-                ATS_N,
-                ATS_R
+                ATS_N,//ATS
+                ATS_R,
+                Run,//MIC
+                Wait,
+                Ready
         }
         public enum ControlMode
         {
@@ -151,6 +214,7 @@ namespace Monitor
                 ACB,
                 MCCB,
                 ATS,
+                MIC,
                 ACREL
         };
 }

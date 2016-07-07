@@ -66,7 +66,7 @@ namespace Monitor
                                 createNode(doc, node1, "Type", di.DvType.ToString());
                                 createNode(doc, node1, "Name", di.Name);
                                 createNode(doc, node1, "Address", di.Address.ToString());
-                                createNode(doc, node1, "Tag", di.Tag.ToString());
+                                createNode(doc, node1, "IP", di.IP.ToString());
                                 byte parentAddr = 0;
                                 byte.TryParse(di.ParentAddr,out parentAddr);
                                 createNode(doc, node1, "Parent", di.ParentAddr);
@@ -102,6 +102,11 @@ namespace Monitor
                         get;
                         set;
                 }
+                public string Alias
+                {
+                        get;
+                        set;
+                }
                 public DeviceType DvType
                 {
                         get;
@@ -117,7 +122,7 @@ namespace Monitor
                         get;
                         set;
                 }
-                public string Tag
+                public string IP
                 {
                         get;
                         set;
@@ -130,7 +135,8 @@ namespace Monitor
                         Name = device.Name;
                         Address = device.Address;
                         DvType = device.DvType;
-                        Tag = device.Tag;
+                        IP = device.IP;
+                        Alias = device.Alias;
                         ParentAddr = device.ParentAddr==0?"---":device.ParentAddr.ToString();
                 }
 

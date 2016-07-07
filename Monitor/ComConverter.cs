@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Monitor
 {
-        class ComConverter
+        public class ComConverter
         {
                 byte[] source;
                 string extra;
-                int nInmFactor = 1;//ACB框架等级
+                int nSpecialFactor = 1,nSpecialFactor2=1;//ACB框架等级，或者MIC额定电流系数,或者MCCB脱扣故障标志位（脱扣时间单位系数）
                 //待优化——太多case
                 public string CvtRead(byte[] _source, int showType, string _extra)
                 {
@@ -43,6 +43,10 @@ namespace Monitor
                                         return cvtRTwentyTwo();
                                 case 23:
                                         return cvtRTwentyThree();
+                                case 24:
+                                        return cvtRTwentyFour();
+                                case 25:
+                                        return cvtRTwentyFive();
                                 case 30:
                                         return cvtRThirty();
                                 case 31:
@@ -51,6 +55,14 @@ namespace Monitor
                                         return cvtRThirtyTwo();
                                 case 33:
                                         return cvtRThirtyThree();
+                                case 40:
+                                        return cvtRForty();
+                                case 41:
+                                        return cvtRFortyOne();
+                                case 42:
+                                        return cvtRFortyTwo();
+                                case 43:
+                                        return cvtRFortyThree();
                                 default:
                                         return cvtRDefault();
                         }
@@ -62,6 +74,8 @@ namespace Monitor
                         {
                                 case 1:
                                         return cvtWOne(value, _extra);
+                                case 2:
+                                        return cvtWTwo(value, _extra);
                                 case 11:
                                         return cvtWEleven(value, _extra);
                                 case 12:
@@ -70,6 +84,12 @@ namespace Monitor
                                         return cvtWThirtyTwo(value, _extra);
                                 case 33:
                                         return cvtWThirtyThree(value,_extra);
+                                case 41:
+                                        return cvtWFortyOne(value, _extra);
+                                case 42:
+                                        return cvtWFortyTwo(value, _extra);
+                                case 43:
+                                        return cvtWFortyThree(value, _extra);
                                 default:
                                         return cvtWDefault(value, _extra);
                         }
@@ -131,6 +151,17 @@ namespace Monitor
                         return listExt[index + 1];
                 }
 
+                byte[] cvtWTwo(string value, string _extra)
+                {
+                        byte[] bts = new byte[2];
+                        var items = _extra.Split('_');
+                        int index=items.ToList().IndexOf(value) - 1;
+                        int n = int.Parse(items[index]);
+                        bts[0] = (byte)(n / 256);
+                        bts[1] = (byte)(n % 256);
+                        return bts;
+                }
+
                 /// <summary>
                 /// 控制器
                 /// </summary>
@@ -160,7 +191,7 @@ namespace Monitor
                         int value = source[0] * 256 + source[1];
                         double factor1 = double.Parse(extra.Split('_')[0]);
                         value = (int)(value / factor1);
-                        nInmFactor = value == 6300 ? 2 : 1;
+                        nSpecialFactor = value == 6300 ? 2 : 1;
                         return value.ToString();
                 }
 
@@ -173,13 +204,13 @@ namespace Monitor
                 {
                         int value = source[0] * 256 + source[1];
                         double factor1 = double.Parse(extra.Split('_')[0]);
-                        return (value / factor1 / nInmFactor).ToString();
+                        return (value / factor1 / nSpecialFactor).ToString();
                 }
                 private byte[] cvtWEleven(string value, string _extra)
                 {
                         double factor1 = double.Parse(_extra.Split('_')[0]);
                         double data1 = double.Parse(value);
-                        int data = Convert.ToInt32(data1 * factor1 * nInmFactor);
+                        int data = Convert.ToInt32(data1 * factor1 * nSpecialFactor);
                         byte[] bts = new byte[2];
                         bts[0] = (byte)(data / 256);
                         bts[1] = (byte)(data % 256);
@@ -223,6 +254,42 @@ namespace Monitor
                         string value = source[0].ToString();
                         int index = listExt.Contains(value) ? listExt.IndexOf(value) : 0;
                         return string.Format("{0} {1}P",listExt[index + 1],source[1]);
+                }
+
+                /// <summary>
+                /// 脱扣故障类型
+                /// </summary>
+                /// <returns></returns>
+                string cvtRSixteen()
+                {
+                        List<string> listExt = extra.Split('_').ToList();
+                        string value = (source[0] * 256 + source[1]).ToString();
+                        int index = listExt.Contains(value) ? listExt.IndexOf(value) : 0;
+                        nSpecialFactor2 = index / 2;//脱扣时间量的单位有此决定
+                        return listExt[index + 1];
+                }
+
+                /// <summary>
+                /// 脱扣电流
+                /// </summary>
+                /// <returns></returns>
+                string cvtRSeven()
+                {
+                        List<string> listExt = extra.Split('_').ToList();
+                        double factor = double.Parse(listExt[nSpecialFactor2]);
+                        double facotr2 = nSpecialFactor2 < 5 ? nSpecialFactor : 1;//脱扣电流跟框架等级和脱扣故障类型都有关联
+                        return ((source[0] * 256 + source[1]) * factor*facotr2).ToString();
+                }
+
+                /// <summary>
+                /// 脱扣时间
+                /// </summary>
+                /// <returns></returns>
+                string cvtREight()
+                {
+                        List<string> listExt = extra.Split('_').ToList();
+                        double factor = double.Parse(listExt[nSpecialFactor2]);
+                        return ((source[0] * 256 + source[1]) * factor).ToString();
                 }
 
                 #endregion ACB
@@ -271,6 +338,23 @@ namespace Monitor
                 {
                         return "V1.0";
                 }
+
+                private string cvtRTwentyFour()
+                {
+                        List<string> listExt = extra.Split('_').ToList();
+                        string value = (source[0] * 256 + source[1]).ToString();
+                        int index = listExt.Contains(value) ? listExt.IndexOf(value) : 0;
+                        nSpecialFactor = index / 2;//脱扣时间量的单位有此决定
+                        return listExt[index + 1];
+                }
+
+                private string cvtRTwentyFive()
+                {
+                        List<string> listExt = extra.Split('_').ToList();
+                        double factor = double.Parse(listExt[nSpecialFactor]);
+                        return ((source[0] * 256 + source[1]) * factor).ToString();
+                }
+
                 #endregion MCCB
 
                 #region ATS
@@ -302,6 +386,59 @@ namespace Monitor
                 byte[] cvtWThirtyThree(string value, string _extra)
                 {
                         return cvtWOne(value, _extra);
+                }
+                #endregion
+
+                #region MIC
+                string cvtRForty()
+                {
+                        int value = source[0] * 256 + source[1];
+                        nSpecialFactor = value % 1000 == 0 ? 10 : 100;//2/6.3/25(*100);100/200/400/800(*10)
+                        return (value* 1.0f / nSpecialFactor ).ToString();
+                }
+
+                string cvtRFortyOne()
+                {
+                        int value = source[0] * 256 + source[1];
+                        return (value * 1.0f / nSpecialFactor).ToString();
+                }
+                byte[] cvtWFortyOne(string value, string _extra)
+                {
+                        byte[] bts = new byte[2];
+                        double dValue = double.Parse(value);
+                        int nValue=(int)(dValue * nSpecialFactor);
+                        bts[0] = (byte)(nValue / 256);
+                        bts[1] = (byte)(nValue % 256);
+                        return bts;
+                }
+
+                string cvtRFortyTwo()
+                {
+                        int value = source[0] * 256 + source[1];
+                        double factor1 = double.Parse(extra.Split('_')[0]);
+                        return value == 0 ? "OFF" : (value/factor1).ToString();
+                }                
+                byte[] cvtWFortyTwo(string value, string _extra)
+                {
+                        double factor1 = double.Parse(_extra.Split('_')[0]);
+                        double data1=value=="OFF"?0: double.Parse(value);
+                        int data = Convert.ToInt32(data1 * factor1);
+                        byte[] bts = new byte[2];
+                        bts[0] = (byte)(data / 256);
+                        bts[1] = (byte)(data % 256);
+                        return bts;
+                }
+
+                string cvtRFortyThree()
+                {
+                        int value = source[0] * 256 + source[1];
+                        return value==0?"OFF":"ON";
+                }
+                byte[] cvtWFortyThree(string value,string _extra)
+                {
+                        byte[] bts = new byte[2];
+                        bts[1] = value == "ON" ? (byte)1 : (byte)0;
+                        return bts;
                 }
                 #endregion
         }

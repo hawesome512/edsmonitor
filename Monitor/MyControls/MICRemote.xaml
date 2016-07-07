@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="Monitor.MICRemote"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="200">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Image Name="img_state" Grid.ColumnSpan="5" Source="/Monitor;component/Images/M.png"/>
+        <Button Name="btn_startA" Grid.Row="1" Grid.Column="1" Content="启动 A" Height="30" Click="btn_startA_Click"/>
+        <Button Name="btn_startB" Grid.Row="1" Grid.Column="3" Content="启动 B" Height="30" Click="btn_startB_Click"/>
+        <Button Name="btn_reset" Grid.Row="2" Grid.Column="1" Content="复位" Height="30" Click="btn_reset_Click"/>
+        <Button Name="btn_stop" Grid.Row="2" Grid.Column="3" Content="停止" Height="30" Click="btn_stop_Click"/>
+        <Button Name="btn_cleanQ" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Content="热容快速清除" Height="30" Click="btn_cleanQ_Click"/>
+    </Grid>
+</UserControl>

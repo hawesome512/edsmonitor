@@ -6,6 +6,7 @@
     <Application.Resources>
 
         <ResourceDictionary>
+            <!--.Net4.5以下时，此部分必须注释-->
             <ResourceDictionary.MergedDictionaries>
 
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
@@ -304,6 +305,7 @@
                     </Trigger>
                 </ControlTemplate.Triggers>
             </ControlTemplate>
+            
             <Style TargetType="DataGrid">
                 <!--网格线颜色-->
                 <Setter Property="CanUserResizeColumns" Value="false"/>

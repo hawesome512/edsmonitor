@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using EDSLot;
 
 namespace Monitor
 {
@@ -19,7 +20,7 @@ namespace Monitor
                                         state.SwitchState = Switch.Open;
                                 else
                                         state.SwitchState = Switch.Close;
-                                int nCircuit = data1 & 0x278f;
+                                int nCircuit = data & 0x278f;
                                 if (nCircuit>0)
                                         state.RunState = Run.Alarm;
                                 else
@@ -48,14 +49,23 @@ namespace Monitor
                         state.Uc = str2int("Uc");
                         
                         State = state;
+                        if (Common.IsSaveData)
+                        {
+                                SaveDate();
+                                //产生新的脱扣记录
+                                if (Tool.isOne(data, 12))
+                                {
+                                        _tripData = getZoneData(_tripData);
+                                        SaveTrip();
+                                }
+                        }
                 }
 
                 double str2int(string name)
                 {
                         double data;
                         double.TryParse(RealData[name].ShowValue, out data);
-                        Random r = new Random();
-                        return data+r.Next(1,100)/1000.0;
+                        return data;
                 }
 
                 protected override Dictionary<string, DValues> cvtBasic()
@@ -256,6 +266,44 @@ namespace Monitor
                         List<string> tags = new List<string>(tag.Split('_'));
                         tags=tags.Where((value, id) =>id==0||(id>= index && id < index + length)).ToList();
                         return string.Join("_", tags.ToArray());
+                }
+
+                protected override void SaveDate()
+                {
+                        using (EDSLot.EDSEntities context = new EDSLot.EDSEntities())
+                        {
+                                try
+                                {
+                                        context.Record_ACB.Add(new EDSLot.Record_ACB()
+                                        {
+                                                Address = this.Address,
+                                                Time = DateTime.Now,
+                                                Ia = State.Ia,
+                                                Ib = State.Ib,
+                                                Ic = State.Ic,
+                                                IN = str2int("IN"),
+                                                Igf = str2int("Igf"),
+                                                Ua = State.Ua,
+                                                Ub = State.Ub,
+                                                Uc = State.Uc
+                                        });
+                                        context.SaveChanges();
+                                }
+                                catch
+                                {
+                                }
+                        }
+                }
+
+                public override List<Object> QueryData(DateTime start, DateTime end)
+                {
+                        using (EDSEntities context = new EDSEntities())
+                        {
+                                var result = from m in context.Record_Measure
+                                             where m.Address == this.Address && (m.Time >= start && m.Time <= end)
+                                             select m;
+                                return result.ToList<object>();
+                        }
                 }
         }
 }

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using EDSLot;
 
 namespace Monitor
 {
-        public class DvMCCB:Device
+        public class DvMCCB : Device
         {
                 public override void updateState()
                 {
@@ -15,13 +16,14 @@ namespace Monitor
                         if (int.TryParse(dv.ShowValue, out data))
                         {
                                 byte data1 = (Byte)(data / 256);
-                                if ((data1>> 6 & 1) == 1)
+                                if ((data1 >> 6 & 1) == 1)
                                         state.SwitchState = Switch.Close;
                                 else
                                         state.SwitchState = Switch.Open;
+                                //MCCB低位在前/高位在后不符合常规逻辑，转换为高位在前/低位在后
                                 data = data % 256 * 256 + data / 256;
                                 int nCircuit = data & 0x4CBF;
-                                if (nCircuit> 0)
+                                if (nCircuit > 0)
                                         state.RunState = Run.Alarm;
                                 else
                                         state.RunState = Run.Normal;
@@ -43,16 +45,26 @@ namespace Monitor
                         //注1111
                         state.Ia = str2int("Ia");
                         state.Ib = str2int("Ib");
-                        state.Ic = str2int("Ic"); 
-
+                        state.Ic = str2int("Ic");
                         State = state;
+                        if (Common.IsSaveData)
+                        {
+                                SaveDate();
+                                //产生新的脱扣记录
+                                if (Tool.isOne(data, 12))
+                                {
+                                        _tripData = getZoneData(_tripData);
+                                        SaveTrip();
+                                }
+                        }
                 }
 
                 double str2int(string name)
                 {
                         double data;
                         double.TryParse(RealData[name].ShowValue, out data);
-                        return data;
+                        return data;//+new Random().Next(1, 10) / 100f;
+                        //加随机数的原因：使用模拟信号时电流一直保存不变的情况下，NotifyPropertyChanged不会被触发，实际运行时不会出现此状况
                 }
 
                 protected override Dictionary<string, DValues> cvtBasic()
@@ -89,10 +101,10 @@ namespace Monitor
                 protected override Dictionary<string, DValues> cvtParams()
                 {
                         Dictionary<string, DValues> tmps = new Dictionary<string, DValues>();
-                        int nIn,nSwH;
+                        int nIn, nSwH;
                         bool bIn = int.TryParse(BasicData["In"].ShowValue, out nIn);//片区0
                         bool bSw = int.TryParse(_params["ProtectSwitchH"].ShowValue, out nSwH);//片区2
-                        if(bIn&&bSw)
+                        if (bIn && bSw)
                         {
                                 foreach (KeyValuePair<string, DValues> p in _params)
                                 {
@@ -101,7 +113,7 @@ namespace Monitor
                                         {
                                                 case "ProtectSwitchH":
                                                         string[] items = d.Tag.Split('_');
-                                                        d.ShowValue = (nSwH%256*256+nSwH/256).ToString();
+                                                        d.ShowValue = (nSwH % 256 * 256 + nSwH / 256).ToString();
                                                         d.Tag = string.Join("_", items);
                                                         break;
                                                 default:
@@ -127,9 +139,9 @@ namespace Monitor
                         byte[] snd = new byte[7 + len * 2];
                         snd[0] = Address;
                         snd[1] = 16;
-                        snd[2]=0x20;
-                        snd[3]=0x02;
-                        snd[5]=len;
+                        snd[2] = 0x20;
+                        snd[3] = 0x02;
+                        snd[5] = len;
                         snd[6] = (byte)(2 * len);
 
                         ComConverter cvt = new ComConverter();
@@ -137,7 +149,7 @@ namespace Monitor
                         keys.RemoveRange(0, 2);
                         for (int i = 0; i < len; i++)
                         {
-                                DValues d=_params[keys[i]];
+                                DValues d = _params[keys[i]];
                                 var temp = cvt.CvtWrite(dataList[i], d.Cvt, d.Tag);
                                 temp.ToList().CopyTo(0, snd, i * 2 + 7, 2);
                         }
@@ -152,11 +164,47 @@ namespace Monitor
                         return snd;
                 }
 
-                private string getTag(string tag, int index,int length)
+                private string getTag(string tag, int index, int length)
                 {
                         List<string> tags = new List<string>(tag.Split('_'));
-                        tags=tags.Where((value, id) =>id==0||(id>= index && id < index + length)).ToList();
+                        tags = tags.Where((value, id) => id == 0 || (id >= index && id < index + length)).ToList();
                         return string.Join("_", tags.ToArray());
                 }
+
+                #region Data
+                protected override void SaveDate()
+                {
+                        using (EDSLot.EDSEntities context = new EDSLot.EDSEntities())
+                        {
+                                try
+                                {
+                                        context.Record_MCCB.Add(new EDSLot.Record_MCCB()
+                                        {
+                                                Address = this.Address,
+                                                Time = DateTime.Now,
+                                                Ia = State.Ia,
+                                                Ib = State.Ib,
+                                                Ic = State.Ic,
+                                                Igf = str2int("Ig"),
+                                                IN = str2int("IN")
+                                        });
+                                        context.SaveChanges();
+                                }
+                                catch
+                                {
+                                }
+                        }
+                }
+                public override List<Object> QueryData(DateTime start, DateTime end)
+                {
+                        using (EDSEntities context = new EDSEntities())
+                        {
+                                var result = from m in context.Record_MCCB
+                                             where m.Address == this.Address && (m.Time >= start && m.Time <= end)
+                                             select m;
+                                return result.ToList<object>();
+                        }
+                }
+                #endregion
         }
 }

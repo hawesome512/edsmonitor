@@ -36,7 +36,7 @@
                     </ControlTemplate>
                 </RadioButton.Template>
             </RadioButton>
-            <TreeView Name="tree_area" Margin="0,120,50,10">
+            <TreeView Name="tree_area" Margin="0,120,60,10">
                 <TreeViewItem Header="厦门士林电机有限公司" IsExpanded="True" Tag="0">
                     <TreeViewItem Header="楼层一" Tag="1">
                         <TreeViewItem Header="空调" Tag="2"/>

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
              mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="90">
+             d:DesignHeight="500" d:DesignWidth="100" FontSize="14">
     <Grid Name="MyBreaker">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -24,6 +24,7 @@
             </ed:RegularPolygon>
         </Grid>
         <Grid Grid.Row="1">
+            <!--<Image Name="img_device" Width="90" Height="90" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="30,0,0,0"/>-->
             <Line Name="line_2" X1="20" Y1="0" X2="15" Y2="5" Stroke="SeaGreen"/>
             <Line Name="line_3" X1="20" Y1="0" X2="25" Y2="5" Stroke="SeaGreen"/>
             <Line Name="line_4" X1="20" Y1="5" X2="15" Y2="10" Stroke="SeaGreen"/>
@@ -38,7 +39,15 @@
             <Line Name="Switch_open" X1="5" Y1="45" X2="20" Y2="80" Stroke="SeaGreen" StrokeThickness="3"/>
             <Line Name="line_12" X1="20" Y1="40" X2="20" Y2="5" Stroke="SeaGreen"/>
             <Line Name="line_13" X1="20" Y1="80" X2="20" Y2="115" Stroke="SeaGreen"/>
-            <Label Name="txt_name" Margin="25,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource LabelButton}"/>
+            <Label Name="txt_name" Content="BW2000" Margin="25,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource LabelButton}"/>
+        </Grid>
+        <Grid Name="grid_current" Grid.Row="2">
+            <Label Name="Ia" Content="100" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-30,25,0" Foreground="Orange"/>
+            <Label Name="Ib" Content="100" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,25,0" Foreground="Green"/>
+            <Label Name="Ic" Content="100" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,30,25,0" Foreground="Red"/>
+            <Label Content="A" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-30,10,0"/>
+            <Label Content="A" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,10,0"/>
+            <Label Content="A" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,30,10,0"/>
         </Grid>
     </Grid>
 </UserControl>

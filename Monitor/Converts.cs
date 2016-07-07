@@ -7,12 +7,12 @@ using System.Windows.Media;
 
 namespace Monitor
 {
-        class StateToRectFillConverter:IValueConverter
+        class StateToRectFillConverter : IValueConverter
         {
                 public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
                 {
                         DState state = (DState)value;
-                        Brush brush=Brushes.LightGray;
+                        Brush brush = Brushes.LightGray;
                         switch (state.RunState)
                         {
                                 case Run.Alarm:
@@ -64,15 +64,28 @@ namespace Monitor
 
                 public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
                 {
-                        foreach (var value in values)
+                        if (values[0] is DState)
                         {
-                                DState state = (DState)value;
-                                if (state.SwitchState != Switch.Close)
+                                DState state0 = (DState)values[0];
+                                switch (state0.RunState)
                                 {
-                                        return Brushes.SeaGreen;
+                                        case Run.Alarm:
+                                                return Brushes.Orange;
+                                        case Run.NonSignal:
+                                                return Brushes.Gray;
+                                        default:
+                                                foreach (var value in values)
+                                                {
+                                                        DState state = (DState)value;
+                                                        if (state.SwitchState != Switch.Close)
+                                                        {
+                                                                return Brushes.SeaGreen;
+                                                        }
+                                                }
+                                                return Brushes.Red;
                                 }
                         }
-                        return Brushes.Red;
+                        return null;
                 }
 
                 public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
@@ -187,9 +200,30 @@ namespace Monitor
                                         return "投常";
                                 case Switch.ATS_R:
                                         return "投备";
+                                case Switch.Run:
+                                        return "运行";
+                                case Switch.Wait:
+                                        return "等待";
+                                case Switch.Ready:
+                                        return "就绪";
                                 default:
                                         return "未知";
                         }
+                }
+
+                public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+                {
+                        throw new NotImplementedException();
+                }
+        }
+
+        class StringToVisibility : IValueConverter
+        {
+                public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+                {
+                        string str = value == null ? null : value.ToString();
+                        System.Windows.Visibility vsb = string.IsNullOrEmpty(str) ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
+                        return vsb;
                 }
 
                 public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -330,13 +364,13 @@ namespace Monitor
                         switch (state.SwitchState)
                         {
                                 case Switch.Close:
-                                        isChecked=false;
+                                        isChecked = false;
                                         break;
                                 case Switch.Open:
-                                        isChecked=true;
+                                        isChecked = true;
                                         break;
                                 default:
-                                        isChecked=null;
+                                        isChecked = null;
                                         break;
                         }
                         return isChecked;

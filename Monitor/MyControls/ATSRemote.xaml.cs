@@ -20,9 +20,53 @@ namespace Monitor
         /// </summary>
         public partial class ATSRemote : UserControl
         {
+                string command, cmdAlias;
+                Device device;
                 public ATSRemote()
                 {
                         InitializeComponent();
+                }
+
+                public void InitDevice(Device device)
+                {
+                        this.DataContext = device;
+                        this.device = device;
+                        img_state.SetBinding(Image.SourceProperty, Tool.addBinding("State", new StateToATSImageSourceConverter()));
+                }
+
+                private void btn_ton_Click(object sender, RoutedEventArgs e)
+                {
+                        command = "N";
+                        cmdAlias = "投常";
+                        remote();
+                }
+
+                private void btn_off_Click(object sender, RoutedEventArgs e)
+                {
+                        command = "Open";
+                        cmdAlias = "双分";
+                        remote();
+                }
+
+                private void btn_tos_Click(object sender, RoutedEventArgs e)
+                {
+                        command = "S";
+                        cmdAlias = "投备";
+                        remote();
+                }
+
+                void remote()
+                {
+                        var result = device.RemoteControl(command);
+                        if (result.Length == 1)
+                        {
+                                MsgBox.Show(string.Format("{0} 处于 {1}状态.", device.Name, cmdAlias), "成功", MsgBox.Buttons.OK, MsgBox.Icon.Shield, MsgBox.AnimateStyle.FadeIn);
+                        }
+                        else
+                        {
+                                MsgBox.Show(string.Format("{0} {1}操作失败.", device.Name, command), "失败", MsgBox.Buttons.OK, MsgBox.Icon.Error, MsgBox.AnimateStyle.FadeIn);
+                        }
+
                 }
         }
 }

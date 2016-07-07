@@ -3,6 +3,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:Monitor"   
     xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
     xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
     xmlns:Chr="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
@@ -196,7 +197,7 @@
         <TabControl Name="myTab">
             <TabItem>
                 <TabItem.Header>
-                    <Label Foreground="White">遥测</Label>
+                    <Label Foreground="White" MouseDown="Label_MouseDown_1">遥测</Label>
                 </TabItem.Header>
                 <Grid Name="monitor">
                 </Grid>
@@ -205,7 +206,9 @@
                 <TabItem.Header>
                     <Label Foreground="White" MouseDown="Label_MouseDown">遥调</Label>
                 </TabItem.Header>
-                <Grid Name="param"/>
+                <ScrollViewer>
+                    <Grid Name="param"></Grid>
+                </ScrollViewer>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
@@ -213,17 +216,23 @@
                 </TabItem.Header>
                 <Grid Name="remote"/>
             </TabItem>
-            <TabItem>
+            <!--<TabItem>
                 <TabItem.Header>
                     <Label Foreground="White">记录</Label>
                 </TabItem.Header>
                 <Grid Name="history">
                     <DatePicker Name="dt_day" Foreground="Black" Width="100" Height="30" Margin="0,0,0,0" VerticalAlignment="Top" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
-                        <WindowsFormsHost Name="myHost" Margin="0,50,0,0">
-                            <Chr:Chart Name="myChart"/>
-                        </WindowsFormsHost>
+                    <WindowsFormsHost Name="myHost" Margin="0,50,0,0">
+                        <Chr:Chart Name="myChart"/>
+                    </WindowsFormsHost>
                     <Label HorizontalAlignment="Right" Foreground="Gray" Content="做演示用时本页为虚拟数值"/>
                 </Grid>
+            </TabItem>-->
+            <TabItem>
+                <TabItem.Header>
+                    <Label Foreground="White" MouseDown="Label_MouseDown_2">记录</Label>
+                </TabItem.Header>
+                <local:Record x:Name="record"/>
             </TabItem>
         </TabControl>
     </Grid>

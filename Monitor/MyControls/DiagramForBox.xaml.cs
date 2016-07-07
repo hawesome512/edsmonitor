@@ -34,14 +34,7 @@ namespace Monitor
 
                 private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
                 {
-                        try
-                        {
-                                //待优化，多重绑定冲突
-                                DgmGrid.Children.Clear();
-                        }
-                        catch
-                        {
-                        }
+                        DgmGrid.Children.Clear();
                         factorX = e.NewSize.Width / 1000;
                         factorY = e.NewSize.Height / 500;
                         if (devices != null)
@@ -58,40 +51,36 @@ namespace Monitor
                         addLine(new Point(50 * factorX, 475 * factorY), new Point(250 * factorX, 475 * factorY)).Stroke = Brushes.Red;
 
                         addBreaker(450 * factorY, new Thickness(250 * factorX - 20, 25 * factorY, 0, 0), 1, false);
-                        addMessure(new Thickness(250 * factorX - 30, 75 * factorY, 0, 0),8);
                         Line line = addLine(new Point(240 * factorX, 25 * factorY), new Point(885 * factorX, 25 * factorY), 3);
-                        line.SetBinding(Line.StrokeProperty, Tool.addBinding("[0].State", new StateToLineStrokeConverter()));
+                        line.SetBinding(Line.StrokeProperty, Tool.addMulBinding(new List<string> { "[0].State" }));
 
-                        addBreaker(180 * factorY, new Thickness(500 * factorX - 20, 25 * factorY, 0, 0), 2, false);
-                        line = addLine(new Point(425 * factorX, 205 * factorY), new Point(575 * factorX, 205 * factorY));
-                        //line.SetBinding(Line.StrokeProperty, Tool.addBinding("[1].State", new StateToLineStrokeConverter()));
-                        line.SetBinding(Line.StrokeProperty, Tool.addMulBinding(new List<string> { "[0].State", "[1].State" }));
-                        addBreaker(270 * factorY, new Thickness(425 * factorX - 20, 205 * factorY, 0, 0), 4, true);
-                        addBreaker(270 * factorY, new Thickness(575 * factorX - 20, 205 * factorY, 0, 0), 5, true);
+                        addBreaker(450 * factorY, new Thickness(500 * factorX - 20, 25 * factorY, 0, 0), 2, true);
+                        double y = 475 * factorY - (450 * factorY - 120) / 4 - 110;
+                        addMessure(new Thickness(500 * factorX - 75, y, 0, 0), 3);
 
-                        addBreaker(180 * factorY, new Thickness(800 * factorX - 20, 25 * factorY, 0, 0), 3, false);
+                        addBreaker(180 * factorY, new Thickness(800 * factorX - 20, 25 * factorY, 0, 0), 4, false);
                         line = addLine(new Point(725 * factorX, 205 * factorY), new Point(875 * factorX, 205 * factorY));
-                        //line.SetBinding(Line.StrokeProperty, Tool.addBinding("[2].State", new StateToLineStrokeConverter()));
-                        line.SetBinding(Line.StrokeProperty, Tool.addMulBinding(new List<string> { "[0].State", "[2].State" }));
-                        addBreaker(270 * factorY, new Thickness(725 * factorX - 20, 205 * factorY, 0, 0), 6, true);
-                        addBreaker(270 * factorY, new Thickness(875 * factorX - 20, 205 * factorY, 0, 0), 7, true);
+                        line.SetBinding(Line.StrokeProperty, Tool.addMulBinding(new List<string> { "[0].State", "[4].State" }));
+                        addBreaker(270 * factorY, new Thickness(725 * factorX - 20, 205 * factorY, 0, 0), 5, true, true);
+                        addBreaker(270 * factorY, new Thickness(875 * factorX - 20, 205 * factorY, 0, 0), 6, true, true);
                 }
 
-                Breaker addBreaker(double height, Thickness margin, byte address, bool hasTriangle, int angle = 0)
+                Breaker addBreaker(double height, Thickness margin, byte address, bool hasTriangle, bool hasCurrent = false, int angle = 0)
                 {
                         Breaker breaker = new Breaker();
-                        breaker.txt_name.Content = devices[0].Name;
                         Device device = devices.Find(d => d.Address == address);
+                        breaker.txt_name.Content = device.Name;
                         breaker.txt_name.MouseLeftButtonDown += new MouseButtonEventHandler((o, s) =>
                         {
                                 EnterDevice(this, new EnterDeviceArgs(device));
                         });
-                        breaker.Width = 90;
+                        breaker.Width = 100;
                         breaker.Height = height;
                         breaker.Margin = margin;
                         breaker.VerticalAlignment = VerticalAlignment.Top;
                         breaker.HorizontalAlignment = HorizontalAlignment.Left;
                         breaker.Triangle.Visibility = hasTriangle ? Visibility.Visible : Visibility.Hidden;
+                        breaker.grid_current.Visibility = hasCurrent ? Visibility.Visible : Visibility.Hidden;
                         RotateTransform rotate = new RotateTransform(angle);
                         rotate.CenterX = breaker.Width / 2;
                         rotate.CenterY = breaker.Height / 2;
@@ -101,13 +90,13 @@ namespace Monitor
                         return breaker;
                 }
 
-                Messure addMessure(Thickness margin,byte address)
+                Messure addMessure(Thickness margin, byte address)
                 {
                         Device device = devices.Find(d => d.Address == address);
                         Messure ms = new Messure();
                         ms.InitMessure(device);
-                        ms.Width = 160;
-                        ms.Height = 90;
+                        ms.Width = 240;
+                        ms.Height = 220;
                         ms.HorizontalAlignment = HorizontalAlignment.Left;
                         ms.VerticalAlignment = VerticalAlignment.Top;
                         ms.Margin = margin;
@@ -123,6 +112,7 @@ namespace Monitor
                         line.X2 = p2.X;
                         line.Y2 = p2.Y;
                         line.StrokeThickness = thick;
+
                         line.Stroke = Brushes.SeaGreen;
                         line.Name = name;
                         DgmGrid.Children.Add(line);

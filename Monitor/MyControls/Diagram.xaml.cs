@@ -53,7 +53,7 @@ namespace Monitor
                         countInit = DgmGrid.Children.Count;
                 }
 
-                public void InitDevices(List<Device> _devices)
+                public void InitDiagram(List<Device> _devices)
                 {
                         devices = _devices;
                         drawDevices();

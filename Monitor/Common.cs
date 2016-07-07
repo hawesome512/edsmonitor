@@ -9,6 +9,11 @@ namespace Monitor
         public enum User {UNKNOWN,ADMIN}
         public class Common:INotifyPropertyChanged
         {
+                public Common()
+                {
+                        IsSaveData =Convert.ToBoolean(Tool.GetConfig("SaveData"));
+                }
+
                 public event PropertyChangedEventHandler PropertyChanged;//当属性发生改变时触发事件通知绑定对象
                 private User userLevel;
                 public User UserLevel 
@@ -24,5 +29,6 @@ namespace Monitor
 
                 public static ComType ComType;
                 public static int SelectedAddress = -1;
+                public static bool IsSaveData;
         }
 }

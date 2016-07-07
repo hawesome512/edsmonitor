@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="EDSModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="EDSModelStoreContainer">
+          <EntitySet Name="Record_ACB" EntityType="EDSModel.Store.Record_ACB" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Record_MCCB" EntityType="EDSModel.Store.Record_MCCB" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Record_Measure" EntityType="EDSModel.Store.Record_Measure" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Trip" EntityType="EDSModel.Store.Trip" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="Record_ACB">
+          <Key>
+            <PropertyRef Name="Time" />
+          </Key>
+          <Property Name="Time" Type="datetime" Nullable="false" />
+          <Property Name="Address" Type="int" Nullable="false" />
+          <Property Name="Ia" Type="float" />
+          <Property Name="Ib" Type="float" />
+          <Property Name="Ic" Type="float" />
+          <Property Name="IN" Type="float" />
+          <Property Name="Igf" Type="float" />
+          <Property Name="Ua" Type="float" />
+          <Property Name="Ub" Type="float" />
+          <Property Name="Uc" Type="float" />
+        </EntityType>
+        <EntityType Name="Record_MCCB">
+          <Key>
+            <PropertyRef Name="Time" />
+          </Key>
+          <Property Name="Time" Type="datetime" Nullable="false" />
+          <Property Name="Address" Type="int" Nullable="false" />
+          <Property Name="Ia" Type="float" />
+          <Property Name="Ib" Type="float" />
+          <Property Name="Ic" Type="float" />
+          <Property Name="IN" Type="float" />
+          <Property Name="Igf" Type="float" />
+        </EntityType>
+        <EntityType Name="Record_Measure">
+          <Key>
+            <PropertyRef Name="Time" />
+          </Key>
+          <Property Name="Time" Type="datetime" Nullable="false" />
+          <Property Name="Address" Type="int" Nullable="false" />
+          <Property Name="U" Type="float" />
+          <Property Name="I" Type="float" />
+          <Property Name="F" Type="float" />
+          <Property Name="PF" Type="float" />
+          <Property Name="P" Type="float" />
+          <Property Name="Q" Type="float" />
+          <Property Name="PE" Type="float" />
+          <Property Name="QE" Type="float" />
+        </EntityType>
+        <EntityType Name="Trip">
+          <Key>
+            <PropertyRef Name="Time" />
+          </Key>
+          <Property Name="Time" Type="datetime" Nullable="false" />
+          <Property Name="Address" Type="int" Nullable="false" />
+          <Property Name="Phase" Type="nvarchar" MaxLength="10" />
+          <Property Name="Type" Type="nvarchar" MaxLength="10" />
+          <Property Name="Ia" Type="float" />
+          <Property Name="Ib" Type="float" />
+          <Property Name="Ic" Type="float" />
+          <Property Name="IN" Type="float" />
+          <Property Name="It" Type="float" />
+          <Property Name="Tt" Type="float" />
+          <Property Name="Ip" Type="float" />
+          <Property Name="Tp" Type="float" />
+          <Property Name="Ir" Type="float" />
+          <Property Name="Ig" Type="float" />
+        </EntityType>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="EDSModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="EDSEntities3" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Record_ACB" EntityType="EDSModel.Record_ACB" />
+          <EntitySet Name="Record_MCCB" EntityType="EDSModel.Record_MCCB" />
+          <EntitySet Name="Record_Measure" EntityType="EDSModel.Record_Measure" />
+          <EntitySet Name="Trip" EntityType="EDSModel.Trip" />
+        </EntityContainer>
+        <EntityType Name="Record_ACB">
+          <Key>
+            <PropertyRef Name="Time" />
+          </Key>
+          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Address" Type="Int32" Nullable="false" />
+          <Property Name="Ia" Type="Double" />
+          <Property Name="Ib" Type="Double" />
+          <Property Name="Ic" Type="Double" />
+          <Property Name="IN" Type="Double" />
+          <Property Name="Igf" Type="Double" />
+          <Property Name="Ua" Type="Double" />
+          <Property Name="Ub" Type="Double" />
+          <Property Name="Uc" Type="Double" />
+        </EntityType>
+        <EntityType Name="Record_MCCB">
+          <Key>
+            <PropertyRef Name="Time" />
+          </Key>
+          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Address" Type="Int32" Nullable="false" />
+          <Property Name="Ia" Type="Double" />
+          <Property Name="Ib" Type="Double" />
+          <Property Name="Ic" Type="Double" />
+          <Property Name="IN" Type="Double" />
+          <Property Name="Igf" Type="Double" />
+        </EntityType>
+        <EntityType Name="Record_Measure">
+          <Key>
+            <PropertyRef Name="Time" />
+          </Key>
+          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Address" Type="Int32" Nullable="false" />
+          <Property Name="U" Type="Double" />
+          <Property Name="I" Type="Double" />
+          <Property Name="F" Type="Double" />
+          <Property Name="PF" Type="Double" />
+          <Property Name="P" Type="Double" />
+          <Property Name="Q" Type="Double" />
+          <Property Name="PE" Type="Double" />
+          <Property Name="QE" Type="Double" />
+        </EntityType>
+        <EntityType Name="Trip">
+          <Key>
+            <PropertyRef Name="Time" />
+          </Key>
+          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Address" Type="Int32" Nullable="false" />
+          <Property Name="Phase" Type="String" MaxLength="10" Unicode="true" FixedLength="false" />
+          <Property Name="Type" Type="String" MaxLength="10" Unicode="true" FixedLength="false" />
+          <Property Name="Ia" Type="Double" />
+          <Property Name="Ib" Type="Double" />
+          <Property Name="Ic" Type="Double" />
+          <Property Name="IN" Type="Double" />
+          <Property Name="It" Type="Double" />
+          <Property Name="Tt" Type="Double" />
+          <Property Name="Ip" Type="Double" />
+          <Property Name="Tp" Type="Double" />
+          <Property Name="Ir" Type="Double" />
+          <Property Name="Ig" Type="Double" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="EDSModelStoreContainer" CdmEntityContainer="EDSEntities3">
+          <EntitySetMapping Name="Record_ACB">
+            <EntityTypeMapping TypeName="EDSModel.Record_ACB">
+              <MappingFragment StoreEntitySet="Record_ACB">
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Ia" ColumnName="Ia" />
+                <ScalarProperty Name="Ib" ColumnName="Ib" />
+                <ScalarProperty Name="Ic" ColumnName="Ic" />
+                <ScalarProperty Name="IN" ColumnName="IN" />
+                <ScalarProperty Name="Igf" ColumnName="Igf" />
+                <ScalarProperty Name="Ua" ColumnName="Ua" />
+                <ScalarProperty Name="Ub" ColumnName="Ub" />
+                <ScalarProperty Name="Uc" ColumnName="Uc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Record_MCCB">
+            <EntityTypeMapping TypeName="EDSModel.Record_MCCB">
+              <MappingFragment StoreEntitySet="Record_MCCB">
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Ia" ColumnName="Ia" />
+                <ScalarProperty Name="Ib" ColumnName="Ib" />
+                <ScalarProperty Name="Ic" ColumnName="Ic" />
+                <ScalarProperty Name="IN" ColumnName="IN" />
+                <ScalarProperty Name="Igf" ColumnName="Igf" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Record_Measure">
+            <EntityTypeMapping TypeName="EDSModel.Record_Measure">
+              <MappingFragment StoreEntitySet="Record_Measure">
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="U" ColumnName="U" />
+                <ScalarProperty Name="I" ColumnName="I" />
+                <ScalarProperty Name="F" ColumnName="F" />
+                <ScalarProperty Name="PF" ColumnName="PF" />
+                <ScalarProperty Name="P" ColumnName="P" />
+                <ScalarProperty Name="Q" ColumnName="Q" />
+                <ScalarProperty Name="PE" ColumnName="PE" />
+                <ScalarProperty Name="QE" ColumnName="QE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Trip">
+            <EntityTypeMapping TypeName="EDSModel.Trip">
+              <MappingFragment StoreEntitySet="Trip">
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Phase" ColumnName="Phase" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Ia" ColumnName="Ia" />
+                <ScalarProperty Name="Ib" ColumnName="Ib" />
+                <ScalarProperty Name="Ic" ColumnName="Ic" />
+                <ScalarProperty Name="IN" ColumnName="IN" />
+                <ScalarProperty Name="It" ColumnName="It" />
+                <ScalarProperty Name="Tt" ColumnName="Tt" />
+                <ScalarProperty Name="Ip" ColumnName="Ip" />
+                <ScalarProperty Name="Tp" ColumnName="Tp" />
+                <ScalarProperty Name="Ir" ColumnName="Ir" />
+                <ScalarProperty Name="Ig" ColumnName="Ig" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using EDSLot;
 
 namespace Monitor
 {
@@ -12,7 +13,7 @@ namespace Monitor
 
                 public override void InitAddress()
                 {
-                        string path = string.Format("DevicesConfig\\{0}.xml", DvType);
+                        string path = string.Format("Config\\{0}.xml", DvType);
                         XmlElement xeRoot = Tool.GetXML(path);
                         _realData = initDic(0, xeRoot);
                 }
@@ -31,19 +32,30 @@ namespace Monitor
                         DState state = new DState();
                         if (!string.IsNullOrEmpty(RealData["U"].ShowValue))
                         {
-                                int data1 = int.Parse(RealData["U"].ShowValue);
-                                int data2 = int.Parse(RealData["U_1"].ShowValue);
-                                state.Ua = data1 * Math.Pow(10, data2 - 3);
-
-                                data1 = int.Parse(RealData["I"].ShowValue);
-                                data2 = int.Parse(RealData["I_1"].ShowValue);
-                                state.Ia = data1 * Math.Pow(10, data2 - 3);
-
-                                data1 = int.Parse(RealData["PE"].ShowValue);
-                                data2 = int.Parse(RealData["PE_1"].ShowValue);
-                                state.Ep = (data1 * 65536 + data2) / 1000f;
+                                state.Ua = str2double("U");
+                                state.Ia = str2double("I");
+                                state.FR = str2double("F");
+                                state.PF = str2double("PF");
+                                state.P = str2double("P");
+                                state.Q = str2double("Q");
+                                state.PE = str2doubleE("PE");
+                                state.QE = str2doubleE("QE");
                         }
                         State = state;
+                        SaveDate();
+                }
+
+                double str2double(string name)
+                {
+                        int data1 = int.Parse(RealData[name].ShowValue);
+                        int data2 = int.Parse(RealData[name + "_1"].ShowValue);
+                        return data1 * Math.Pow(10, data2 - 3);
+                }
+                double str2doubleE(string name)
+                {
+                        int data1 = int.Parse(RealData[name].ShowValue);
+                        int data2 = int.Parse(RealData[name + "_1"].ShowValue);
+                        return (data1 * 65536 + data2) / 1000f;
                 }
 
                 protected override byte[] GetValidParams(List<string> dataList)
@@ -54,6 +66,44 @@ namespace Monitor
                 protected override byte[] GetValidRemote(string p)
                 {
                         throw new NotImplementedException();
+                }
+
+                protected override void SaveDate()
+                {
+                        using (EDSLot.EDSEntities context = new EDSLot.EDSEntities())
+                        {
+                                try
+                                {
+                                        context.Record_Measure.Add(new EDSLot.Record_Measure()
+                                        {
+                                                Address = this.Address,
+                                                Time = DateTime.Now,
+                                                U = State.Ua,
+                                                I = State.Ia,
+                                                F = State.FR,
+                                                PF = State.PF,
+                                                P = State.P,
+                                                Q = State.Q,
+                                                PE = State.PE,
+                                                QE = State.QE
+                                        });
+                                        context.SaveChanges();
+                                }
+                                catch
+                                {
+                                }
+                        }
+                }
+
+                public override List<Object> QueryData(DateTime start, DateTime end)
+                {
+                        using (EDSEntities context = new EDSEntities())
+                        {
+                                var result = from m in context.Record_Measure
+                                             where m.Address == this.Address && (m.Time >= start && m.Time <= end)
+                                             select m;
+                                return result.ToList<object>();
+                        }
                 }
         }
 }

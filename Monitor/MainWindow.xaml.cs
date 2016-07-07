@@ -24,7 +24,6 @@ namespace Monitor
                 public MainWindow()
                 {
                         InitializeComponent();
-
                         intitControls();
                         Thread t = new Thread(() =>
                         {
@@ -46,7 +45,9 @@ namespace Monitor
                         {
                                 Common.ComType = ComType.TCP;
                         }
+
                         common = new Common();
+                        common.UserLevel = User.ADMIN;
                         com = new Com(Common.ComType);
 
                         Binding bind = new Binding();
@@ -102,7 +103,9 @@ namespace Monitor
                         {
                                 testComs();
                         }
+
                         diagram.InitDiagram(devices);
+
                         diagram.EnterDevice += new EventHandler<EnterDeviceArgs>(diagram_EnterDevice);
                         threadRun = new Thread(() =>
                         {
@@ -139,17 +142,18 @@ namespace Monitor
                 void loadDevices()
                 {
                         devices = new List<Device>();
-                        XmlElement xeR = Tool.GetXML(@"DevicesConfig/DeviceList.xml");
+                        XmlElement xeR = Tool.GetXML(@"Config/DeviceList.xml");
                         for (int i = 0; i < xeR.ChildNodes.Count;i++ )
                         {
                                 string type = xeR.SelectNodes("//Type")[i].InnerText;
                                 string name = xeR.SelectNodes("//Name")[i].InnerText;
+                                string alias = xeR.SelectNodes("//Alias")[i].InnerText;
                                 byte addr = byte.Parse(xeR.SelectNodes("//Address")[i].InnerText);
-                                string tag = xeR.SelectNodes("//Tag")[i].InnerText;
+                                string tag = xeR.SelectNodes("//IP")[i].InnerText;
                                 byte parent = byte.Parse(xeR.SelectNodes("//Parent")[i].InnerText);
                                 DeviceType dvType = (DeviceType)Enum.Parse(typeof(DeviceType), type);
                                 Device device = Activator.CreateInstance(Type.GetType("Monitor.Dv" + type)) as Device;
-                                device.InitDevice(addr, dvType, name, tag, parent);
+                                device.InitDevice(addr, dvType, name,alias, tag, parent);
                                 device.MyCom = com;
                                 device.PreRemoteModify += (s, o) =>
                                 {

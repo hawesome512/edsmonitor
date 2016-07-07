@@ -33,14 +33,19 @@ namespace Monitor
                         {
                                 sources.Add(string.Format("[{0}].State", i));
                         }
-                        for(int i=0;i<5;i++)
+                        for(int i=0;i<4;i++)
                         {
                                 Shape shape = MyMessure.Children[i] as Shape;
                                 shape.SetBinding(Shape.StrokeProperty, Tool.addMulBinding(sources));
                         }
                         I.SetBinding(Label.ContentProperty, new Binding("[0].State.Ia"));
                         U.SetBinding(Label.ContentProperty, new Binding("[0].State.Ua"));
-                        EP.SetBinding(Label.ContentProperty, new Binding("[0].State.Ep"));
+                        PE.SetBinding(Label.ContentProperty, new Binding("[0].State.PE"));
+                        FR.SetBinding(Label.ContentProperty, new Binding("[0].State.FR"));
+                        PF.SetBinding(Label.ContentProperty, new Binding("[0].State.PF"));
+                        P.SetBinding(Label.ContentProperty, new Binding("[0].State.P"));
+                        Q.SetBinding(Label.ContentProperty, new Binding("[0].State.Q"));
+                        QE.SetBinding(Label.ContentProperty, new Binding("[0].State.QE"));
                 }
         }
 }

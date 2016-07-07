@@ -56,10 +56,9 @@ namespace Monitor
                 /// </summary>
                 /// <param name="snd"></param>
                 /// <returns>Array.Length,0:通信失败；1:写入；2*n:读取</returns>
-                public byte[] Execute(byte[] snd,string tag)
+                public byte[] Execute(byte[] snd,string ip)
                 {
-                        //待优化
-                        strIp = tag;
+                        strIp = ip;
 
                         if (cType == ComType.SP)
                                 return spCom(snd);

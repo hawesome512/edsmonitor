@@ -28,6 +28,10 @@ namespace Monitor
 
                 public void InitBreaker(Device device)
                 {
+                        //string imgUrl =string.Format("pack://application:,,,/Monitor;component/Images/Types/{0}.jpg",device.Name);
+                        //img_device.Source = (new ImageSourceConverter().ConvertFromString(imgUrl) as ImageSource);
+
+
                         this.DataContext = device.Dependence;
                         var lines=initLineArray();
                         List<string> sources = new List<string>();
@@ -44,6 +48,9 @@ namespace Monitor
                         Switch_open.SetBinding(Line.OpacityProperty, Tool.addBinding("[0].State", new StateToOpenConverter()));
                         Switch_close.SetBinding(Line.OpacityProperty, Tool.addBinding("[0].State", new StateToCloseConverter()));
                         Switch_close.SetBinding(Line.StrokeProperty, Tool.addMulBinding(sources));
+                        Ia.SetBinding(Label.ContentProperty, new Binding("[0].State.Ia"));
+                        Ib.SetBinding(Label.ContentProperty, new Binding("[0].State.Ib"));
+                        Ic.SetBinding(Label.ContentProperty, new Binding("[0].State.Ic"));
                 }
 
 

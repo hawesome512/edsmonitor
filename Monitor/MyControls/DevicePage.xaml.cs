@@ -10,33 +10,33 @@ using System.Windows.Shapes;
 
 namespace Monitor
 {
-	/// <summary>
-	/// DevicePage.xaml 的交互逻辑
-	/// </summary>
-	public partial class DevicePage : UserControl
-	{
+        /// <summary>
+        /// DevicePage.xaml 的交互逻辑
+        /// </summary>
+        public partial class DevicePage : UserControl
+        {
                 Device device;
                 int countInit;
-		public DevicePage()
-		{
-			this.InitializeComponent();
+                public DevicePage()
+                {
+                        this.InitializeComponent();
                         countInit = LayoutRoot.Children.Count;
-		}
+                }
 
                 public int GetAddr()
                 {
                         return device.Address;
                 }
 
-                public void InitDevice(Device _device,Common common)
+                public void InitDevice(Device _device, Common common)
                 {
-                        int countNow=LayoutRoot.Children.Count;
+                        int countNow = LayoutRoot.Children.Count;
                         LayoutRoot.Children.RemoveRange(countInit, countNow - countInit);
                         device = _device;
                         this.DataContext = device;
                         bindingState();
                         initBase(device.BasicData);
-                        myTab.InitTab(device,common);
+                        myTab.InitTab(device, common);
                 }
 
                 private void bindingState()
@@ -49,8 +49,11 @@ namespace Monitor
                         lblState.SetBinding(Label.ContentProperty, bind1);
                         Binding bind2 = new Binding("State.ErrorMsg");
                         lbl_error.SetBinding(Label.ContentProperty, bind2);
+                        Binding bind3 = new Binding("State.ErrorMsg");
+                        bind3.Converter = new StringToVisibility();
+                        lbl_error.SetBinding(Label.VisibilityProperty, bind3);
 
-                        string packUri = string.Format("pack://application:,,,/Monitor;component/Images/{0}.jpg", device.DvType);
+                        string packUri = string.Format("pack://application:,,,/Monitor;component/Images/Types/{0}.jpg", device.Name);
                         dvImg.Source = new ImageSourceConverter().ConvertFromString(packUri) as ImageSource;
                 }
 
@@ -71,11 +74,12 @@ namespace Monitor
 
                                 //配置：中英文切换
                                 //text.Text = d.Key;
-                                text.Text=d.Value.Alias;
+                                text.Text = d.Value.Alias;
 
                                 border1.Child = text;
 
-                                Border border2 = addBorder(new Thickness(0, 0, 0, 1), deltaH, 120, new Thickness(170, index * deltaH, 0, 0)); text = new TextBlock();
+                                Border border2 = addBorder(new Thickness(0, 0, 0, 1), deltaH, 120, new Thickness(170, index * deltaH, 0, 0));
+                                text = new TextBlock();
                                 text.HorizontalAlignment = HorizontalAlignment.Left;
                                 text.VerticalAlignment = VerticalAlignment.Center;
                                 text.Margin = new Thickness(20, 0, 0, 0);
@@ -90,7 +94,7 @@ namespace Monitor
                         }
                 }
 
-                private Border addBorder(Thickness btk, double height,double width, Thickness margin)
+                private Border addBorder(Thickness btk, double height, double width, Thickness margin)
                 {
                         Border border = new Border();
                         border.BorderBrush = Brushes.Black;
@@ -104,5 +108,5 @@ namespace Monitor
                         LayoutRoot.Children.Add(border);
                         return border;
                 }
-	}
+        }
 }

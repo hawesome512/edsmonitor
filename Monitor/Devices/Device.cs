@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.ComponentModel;
+using EDSLot;
 
 namespace Monitor
 {
@@ -30,7 +31,12 @@ namespace Monitor
                         get;
                         set;
                 }
-                public string Tag
+                public string Alias
+                {
+                        get;
+                        set;
+                }
+                public string IP
                 {
                         get;
                         set;
@@ -40,16 +46,17 @@ namespace Monitor
                         get;
                         set;
                 }
-                ComConverter comcvt = new ComConverter();
+                protected ComConverter comcvt = new ComConverter();
                 protected int nComFailed;
                 public event EventHandler<EventArgs> PreRemoteModify, RemoteModified;
 
-                public void InitDevice(byte addr, DeviceType type, string name,string tag,byte parent)
+                public void InitDevice(byte addr, DeviceType type, string name,string alias,string ip,byte parent)
                 {
                         Address = addr;
                         DvType = type;
                         Name = name;
-                        Tag = tag;
+                        Alias = alias;
+                        IP = ip;
                         ParentAddr = parent;
                 }
 
@@ -110,10 +117,24 @@ namespace Monitor
                         {
                                 return cvtParams();
                         }
+                        set
+                        {
+                                if (PropertyChanged != null)
+                                        this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Params"));
+                        }
                 }
                 protected virtual Dictionary<string, DValues> cvtParams()
                 {
                         return _params;
+                }
+
+                protected Dictionary<string, DValues> _tripData;
+                public Dictionary<string, DValues> TripData
+                {
+                        get
+                        {
+                                return _tripData;
+                        }
                 }
 
                 protected DState _state = new DState();
@@ -167,7 +188,7 @@ namespace Monitor
                         snd[2] = (byte)(addr / 256);
                         snd[3] = (byte)(addr % 256);
                         snd[5] = (byte)length;
-                        byte[] rcv = MyCom.Execute(snd,Tag);
+                        byte[] rcv = MyCom.Execute(snd,IP);
                         nComFailed = rcv.Length == 0 ? nComFailed + 1 : 0;
                         List<string> keys = new List<string>(dic.Keys);
                         for (int i = 0; i < keys.Count; i++)
@@ -194,7 +215,7 @@ namespace Monitor
                         PreRemoteModify(null, new EventArgs());
                         System.Threading.Thread.Sleep(500);
                         byte[] snd = GetValidParams(dataList);
-                        var result = MyCom.Execute(snd,Tag);
+                        var result = MyCom.Execute(snd,IP);
                         RemoteModified(null, new EventArgs());
                         return result;
                 }
@@ -206,7 +227,7 @@ namespace Monitor
                         PreRemoteModify(null, new EventArgs());
                         System.Threading.Thread.Sleep(500);
                         byte[] snd = GetValidRemote(p);
-                        var result = MyCom.Execute(snd,Tag);
+                        var result = MyCom.Execute(snd,IP);
                         RemoteModified(null, new EventArgs());
                         return result;
                 }
@@ -217,11 +238,16 @@ namespace Monitor
                 #region Init
                 public virtual void InitAddress()
                 {
-                        string path = string.Format("DevicesConfig\\{0}.xml", DvType);
+                        string path = string.Format("Config\\{0}.xml", DvType);
                         XmlElement xeRoot = Tool.GetXML(path);
                         _basicData = initDic(0, xeRoot);
                         _realData = initDic(1, xeRoot);
                         _params = initDic(2, xeRoot);
+                        if (xeRoot.ChildNodes.Count > 3)
+                        {
+                                //默认设定配置地址表XML文件时忽略3/4/5000片区，6000片区为脱扣记录，以后可能需要修改此设定
+                                _tripData = initDic(3, xeRoot);
+                        }
                 }
 
                 protected Dictionary<string, DValues> initDic(int zone, XmlElement xeRoot)
@@ -248,5 +274,67 @@ namespace Monitor
                         return tag;
                 }
                 #endregion
+
+                protected virtual void SaveDate()
+                {
+                }
+                protected virtual void SaveTrip()
+                {
+                        using (EDSEntities context = new EDSEntities())
+                        {
+                                context.Trip.Add(new Trip()
+                                {
+                                        Address = this.Address,
+                                        Time = DateTime.Now,
+                                        Phase = TripData["Phase"].ShowValue,
+                                        Type = TripData["Type"].ShowValue,
+                                        Ia = tripStr2int("Ia"),
+                                        Ib = tripStr2int("Ib"),
+                                        Ic = tripStr2int("Ic"),
+                                        IN = tripStr2int("IN"),
+                                        It = tripStr2int("It"),
+                                        Tt = tripStr2int("Tt"),
+                                        Ip = tripStr2int("Ip"),
+                                        Tp = tripStr2int("Tp"),
+                                        Ir = getIr()
+                                });
+                                try
+                                {
+                                        context.SaveChanges();
+                                }
+                                catch
+                                {
+                                }
+                        }
+
+                }
+
+                private double getIr()
+                {
+                        return double.Parse(BasicData["In"].ShowValue) * double.Parse(Params["Ir"].ShowValue);
+                }
+
+                double tripStr2int(string name)
+                {
+                        double data;
+                        double.TryParse(TripData[name].ShowValue, out data);
+                        return data;
+                }
+
+                public virtual List<object> QueryData(DateTime start, DateTime end)
+                {
+                        return null;
+                }
+                public virtual List<object> QueryTrip(DateTime start, DateTime end)
+                {
+                        using (EDSEntities context = new EDSEntities())
+                        {
+                                var result = from m in context.Trip
+                                             where m.Address == this.Address && (m.Time >= start && m.Time <= end)
+                                             orderby m.Time descending
+                                             select m;
+                                return result.ToList<object>();
+                        }
+                }
         }
 }

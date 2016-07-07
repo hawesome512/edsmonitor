@@ -217,7 +217,8 @@ namespace Monitor
                         double dValue;
                         if (double.TryParse(value, out dValue))
                         {
-                                var array = items.Cast<object>().Select(s =>s).ToList().ConvertAll(s=>Convert.ToDouble(s));
+                                var t = items.Cast<object>().Select(s => s).ToList();
+                                var array = items.Cast<object>().Select(s =>s).ToList().ConvertAll(s=>cvt2Double(s));
                                 array = array.ConvertAll(s => Math.Abs(s - dValue));
                                 return array.FindIndex(s => s == array.Min());
                         }
@@ -225,6 +226,13 @@ namespace Monitor
                         {
                                 return 0;
                         }
+                }
+
+                static double cvt2Double(object obj)
+                {
+                        double d = 0;
+                        double.TryParse(obj.ToString(), out d);
+                        return d;
                 }
 
                 public static List<Device> FindParents(List<Device> devices, byte address)
