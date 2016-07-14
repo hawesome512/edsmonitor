@@ -90,6 +90,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="TopSdk">
+      <HintPath>..\..\..\Downloads\alidayu\TopSdk.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -156,6 +159,7 @@
     <Compile Include="MyControls\DiagramForBox.xaml.cs">
       <DependentUpon>DiagramForBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Sms.cs" />
     <Compile Include="Tool.cs" />
     <Compile Include="Devices\DvATS.cs" />
     <Compile Include="Devices\DvMCCB_old.cs" />
@@ -300,6 +304,9 @@
     <Resource Include="Images\M.png" />
     <Resource Include="Images\Types\BMA160.jpg" />
     <Resource Include="Images\Types\BMA400.jpg" />
+    <Content Include="Config\SMS.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="MonitorHelp.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -12,6 +12,7 @@ namespace Monitor
                 public Common()
                 {
                         IsSaveData =Convert.ToBoolean(Tool.GetConfig("SaveData"));
+                        SmsAlarm = new Sms();
                 }
 
                 public event PropertyChangedEventHandler PropertyChanged;//当属性发生改变时触发事件通知绑定对象
@@ -30,5 +31,6 @@ namespace Monitor
                 public static ComType ComType;
                 public static int SelectedAddress = -1;
                 public static bool IsSaveData;
+                public static Sms SmsAlarm;
         }
 }

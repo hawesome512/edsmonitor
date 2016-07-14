@@ -308,6 +308,11 @@ namespace Monitor
                         }
 
                 }
+                protected virtual void SmsAlarm()
+                {
+                        string info=string.Format("{0}-{1}",TripData["Phase"].ShowValue,TripData["Type"].ShowValue);
+                        Common.SmsAlarm.SendSms(Address, info);
+                }
 
                 private double getIr()
                 {

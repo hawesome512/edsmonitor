@@ -55,6 +55,7 @@ namespace Monitor
                                 {
                                         _tripData = getZoneData(_tripData);
                                         SaveTrip();
+                                        SmsAlarm();
                                 }
                         }
                 }
