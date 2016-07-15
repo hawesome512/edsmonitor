@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monitor", "E:\Monitor\Monitor\Monitor.csproj", "{C1E2C9B3-A161-474C-8E31-E74224445700}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monitor", "G:\Users\haisheng\Desktop\Monitor\Monitor\Monitor.csproj", "{C1E2C9B3-A161-474C-8E31-E74224445700}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoSizeDemo", "E:\Monitor\AutoSizeDemo\AutoSizeDemo.csproj", "{4B5D11D9-5DAE-47A9-A34D-9543F0A20589}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoSizeDemo", "G:\Users\haisheng\Desktop\Monitor\AutoSizeDemo\AutoSizeDemo.csproj", "{4B5D11D9-5DAE-47A9-A34D-9543F0A20589}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetroStyles", "E:\Monitor\MetroStyles\MetroStyles.csproj", "{0A7C47BD-3FAA-42E4-BC15-6FA2A2D5C7ED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetroStyles", "G:\Users\haisheng\Desktop\Monitor\MetroStyles\MetroStyles.csproj", "{0A7C47BD-3FAA-42E4-BC15-6FA2A2D5C7ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDSLot", "E:\Monitor\EDSLot\EDSLot.csproj", "{77BF0430-1A26-445D-BD47-DC077A688A4A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDSLot", "G:\Users\haisheng\Desktop\Monitor\EDSLot\EDSLot.csproj", "{77BF0430-1A26-445D-BD47-DC077A688A4A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
