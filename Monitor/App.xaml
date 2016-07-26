@@ -15,6 +15,8 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Red.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
+            
+            
             <!--Foreground-->
             <SolidColorBrush x:Key="Foreground" Color="#FFFFFF"/>
 
@@ -43,6 +45,23 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+            </Style>
+            <Style x:Key="RadioLableStyle" TargetType="RadioButton">
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="VerticalAlignment" Value="Top"/>
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="RadioButton">
+                            <Label Content="{TemplateBinding Content}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" HorizontalContentAlignment="Center" Background="{TemplateBinding Background}"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsChecked" Value="true">
+                        <Setter Property="Background" Value="#55d3d3d3"/>
+                    </Trigger> 
+                </Style.Triggers>
             </Style>
             <Style x:Key="StandardButton" TargetType="Button">
                 <Setter Property="Visibility" Value="Visible"/>

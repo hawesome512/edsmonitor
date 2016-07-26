@@ -1,0 +1,54 @@
+﻿<Window x:Class="Monitor.Setting"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Monitor"
+        Height="300" Width="500" WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True" FontSize="13.5">
+    <Window.Resources>
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid/>
+        <Border BorderBrush="SeaGreen" BorderThickness="1" Grid.RowSpan="3"></Border>
+        <Grid Grid.Row="0">
+            <Grid.Background>
+                <ImageBrush ImageSource="/Monitor;component/Images/title.png" Stretch="None"/>
+            </Grid.Background>
+            <Label Content="设置"/>
+            <local:ImageButton x:Name="btn_close" HorizontalAlignment="Right" Width="25" Height="25" VerticalAlignment="Top"  ImgPath="/Images/关闭.png" Template="{StaticResource ImageButtonTemplate}" Click="btn_close_Click"/>
+        </Grid>
+        <Grid Grid.Row="1">
+            <StackPanel Orientation="Vertical" Width="90" HorizontalAlignment="Left" Margin="10">
+                <RadioButton Name="rb_com" Content="通信模式" IsChecked="True" Style="{DynamicResource RadioLableStyle}"></RadioButton>
+                <RadioButton Name="rb_data" Content="数据存储" Style="{DynamicResource RadioLableStyle}"></RadioButton>
+                <RadioButton Name="rb_sms" Content="短信报警"  Style="{DynamicResource RadioLableStyle}"></RadioButton>
+            </StackPanel>
+            <Grid Margin="100,10,10,0" Background="#55d3d3d3">
+                <Grid Name="grid_com" Visibility="{Binding IsChecked, Converter={StaticResource BoolToVisibilityConverter}, ElementName=rb_com}">
+                    <RadioButton Name="rb_sp" GroupName="com"
+                                  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,-100,0,0">串口通信</RadioButton>
+                    <RadioButton Name="rb_tcp" GroupName="com" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0">TCP/IP</RadioButton>
+                    <RadioButton Name="rb_wcf" GroupName="com" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,100,0,0">WCF</RadioButton>
+                    <TextBox HorizontalAlignment="Left" VerticalAlignment="Center" Margin="100,142,0,42" Width="280" Text="net.tcp://172.16.65.88:8090/EDSService"></TextBox>
+                </Grid>
+                <Grid Name="grid_data" Visibility="{Binding IsChecked, Converter={StaticResource BoolToVisibilityConverter}, ElementName=rb_data}">
+                    <Label Margin="20,10,0,0" Content="数据库连接地址:" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                    <TextBox Name="txt_sql" TextWrapping="Wrap" Margin="20,40" Background="White"></TextBox>
+                </Grid>
+                <Grid Name="grid_sms" Visibility="{Binding IsChecked, Converter={StaticResource BoolToVisibilityConverter}, ElementName=rb_sms}">
+                    <TextBlock Margin="20,80,20,20" Text="短信接收号码。支持单个或多个手机号码，传入号码为11位手机号码，不能加0或+86。群发短信需传入多个号码，以英文逗号分隔，一次调用最多传入200个号码。示例：18600000000,13911111111,13322222222" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBox Name="txt_tel" VerticalAlignment="Center" Margin="20,-80,20,0" Background="White">18759282157</TextBox>
+                </Grid>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Label Content="*重启生效" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10"/>
+            <Button Name="btn_save" HorizontalAlignment="Right" Margin="0,0,10,0" Content="确定" Width="80" Click="btn_save_Click"/>
+            <Button HorizontalAlignment="Right" Margin="0,0,100,0" Background="#B2DFDB" Content="取消" Width="80" Click="btn_close_Click"/>
+        </Grid>
+    </Grid>
+</Window>

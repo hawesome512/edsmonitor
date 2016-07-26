@@ -19,7 +19,8 @@ namespace Monitor
                         Appkey = root.SelectSingleNode("//APPKEY").InnerText;
                         Secret = root.SelectSingleNode("//SECRET").InnerText;
                         SmsFreeSignName = root.SelectSingleNode("//SMSFREESIGNNAME").InnerText;
-                        RecNum = root.SelectSingleNode("//RECNUM").InnerText;
+                        //RecNum = root.SelectSingleNode("//RECNUM").InnerText;
+                        RecNum = Tool.GetConfig("Telephones");
                         SmsTemplateCode = root.SelectSingleNode("//SMSTEMPLATECODE").InnerText;
                 }
                 public string Url

@@ -5,37 +5,49 @@ using System.Text;
 using System.Xml;
 using System.ComponentModel;
 using EDSLot;
+using System.ServiceModel;
+using System.Runtime.Serialization;
 
 namespace Monitor
 {
+        [DataContract]
         public abstract class Device : INotifyPropertyChanged
         {
+                [DataMember]
+                public List<byte[]> DataList = new List<byte[]>();
+
                 public Com MyCom;
+
                 public byte Address
                 {
                         get;
                         set;
                 }
+
                 public byte ParentAddr
                 {
                         get;
                         set;
                 }
+
                 public DeviceType DvType
                 {
                         get;
                         set;
                 }
+
                 public string Name
                 {
                         get;
                         set;
                 }
+
                 public string Alias
                 {
                         get;
                         set;
                 }
+
                 public string IP
                 {
                         get;
@@ -50,7 +62,7 @@ namespace Monitor
                 protected int nComFailed;
                 public event EventHandler<EventArgs> PreRemoteModify, RemoteModified;
 
-                public void InitDevice(byte addr, DeviceType type, string name,string alias,string ip,byte parent)
+                public void InitDevice(byte addr, DeviceType type, string name, string alias, string ip, byte parent)
                 {
                         Address = addr;
                         DvType = type;
@@ -169,18 +181,18 @@ namespace Monitor
                                 //第三片区：进入设备页时循环读取
                                 if (_basicData["Device"].ShowValue == null)
                                 {
-                                        _basicData = getZoneData(_basicData);
+                                        _basicData = getZoneData(_basicData,0);
                                 }
-                                _realData = getZoneData(_realData);
+                                _realData = getZoneData(_realData,1);
                                 if (Address == Common.SelectedAddress || _params["LocalOrRemote"].ShowValue == null)
                                 {
-                                        _params = getZoneData(_params);
+                                        _params = getZoneData(_params,2);
                                 }
                                 updateState();
                         }
                 }
 
-                protected Dictionary<string, DValues> getZoneData(Dictionary<string, DValues> dic)
+                protected Dictionary<string, DValues> getZoneData(Dictionary<string, DValues> dic,int zoneIndex=-1)
                 {
                         byte[] snd = { Address, 3, 0, 0, 0, 1 };
                         int addr = dic.First().Value.Addr;
@@ -188,7 +200,12 @@ namespace Monitor
                         snd[2] = (byte)(addr / 256);
                         snd[3] = (byte)(addr % 256);
                         snd[5] = (byte)length;
-                        byte[] rcv = MyCom.Execute(snd,IP);
+                        string tag = Common.CType == ComType.WCF ? zoneIndex.ToString() : IP;
+                        byte[] rcv = MyCom.Execute(snd, tag);
+                        if (zoneIndex!=-1)
+                        {
+                                DataList[zoneIndex] = rcv;
+                        }
                         nComFailed = rcv.Length == 0 ? nComFailed + 1 : 0;
                         List<string> keys = new List<string>(dic.Keys);
                         for (int i = 0; i < keys.Count; i++)
@@ -215,7 +232,7 @@ namespace Monitor
                         PreRemoteModify(null, new EventArgs());
                         System.Threading.Thread.Sleep(500);
                         byte[] snd = GetValidParams(dataList);
-                        var result = MyCom.Execute(snd,IP);
+                        var result = MyCom.Execute(snd, IP);
                         RemoteModified(null, new EventArgs());
                         return result;
                 }
@@ -227,7 +244,7 @@ namespace Monitor
                         PreRemoteModify(null, new EventArgs());
                         System.Threading.Thread.Sleep(500);
                         byte[] snd = GetValidRemote(p);
-                        var result = MyCom.Execute(snd,IP);
+                        var result = MyCom.Execute(snd, IP);
                         RemoteModified(null, new EventArgs());
                         return result;
                 }
@@ -241,8 +258,11 @@ namespace Monitor
                         string path = string.Format("Config\\{0}.xml", DvType);
                         XmlElement xeRoot = Tool.GetXML(path);
                         _basicData = initDic(0, xeRoot);
+                        DataList.Add(new byte[_basicData.Count * 2]);
                         _realData = initDic(1, xeRoot);
+                        DataList.Add(new byte[_realData.Count * 2]);
                         _params = initDic(2, xeRoot);
+                        DataList.Add(new byte[_params.Count * 2]);
                         if (xeRoot.ChildNodes.Count > 3)
                         {
                                 //默认设定配置地址表XML文件时忽略3/4/5000片区，6000片区为脱扣记录，以后可能需要修改此设定
@@ -310,7 +330,7 @@ namespace Monitor
                 }
                 protected virtual void SmsAlarm()
                 {
-                        string info=string.Format("{0}-{1}",TripData["Phase"].ShowValue,TripData["Type"].ShowValue);
+                        string info = string.Format("{0}-{1}", TripData["Phase"].ShowValue, TripData["Type"].ShowValue);
                         Common.SmsAlarm.SendSms(Address, info);
                 }
 

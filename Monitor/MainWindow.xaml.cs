@@ -8,6 +8,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
 using System.Threading;
+using System.ServiceModel;
 
 namespace Monitor
 {
@@ -21,10 +22,12 @@ namespace Monitor
                 List<Device> devices = null;
                 List<UIElement> mainContainer = null;
                 Thread threadRun = null;
+                ServiceHost host;
+                ServiceReference1.EDSServiceClient client;
                 public MainWindow()
                 {
                         InitializeComponent();
-                        intitControls();
+                        init();
                         Thread t = new Thread(() =>
                         {
                                 this.Dispatcher.Invoke(new Action(() =>
@@ -35,21 +38,29 @@ namespace Monitor
                         t.Start();
                 }
 
-                private void intitControls()
+                private void init()
                 {
-                        if (Tool.GetConfig("ComType") == "SP")
+                        initOthers();
+                        initControls();
+                }
+
+                private void initOthers()
+                {
+                        common = new Common();
+                        com = new Com(Common.CType);
+                        if (Common.CType == ComType.WCF)
                         {
-                                Common.ComType = ComType.SP;
+                                client = new ServiceReference1.EDSServiceClient();
                         }
                         else
                         {
-                                Common.ComType = ComType.TCP;
+                                host = new ServiceHost(typeof(EDSService));
+                                host.Open();
                         }
+                }
 
-                        common = new Common();
-                        common.UserLevel = User.ADMIN;
-                        com = new Com(Common.ComType);
-
+                private void initControls()
+                {
                         Binding bind = new Binding();
                         bind.Source = dvPage;
                         bind.Path = new PropertyPath("IsVisible");
@@ -77,7 +88,7 @@ namespace Monitor
 
                         loginPage.LoginSucceeded += loginPage_LoginSucceeded;
 
-                        mainContainer = new List<UIElement>() { diagram, dvPage, dvDevices, img_link, loginPage,energy };
+                        mainContainer = new List<UIElement>() { diagram, dvPage, dvDevices, img_link, loginPage, energy };
                 }
 
                 void loginPage_LoginSucceeded(object sender, EventArgs e)
@@ -89,7 +100,7 @@ namespace Monitor
                 void dvDevices_ReloadDevices(object sender, EventArgs e)
                 {
                         com.Dispose();
-                        com = new Com(Common.ComType);
+                        com = new Com(Common.CType);
                         initDiagram();
                         btn_run_Click(btn_run, new RoutedEventArgs());
                 }
@@ -99,7 +110,7 @@ namespace Monitor
                         if (threadRun != null)
                                 threadRun.Suspend();
                         loadDevices();
-                        if (Common.ComType == ComType.SP)
+                        if (Common.CType == ComType.SP)
                         {
                                 testComs();
                         }
@@ -116,7 +127,7 @@ namespace Monitor
                                                 dv.GetData();
                                                 if (Common.SelectedAddress != -1 && Common.SelectedAddress != dv.Address)
                                                 {
-                                                        Device dvSelected= (Device)devices.Find(d => d.Address == Common.SelectedAddress);
+                                                        Device dvSelected = (Device)devices.Find(d => d.Address == Common.SelectedAddress);
                                                         dvSelected.GetData();
                                                 }
                                         }
@@ -142,8 +153,9 @@ namespace Monitor
                 void loadDevices()
                 {
                         devices = new List<Device>();
+                        Common.Devices = devices;
                         XmlElement xeR = Tool.GetXML(@"Config/DeviceList.xml");
-                        for (int i = 0; i < xeR.ChildNodes.Count;i++ )
+                        for (int i = 0; i < xeR.ChildNodes.Count; i++)
                         {
                                 string type = xeR.SelectNodes("//Type")[i].InnerText;
                                 string name = xeR.SelectNodes("//Name")[i].InnerText;
@@ -153,7 +165,7 @@ namespace Monitor
                                 byte parent = byte.Parse(xeR.SelectNodes("//Parent")[i].InnerText);
                                 DeviceType dvType = (DeviceType)Enum.Parse(typeof(DeviceType), type);
                                 Device device = Activator.CreateInstance(Type.GetType("Monitor.Dv" + type)) as Device;
-                                device.InitDevice(addr, dvType, name,alias, tag, parent);
+                                device.InitDevice(addr, dvType, name, alias, tag, parent);
                                 device.MyCom = com;
                                 device.PreRemoteModify += (s, o) =>
                                 {
@@ -176,10 +188,10 @@ namespace Monitor
                 {
                         foreach (var d in devices)
                         {
-                                string resultCom = com.TestCom(d.Address, Tool.GetConfig("Com"));
+                                string resultCom = com.TestCom(d.Address, Tool.GetConfig("ComTag"));
                                 if (resultCom != null)
                                 {
-                                        Tool.SetConfig("Com", resultCom);
+                                        Tool.SetConfig("ComTag", resultCom);
                                         return;
                                 }
                         }
@@ -291,6 +303,12 @@ namespace Monitor
                 private void about_Click(object sender, RoutedEventArgs e)
                 {
                         System.Diagnostics.Process.Start("http://www.xseec.cn/cn/index.asp");
+                }
+
+                private void system_Click(object sender, RoutedEventArgs e)
+                {
+                        Setting setting = new Setting();
+                        setting.ShowDialog();
                 }
         }
 }

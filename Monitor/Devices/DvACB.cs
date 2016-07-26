@@ -47,7 +47,6 @@ namespace Monitor
                         state.Ua =str2int("Ua");
                         state.Ub = str2int("Ub");
                         state.Uc = str2int("Uc");
-                        
                         State = state;
                         if (Common.IsSaveData)
                         {

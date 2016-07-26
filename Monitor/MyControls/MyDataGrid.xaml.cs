@@ -31,7 +31,7 @@ namespace Monitor
 
                 public void InitDataGrid(List<Device> members, Common common)
                 {
-                        if (Common.ComType == ComType.SP)
+                        if (Common.CType == ComType.SP)
                         {
                                 rb_sp.IsChecked = true;
                         }
@@ -43,7 +43,7 @@ namespace Monitor
                         dg_devices.DataContext = deviceInfList;
                         List<string> ports = System.IO.Ports.SerialPort.GetPortNames().ToList();
                         cbox_coms.ItemsSource = ports;
-                        cbox_coms.SelectedIndex = ports.IndexOf(Tool.GetConfig("Com"));
+                        cbox_coms.SelectedIndex = ports.IndexOf(Tool.GetConfig("ComTag"));
 
                         Binding bind = new Binding();
                         bind.Source = common;
@@ -72,14 +72,14 @@ namespace Monitor
                                 createNode(doc, node1, "Parent", di.ParentAddr);
                                 root.AppendChild(node1);
                         }
-                        doc.Save(@"DevicesConfig/DeviceList.xml");
+                        doc.Save(@"Config/DeviceList.xml");
 
                         if (cbox_coms.SelectedIndex == -1)
                                 cbox_coms.SelectedIndex = 0;
                         Tool.SetConfig("Com", cbox_coms.SelectedValue.ToString());
                         bool isSp = (bool)rb_sp.IsChecked;
                         Tool.SetConfig("ComType", isSp ? "SP" : "TCP");
-                        Common.ComType = isSp ? ComType.SP : ComType.TCP;
+                        Common.CType = isSp ? ComType.SP : ComType.TCP;
 
                         var result = MsgBox.Show("是否立即刷新配电网?", "保存成功", MsgBox.Buttons.YesNo, MsgBox.Icon.Shield, MsgBox.AnimateStyle.FadeIn);
                         if (result == System.Windows.Forms.DialogResult.Yes)

@@ -9,8 +9,11 @@ namespace Monitor
         public class DValues : INotifyPropertyChanged
         {
                 public event PropertyChangedEventHandler PropertyChanged;
+                
                 public int Addr;
+                
                 private string str;
+                
                 public string ShowValue
                 {
                         get
@@ -26,22 +29,32 @@ namespace Monitor
                                 }
                         }
                 }
+                
                 public int Cvt;
+                
                 public string Tag;
+                
                 public string Unit;
+                
                 public string Alias;
         }
+        
         public struct DState
         {
+                
                 public Run RunState;
+                
                 public Switch SwitchState;
+                
                 public ControlMode ControlState;
+                
                 public string ErrorMsg
                 {
                         get;
                         set;
                 }
                 double _Ia;
+                
                 public double Ia
                 {
                         get
@@ -54,6 +67,7 @@ namespace Monitor
                         }
                 }
                 double _Ib;
+                
                 public double Ib
                 {
                         get
@@ -66,6 +80,7 @@ namespace Monitor
                         }
                 }
                 double _Ic;
+                
                 public double Ic
                 {
                         get
@@ -78,6 +93,7 @@ namespace Monitor
                         }
                 }
                 double _Ua;
+                
                 public double Ua
                 {
                         get
@@ -90,6 +106,7 @@ namespace Monitor
                         }
                 }
                 double _Ub;
+                
                 public double Ub
                 {
                         get
@@ -102,6 +119,7 @@ namespace Monitor
                         }
                 }
                 double _Uc;
+                
                 public double Uc
                 {
                         get
@@ -114,6 +132,7 @@ namespace Monitor
                         }
                 }
                 double _PE;
+                
                 public double PE
                 {
                         get
@@ -126,6 +145,7 @@ namespace Monitor
                         }
                 }
                 double _QE;
+                
                 public double QE
                 {
                         get
@@ -138,6 +158,7 @@ namespace Monitor
                         }
                 }
                 double _P;
+                
                 public double P
                 {
                         get
@@ -150,6 +171,7 @@ namespace Monitor
                         }
                 }
                 double _Q;
+                
                 public double Q
                 {
                         get
@@ -162,6 +184,7 @@ namespace Monitor
                         }
                 }
                 double _FR;
+                
                 public double FR
                 {
                         get
@@ -174,6 +197,7 @@ namespace Monitor
                         }
                 }
                 double _PF;
+                
                 public double PF
                 {
                         get
@@ -186,35 +210,57 @@ namespace Monitor
                         }
                 }
         }
+        
         public enum Run
         {
+                
                 NonSignal,
+                
                 Normal,
+                
                 Alarm
         }
         public enum Switch
         {
+                
                 Unknown,
+                
                 Close,
+                
                 Open,
+                
                 ATS_N,//ATS
+                
                 ATS_R,
+                
                 Run,//MIC
+                
                 Wait,
+                
                 Ready
         }
+        
         public enum ControlMode
         {
+                
                 Unknown,
+                
                 Local,
+                
                 Remote
         }
+        
         public enum DeviceType
         {
+                
                 ACB,
+                
                 MCCB,
+                
                 ATS,
+                
                 MIC,
+                
                 ACREL
         };
 }

@@ -11,7 +11,8 @@ namespace Monitor
         {
                 public Common()
                 {
-                        IsSaveData =Convert.ToBoolean(Tool.GetConfig("SaveData"));
+                        CType = (ComType)Enum.Parse(typeof(ComType), Tool.GetConfig("ComType"));
+                        IsSaveData = CType == ComType.WCF ? false : true;
                         SmsAlarm = new Sms();
                 }
 
@@ -28,9 +29,10 @@ namespace Monitor
                         }
                 }
 
-                public static ComType ComType;
+                public static ComType CType;
                 public static int SelectedAddress = -1;
                 public static bool IsSaveData;
                 public static Sms SmsAlarm;
+                public static List<Device> Devices;
         }
 }

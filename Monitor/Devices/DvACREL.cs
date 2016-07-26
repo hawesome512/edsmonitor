@@ -16,13 +16,16 @@ namespace Monitor
                         string path = string.Format("Config\\{0}.xml", DvType);
                         XmlElement xeRoot = Tool.GetXML(path);
                         _realData = initDic(0, xeRoot);
+                        DataList.Add(null);
+                        DataList.Add(new byte[_realData.Count * 2]);
+                        DataList.Add(null);
                 }
 
                 public override void GetData()
                 {
                         if (nComFailed < 5)
                         {
-                                _realData = getZoneData(_realData);
+                                _realData = getZoneData(_realData,1);
                                 updateState();
                         }
                 }

@@ -21,6 +21,7 @@
                 <local:ImageButton x:Name="btn_set" Width="27" Height="26" VerticalAlignment="Top"  ImgPath="/Images/设置菜单.png" Template="{StaticResource ImageButtonTemplate}" Click="btn_set_Click">
                     <local:ImageButton.ContextMenu>
                         <ContextMenu Name="menu" Placement="MousePoint" Width="100" Foreground="White">
+                            <MenuItem Name="system" Header="系统设置" Template="{StaticResource SelfMenuItemTemplate}" Click="system_Click" />
                             <MenuItem Name="help" Header="帮助说明" Template="{StaticResource SelfMenuItemTemplate}" Click="help_Click"/>
                             <MenuItem Name="psw" Header="修改密码" Template="{StaticResource SelfMenuItemTemplate}" Click="psw_Click" />
                             <MenuItem Name="feedback" Header="用户反馈" Template="{StaticResource SelfMenuItemTemplate}" Click="feedback_Click"/>

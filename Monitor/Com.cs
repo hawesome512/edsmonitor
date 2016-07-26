@@ -7,6 +7,7 @@ using System.IO.Ports;
 using System.Net.Sockets;
 using System.Threading;
 
+
 namespace Monitor
 {
         /// <summary>
@@ -15,13 +16,15 @@ namespace Monitor
         public enum ComType
         {
                 TCP,
-                SP
+                SP,
+                WCF
         }
 
         public class Com : IDisposable
         {
                 SerialPort sp;
                 TcpClient tcp;
+                ServiceReference1.EDSServiceClient wcf;
                 string strIp;
                 string strCom;
                 ComType cType;
@@ -43,9 +46,11 @@ namespace Monitor
                         {
                                 if (sp != null)
                                         sp.Dispose();
-
-                                //TCP方式通信每次都有及时回收资源，不做额外处理。
-
+                                if (wcf != null)
+                                {
+                                        wcf.Close();
+                                        wcf = null;
+                                }
                                 disposed = true;
                                 GC.SuppressFinalize(this);
                         }
@@ -56,14 +61,30 @@ namespace Monitor
                 /// </summary>
                 /// <param name="snd"></param>
                 /// <returns>Array.Length,0:通信失败；1:写入；2*n:读取</returns>
-                public byte[] Execute(byte[] snd,string ip)
+                public byte[] Execute(byte[] snd, string tag)
                 {
-                        strIp = ip;
+                        switch (cType)
+                        {
+                                case ComType.SP:
+                                        return spCom(snd);
+                                case ComType.TCP:
+                                        strIp = tag;
+                                        return tcpCom(snd);
+                                case ComType.WCF:
+                                        int zoneIndex = int.Parse(tag);
+                                        return wcfCom(snd,zoneIndex);
+                                default:
+                                        return null;
+                        }
+                }
 
-                        if (cType == ComType.SP)
-                                return spCom(snd);
-                        else
-                                return tcpCom(snd);
+                private byte[] wcfCom(byte[] snd,int zoneIndex)
+                {
+                        if (wcf == null)
+                        {
+                                wcf = new ServiceReference1.EDSServiceClient();
+                        }
+                        return wcf.UpdateDevice(snd[0], zoneIndex);
                 }
 
                 private byte[] tcpCom(byte[] _snd)
@@ -77,7 +98,7 @@ namespace Monitor
                         }
                         catch
                         {
-                                return new byte[]{};
+                                return new byte[] { };
                         }
 
                         byte[] snd = new byte[6 + _snd.Length];
@@ -93,7 +114,7 @@ namespace Monitor
                         }
                         catch
                         {
-                                return new byte[]{};
+                                return new byte[] { };
                         }
                         finally
                         {
@@ -112,14 +133,14 @@ namespace Monitor
                         }
                         else
                         {
-                                return new byte[]{};
+                                return new byte[] { };
                         }
                 }
 
                 private byte[] spCom(byte[] snd)
                 {
                         if (strCom == null || strCom == string.Empty)
-                                return new byte[]{};
+                                return new byte[] { };
                         if (sp == null || !sp.IsOpen)
                         {
                                 sp = new SerialPort(strCom);
@@ -132,7 +153,7 @@ namespace Monitor
 
                         //频繁通信，排除可能残留未读取数据
                         byte[] rcv = new byte[256];
-                        if(sp.BytesToRead> 0)
+                        if (sp.BytesToRead > 0)
                         {
                                 sp.Read(rcv, 0, rcv.Length);
                                 rcv = new byte[256];
@@ -140,7 +161,7 @@ namespace Monitor
                         sp.Write(Tool.CRCck(snd), 0, snd.Length + 2);
                         Thread.Sleep(500);
                         //Thread.Sleep(snd[1]==16?500:200);//写模式设置长时间，否则容易出错
-                        if(sp.BytesToRead>0)
+                        if (sp.BytesToRead > 0)
                                 sp.Read(rcv, 0, rcv.Length);
                         if (rcv[1] == 3)
                         {
@@ -161,7 +182,7 @@ namespace Monitor
                 /// <summary>
                 /// 测试可用的串口
                 /// </summary>
-                public string TestCom(byte addr,string defaultCom)
+                public string TestCom(byte addr, string defaultCom)
                 {
                         if (sp == null || !sp.IsOpen)
                         {
@@ -180,8 +201,8 @@ namespace Monitor
                                         sp.WriteTimeout = 500;
                                         sp.RtsEnable = true;
                                         sp.Open();
-                                        byte[] tmp = new byte[] { addr, 3, 0, 0, 0, 1};
-                                        sp.Write(Tool.CRCck(tmp), 0, tmp.Length+2);
+                                        byte[] tmp = new byte[] { addr, 3, 0, 0, 0, 1 };
+                                        sp.Write(Tool.CRCck(tmp), 0, tmp.Length + 2);
                                         Thread.Sleep(500);
                                         byte[] rcv = new byte[256];
                                         try
