@@ -6,23 +6,75 @@
 //    如果重新生成代码，则将覆盖对此文件的手动更改。
 // </auto-generated>
 //------------------------------------------------------------------------------
-
 namespace EDSLot
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class Record_Measure
-    {
-        public System.DateTime Time { get; set; }
-        public int Address { get; set; }
-        public Nullable<double> U { get; set; }
-        public Nullable<double> I { get; set; }
-        public Nullable<double> F { get; set; }
-        public Nullable<double> PF { get; set; }
-        public Nullable<double> P { get; set; }
-        public Nullable<double> Q { get; set; }
-        public Nullable<double> PE { get; set; }
-        public Nullable<double> QE { get; set; }
-    }
+        using System;
+        using System.Collections.Generic;
+        using System.ServiceModel;
+        using System.Runtime.Serialization;
+
+        [DataContract]
+        public partial class Record_Measure
+        {
+                [DataMember]
+                public System.DateTime Time
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public int Address
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> U
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> I
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> F
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> PF
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> P
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> Q
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> PE
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> QE
+                {
+                        get;
+                        set;
+                }
+        }
 }

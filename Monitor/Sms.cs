@@ -54,7 +54,7 @@ namespace Monitor
                         set;
                 }
 
-                public void SendSms(int address, string info)
+                public void SendSms(string address, string info)
                 {
                         try
                         {
@@ -71,6 +71,7 @@ namespace Monitor
                         }
                         catch
                         {
+                                MsgBox.Show("请检查短信报警设置情况！", "发送短信失败", MsgBox.Buttons.OK, MsgBox.Icon.Error, MsgBox.AnimateStyle.FadeIn);
                         }
                 }
         }

@@ -9,7 +9,7 @@
     <Parent>0</Parent>
   </Device>
   <Device>
-    <Type>MCCB</Type>
+    <Type>MCCB_BMA</Type>
     <Name>BMA400</Name>
     <Alias>BMA400</Alias>
     <Address>2</Address>
@@ -25,7 +25,7 @@
     <Parent>2</Parent>
   </Device>
   <Device>
-    <Type>MCCB</Type>
+    <Type>MCCB_BMA</Type>
     <Name>BMA400</Name>
     <Alias>BMA400</Alias>
     <Address>4</Address>
@@ -33,7 +33,7 @@
     <Parent>1</Parent>
   </Device>
   <Device>
-    <Type>MCCB</Type>
+    <Type>MCCB_BMA</Type>
     <Name>BMA160</Name>
     <Alias>BMA160</Alias>
     <Address>5</Address>
@@ -41,7 +41,7 @@
     <Parent>4</Parent>
   </Device>
   <Device>
-    <Type>MCCB</Type>
+    <Type>MCCB_BMA</Type>
     <Name>BMA160</Name>
     <Alias>BMA160</Alias>
     <Address>6</Address>

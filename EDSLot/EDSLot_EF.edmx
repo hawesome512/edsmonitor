@@ -4,13 +4,23 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="EDSModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="EDSModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="EDSModelStoreContainer">
-          <EntitySet Name="Record_ACB" EntityType="EDSModel.Store.Record_ACB" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Record_MCCB" EntityType="EDSModel.Store.Record_MCCB" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Record_Measure" EntityType="EDSModel.Store.Record_Measure" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Trip" EntityType="EDSModel.Store.Trip" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Energy" EntityType="EDSModel.Store.Energy" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Record_ACB" EntityType="EDSModel.Store.Record_ACB" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Record_MCCB" EntityType="EDSModel.Store.Record_MCCB" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Record_Measure" EntityType="EDSModel.Store.Record_Measure" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Trip" EntityType="EDSModel.Store.Trip" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
         </EntityContainer>
+        <EntityType Name="Energy">
+          <Key>
+            <PropertyRef Name="Time" />
+            <PropertyRef Name="Address" />
+          </Key>
+          <Property Name="Time" Type="datetime" Nullable="false" />
+          <Property Name="Address" Type="int" Nullable="false" />
+          <Property Name="PE" Type="float" />
+        </EntityType>
         <EntityType Name="Record_ACB">
           <Key>
             <PropertyRef Name="Time" />
@@ -76,13 +86,23 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="EDSModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityContainer Name="EDSEntities3" p1:LazyLoadingEnabled="true">
+      <Schema Namespace="EDSModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="EDSEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Energy" EntityType="EDSModel.Energy" />
           <EntitySet Name="Record_ACB" EntityType="EDSModel.Record_ACB" />
           <EntitySet Name="Record_MCCB" EntityType="EDSModel.Record_MCCB" />
           <EntitySet Name="Record_Measure" EntityType="EDSModel.Record_Measure" />
           <EntitySet Name="Trip" EntityType="EDSModel.Trip" />
         </EntityContainer>
+        <EntityType Name="Energy">
+          <Key>
+            <PropertyRef Name="Time" />
+            <PropertyRef Name="Address" />
+          </Key>
+          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Address" Type="Int32" Nullable="false" />
+          <Property Name="PE" Type="Double" />
+        </EntityType>
         <EntityType Name="Record_ACB">
           <Key>
             <PropertyRef Name="Time" />
@@ -149,7 +169,16 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="EDSModelStoreContainer" CdmEntityContainer="EDSEntities3">
+        <EntityContainerMapping StorageEntityContainer="EDSModelStoreContainer" CdmEntityContainer="EDSEntities">
+          <EntitySetMapping Name="Energy">
+            <EntityTypeMapping TypeName="EDSModel.Energy">
+              <MappingFragment StoreEntitySet="Energy">
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="PE" ColumnName="PE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Record_ACB">
             <EntityTypeMapping TypeName="EDSModel.Record_ACB">
               <MappingFragment StoreEntitySet="Record_ACB">
@@ -235,6 +264,6 @@
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
-    <Diagrams></Diagrams>
+    <Diagrams />
   </Designer>
 </edmx:Edmx>

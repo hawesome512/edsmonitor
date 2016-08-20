@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="2c87dfdd-c76f-4a4a-82a8-a81ebab87def" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="18c5443a-2b27-4a5d-ba14-3dcb21c73352" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -19,13 +19,16 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:8090/EDSService" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:7070/EDSService" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="EDSService.disco" MetadataType="Disco" ID="8dd57859-7f58-4ba5-8b23-c6334bcc6ec5" SourceId="1" SourceUrl="http://localhost:8090/EDSService?disco" />
-    <MetadataFile FileName="EDSService.xsd" MetadataType="Schema" ID="f59b31f2-7503-4edf-9a32-f9a6813ce23b" SourceId="1" SourceUrl="http://localhost:8090/EDSService?xsd=xsd0" />
-    <MetadataFile FileName="EDSService1.xsd" MetadataType="Schema" ID="fa528d79-f8a1-4572-91ee-38b7e196869a" SourceId="1" SourceUrl="http://localhost:8090/EDSService?xsd=xsd1" />
-    <MetadataFile FileName="EDSService.wsdl" MetadataType="Wsdl" ID="656f876c-1e7e-4eee-a068-cc0918e2d75e" SourceId="1" SourceUrl="http://localhost:8090/EDSService?wsdl" />
+    <MetadataFile FileName="EDSService.disco" MetadataType="Disco" ID="92e7ff35-b9b9-4193-8c5c-744747334c76" SourceId="1" SourceUrl="http://localhost:7070/EDSService?disco" />
+    <MetadataFile FileName="EDSService.wsdl" MetadataType="Wsdl" ID="89bb6a0e-5371-4839-bc00-2a4999cdcf16" SourceId="1" SourceUrl="http://localhost:7070/EDSService?wsdl" />
+    <MetadataFile FileName="EDSService.xsd" MetadataType="Schema" ID="a0b1640d-1a6d-4c0c-87ee-8e2b69a1ce33" SourceId="1" SourceUrl="http://localhost:7070/EDSService?xsd=xsd0" />
+    <MetadataFile FileName="EDSService1.xsd" MetadataType="Schema" ID="faf884ce-1ff2-4a14-9911-25d8edd04919" SourceId="1" SourceUrl="http://localhost:7070/EDSService?xsd=xsd1" />
+    <MetadataFile FileName="EDSService2.xsd" MetadataType="Schema" ID="98260b56-6f82-4892-8dff-b69e6ffddb66" SourceId="1" SourceUrl="http://localhost:7070/EDSService?xsd=xsd2" />
+    <MetadataFile FileName="EDSService3.xsd" MetadataType="Schema" ID="1838546a-ab26-42b9-9e97-ca40a04abfd5" SourceId="1" SourceUrl="http://localhost:7070/EDSService?xsd=xsd3" />
+    <MetadataFile FileName="EDSService4.xsd" MetadataType="Schema" ID="9d030d95-6d7c-40b6-86cb-25f407fbecbf" SourceId="1" SourceUrl="http://localhost:7070/EDSService?xsd=xsd4" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

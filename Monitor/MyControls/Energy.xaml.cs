@@ -18,6 +18,23 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Monitor
 {
+        public class ViewModel
+        {
+                public XmlDataProvider XmlData
+                {
+                        get;
+                        set;
+                }
+
+                public ViewModel()
+                {
+                        XmlData = new XmlDataProvider();
+                        string dir = System.AppDomain.CurrentDomain.BaseDirectory;
+                        XmlData.Source = new Uri(dir + @"Config\Grid.xml");
+                        XmlData.XPath = "node";
+                }
+        }
+
         /// <summary>
         /// Energy.xaml 的交互逻辑
         /// </summary>
@@ -27,7 +44,6 @@ namespace Monitor
                 Chart colChart, pieChart;
                 System.Windows.Forms.DataVisualization.Charting.HitTestResult hitTest;
                 DateTime start, end;
-                Random random;
                 public Energy()
                 {
                         InitializeComponent();
@@ -43,7 +59,6 @@ namespace Monitor
                         initPieChart();
                         start = end = DateTime.Today;
                         rb_Click(rb_month, null);
-                        random = new Random();
                 }
 
                 private void initColChart()
@@ -58,10 +73,10 @@ namespace Monitor
                         area.AxisY.InterlacedColor = System.Drawing.Color.FromArgb(0x88, 0xdd, 0xdd, 0xdd);
                         area.BackColor = System.Drawing.Color.Transparent;
                         colChart.ChartAreas.Add(area);
-                        Series series = new Series("default");
-                        colChart.Series.Add(series);
+                        Series series = new Series("now");
                         series.ChartType = SeriesChartType.Column;
                         series.Color = System.Drawing.Color.FromArgb(0xff, 0x00, 0x96, 0x88);
+                        colChart.Series.Add(series);
                 }
 
                 void colChart_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -116,39 +131,62 @@ namespace Monitor
 
                 private void btn_query_Click(object sender, RoutedEventArgs e)
                 {
-                        TreeViewItem tvi = tree_area.SelectedItem as TreeViewItem;
-                        if (tvi != null)
+                        XmlElement selNode = tree_area.SelectedItem as XmlElement;
+                        if (selNode != null)
                         {
                                 getDates();
-                                setDaysData(int.Parse(tvi.Tag.ToString()));
-                                List<string> parents = new List<string>();
-                                TreeViewItem p = tvi;
-                                do
+                                int num = selNode.ChildNodes.Count;
+                                int[] addrs = new int[num + 1];
+                                addrs[0] = int.Parse(selNode.Attributes["Address"].Value);
+                                for (int i = 0; i < num; i++)
                                 {
-                                        parents.Insert(0,p.Header.ToString());
-                                        p = p.Parent as TreeViewItem;
-                                } while (p != null);
-                                List<string> children = new List<string>();
-                                foreach (var t in tvi.Items)
-                                {
-                                        TreeViewItem tv = t as TreeViewItem;
-                                        children.Add(tv.Header.ToString());
+                                        addrs[i + 1] = int.Parse(selNode.ChildNodes[i].Attributes["Address"].Value);
                                 }
-                                setPieData(children);
-                                title.Content = string.Format("{0}  能耗分析  {1}-{2}  (单位：kWh)", string.Join("/", parents), start.ToString("yyyy/MM/dd"), end.ToString("yyyy/MM/dd"));
-                                var points = colChart.Series[0].Points;
-                                txt_max.Content = points.FindMaxByValue().YValues[0].ToString()+"  kWh";
-                                txt_min.Content = points.FindMinByValue().YValues[0].ToString() + "  kWh";
-                                int sum = (int)points.Sum(pt => pt.YValues[0]);
-                                txt_sum.Content = sum.ToString() + "  kWh";
-                                txt_avg.Content = sum / points.Count + "  kWh";
+                                Task.Factory.StartNew(new Action(() =>
+                                {
+                                        List<EDSLot.Energy> dataList = DataLib.QueryEnergy(addrs, start, end);
+                                        var dataForCol = dataList.FindAll(d => d.Address == addrs[0] && d.Time >= start && d.Time < end);
+                                        var dataForPie = dataList.FindAll(d => d.Address != addrs[0]).ConvertAll(d => d.PE);
+                                        double? now = dataForCol.Sum(d => d.PE);
+                                        double? lastYear = dataList.Find(d => d.Time == start.AddYears(-1)).PE;
+                                        double? lastMonth = dataList.Find(d => d.Time == start.AddMonths(-1)).PE;
 
-                                int rorate = random.Next(-10, 10);
-                                txt_y2y.Content = Math.Abs(rorate)+"%";
-                                img_y2y.Source = getImgSource(rorate);
-                                rorate = random.Next(-10, 10);
-                                txt_m2m.Content = Math.Abs(rorate)+"%";
-                                img_m2m.Source = getImgSource(rorate);
+                                        this.Dispatcher.Invoke(new Action(() =>
+                                        {
+                                                title.Content = string.Format("{0}  能耗分析  {1}-{2}  (单位：kWh)", string.Join("/", selNode.Attributes["Name"].Value), start.ToString("yyyy/MM/dd"), end.ToString("yyyy/MM/dd"));
+                                                setColData(dataForCol);
+                                                setPieData(selNode, dataForPie);
+                                                if (now != null && lastYear != null)
+                                                {
+                                                        double rorate = (double)now / (double)lastYear - 1;
+                                                        txt_y2y.Content = Math.Round(rorate * 100, 1) + "%";
+                                                        img_y2y.Source = getImgSource(rorate);
+                                                }
+                                                else
+                                                {
+                                                        txt_y2y.Content = "---%";
+                                                }
+                                                if (now != null && lastMonth != null)
+                                                {
+                                                        double rorate = (double)now / (double)lastMonth - 1;
+                                                        txt_m2m.Content = Math.Round(rorate * 100, 1) + "%";
+                                                        img_m2m.Source = getImgSource(rorate);
+                                                }
+                                                else
+                                                {
+                                                        txt_m2m.Content = "---%";
+                                                }
+                                                var points = colChart.Series[0].Points;
+                                                if (points.Count > 0)
+                                                {
+                                                        txt_max.Content = points.FindMaxByValue().YValues[0].ToString() + "  kWh";
+                                                        txt_min.Content = points.FindMinByValue().YValues[0].ToString() + "  kWh";
+                                                        int sum = (int)points.Sum(pt => pt.YValues[0]);
+                                                        txt_sum.Content = sum.ToString() + "  kWh";
+                                                        txt_avg.Content = sum / points.Count + "  kWh";
+                                                }
+                                        }));
+                                }));
                         }
                         else
                         {
@@ -156,70 +194,48 @@ namespace Monitor
                         }
                 }
 
-                private ImageSource getImgSource(int flag)
+                private void setColData(List<EDSLot.Energy> dataList)
+                {
+                        bool shortTime = (end - start).TotalHours <= 24;
+                        if (shortTime)
+                        {
+                                colChart.Series[0].Points.DataBindXY(dataList.ConvertAll(d => d.Time.ToShortTimeString()), dataList.ConvertAll(d => d.PE));
+                        }
+                        else
+                        {
+                                colChart.Series[0].Points.DataBindXY(dataList.ConvertAll(d => d.Time.ToString("M/d")), dataList.ConvertAll(d => d.PE));
+                        }
+                }
+
+                private ImageSource getImgSource(double flag)
                 {
                         string url = flag > 0 ? "pack://application:,,,/Monitor;component/Images/up.png" : "pack://application:,,,/Monitor;component/Images/down.png";
                         return (new ImageSourceConverter().ConvertFromString(url) as ImageSource);
                 }
 
-                private void setPieData(List<string> xValues)
+                private void setPieData(XmlElement selNode, List<double?> childValues)
                 {
-                        var yValues = xValues.ConvertAll<int>(i => random.Next(5, 10));
+                        List<string> children = new List<string>();
+                        foreach (XmlElement child in selNode.ChildNodes)
+                        {
+                                int address = int.Parse(child.Attributes["Address"].Value);
+                                children.Add(child.Attributes["Name"].Value);
+                        }
                         Series series = pieChart.Series[0];
-                        series.Points.DataBindXY(xValues, yValues);
-                        if(xValues.Count>0)
+                        series.Points.DataBindXY(children, childValues);
+                        if (children.Count > 0)
                                 series.Points.FindMaxByValue()["Exploded"] = "true";
                         for (int i = 0; i < series.Points.Count; i++)
                         {
                                 series.Points[i].IsValueShownAsLabel = true;
-                                series.Points[i].LegendText = xValues[i];
+                                series.Points[i].LegendText = children[i];
                         }
-                }
-
-                private void setDaysData(int level)
-                {
-                        List<string> days = new List<string>();
-                        List<int> yValues = new List<int>();
-                        int min,max;
-                        switch (level)
-                        {
-                                case 0:
-                                        min = 1400;
-                                        max = 1800;
-                                        break;
-                                case 1:
-                                        min = 300;
-                                        max = 480;
-                                        break;
-                                default:
-                                        min = 80;
-                                        max = 125;
-                                        break;
-
-                        }
-                        if (end.AddDays(-1) <= start)
-                        {
-                                for (DateTime s = start; s <= end; s = s.AddHours(1))
-                                {
-                                        days.Add(s.ToShortTimeString());
-                                        yValues.Add(random.Next(min/24, max/24));
-                                }
-                        }
-                        else
-                        {
-                                for (DateTime s = start; s <= end; s = s.AddDays(1))
-                                {
-                                        days.Add(s.Date.ToString("MM-dd"));
-                                        yValues.Add(random.Next(min, max));
-                                }
-                        }
-                        colChart.Series[0].Points.DataBindXY(days, yValues);
                 }
 
                 private void getDates()
                 {
-                        int index=rbs.ToList().FindIndex(r => r.IsChecked == true);
-                        DateTime t=DateTime.Today;
+                        int index = rbs.ToList().FindIndex(r => r.IsChecked == true);
+                        DateTime t = DateTime.Today;
                         switch (index)
                         {
                                 case 0:
@@ -227,14 +243,17 @@ namespace Monitor
                                         end = DateTime.Now;
                                         break;
                                 case 1:
-                                        start = t.AddDays(DayOfWeek.Monday - t.DayOfWeek);
-                                        end = t;
+                                        start = t.AddDays(-6);
+                                        end = DateTime.Now;
                                         break;
                                 case 2:
-                                        start = new DateTime(t.Year, t.Month, 1);
-                                        end = t;
+                                        start = t.AddMonths(-1).AddDays(1);
+                                        end = DateTime.Now;
                                         break;
-                                default :
+                                default:
+                                        start = start > t ? t : start;
+                                        end = end <= start ? start.AddDays(1) : end;
+                                        end = end > t ? DateTime.Now : end;
                                         break;
                         }
                 }
@@ -242,15 +261,14 @@ namespace Monitor
                 private void dp_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
                 {
                         DatePicker dp = sender as DatePicker;
-                        if (dp.Name == "dp1")
+                        if (dp.Name == "dp_start")
                         {
                                 start = DateTime.Parse(dp.Text);
                         }
                         else
                         {
-                                end = DateTime.Parse(dp.Text);
+                                end = DateTime.Parse(dp.Text).AddDays(1);
                         }
                 }
-
         }
 }

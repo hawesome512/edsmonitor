@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="Monitor.Progress"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="100">
+    <Grid>
+        <materialDesign:Card Name="Card" UniformCornerRadius="50" Width="100" Height="100" RenderTransformOrigin=".5,.5"  VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Grid>
+                <Label x:Name="lbl_wait" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18">等待</Label>
+                <ProgressBar x:Name="AnimatedProgressInCard" Style="{StaticResource MaterialDesignCircularProgressBar}" IsIndeterminate="True" Width="80" Height="80"/>
+                <Image x:Name="img_result"/>
+            </Grid>
+            <materialDesign:Card.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform x:Name="ScaleTransform" ScaleX="0" ScaleY="0" />
+                </TransformGroup>
+            </materialDesign:Card.RenderTransform>
+        </materialDesign:Card>
+    </Grid>
+</UserControl>

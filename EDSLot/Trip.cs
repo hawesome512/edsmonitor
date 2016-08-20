@@ -9,24 +9,96 @@
 
 namespace EDSLot
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class Trip
-    {
-        public System.DateTime Time { get; set; }
-        public int Address { get; set; }
-        public string Phase { get; set; }
-        public string Type { get; set; }
-        public Nullable<double> Ia { get; set; }
-        public Nullable<double> Ib { get; set; }
-        public Nullable<double> Ic { get; set; }
-        public Nullable<double> IN { get; set; }
-        public Nullable<double> It { get; set; }
-        public Nullable<double> Tt { get; set; }
-        public Nullable<double> Ip { get; set; }
-        public Nullable<double> Tp { get; set; }
-        public Nullable<double> Ir { get; set; }
-        public Nullable<double> Ig { get; set; }
-    }
+        using System;
+        using System.Collections.Generic;
+        using System.ServiceModel;
+        using System.Runtime.Serialization;
+        [DataContract]
+        public partial class Trip
+        {
+                [DataMember]
+                public System.DateTime Time
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public int Address
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public string Phase
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public string Type
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> Ia
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> Ib
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> Ic
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> IN
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> It
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> Tt
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> Ip
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> Tp
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> Ir
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> Ig
+                {
+                        get;
+                        set;
+                }
+        }
 }

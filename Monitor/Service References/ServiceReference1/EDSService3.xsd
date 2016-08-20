@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/EDSLot" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/EDSLot" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ArrayOfTrip">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Trip" nillable="true" type="tns:Trip" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTrip" nillable="true" type="tns:ArrayOfTrip" />
+  <xs:complexType name="Trip">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Address" type="xs:int" />
+      <xs:element minOccurs="0" name="IN" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="Ia" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="Ib" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="Ic" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="Ig" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="Ip" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="Ir" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="It" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="Phase" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Time" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Tp" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="Tt" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="Type" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Trip" nillable="true" type="tns:Trip" />
+  <xs:complexType name="ArrayOfEnergy">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Energy" nillable="true" type="tns:Energy" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfEnergy" nillable="true" type="tns:ArrayOfEnergy" />
+  <xs:complexType name="Energy">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Address" type="xs:int" />
+      <xs:element minOccurs="0" name="PE" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="Time" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Energy" nillable="true" type="tns:Energy" />
+</xs:schema>

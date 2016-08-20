@@ -9,6 +9,17 @@
             xmlns:Chr="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="1000" FontSize="14">
+    <UserControl.DataContext>
+        <local:ViewModel />
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <HierarchicalDataTemplate x:Key="template">
+            <TextBlock Text="{Binding XPath=@Name}" Tag="{Binding XPath=@Address}" />
+            <HierarchicalDataTemplate.ItemsSource>
+                <Binding XPath="node" />
+            </HierarchicalDataTemplate.ItemsSource>
+        </HierarchicalDataTemplate>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="255"></ColumnDefinition>
@@ -19,7 +30,7 @@
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid Grid.RowSpan="2">
+        <Grid Grid.RowSpan="2" DataContext="{Binding Path=XmlData}">
             <Border BorderThickness="0,0,5,0" BorderBrush="#ddd"></Border>
             <RadioButton Name="rb_today" Margin="10,10,0,0" Content="当日" Style="{DynamicResource RadioButtonStyle}"  Click="rb_Click"/>
             <RadioButton Name="rb_week" Margin="90,10,0,0" Content="本周" Style="{DynamicResource RadioButtonStyle}" Click="rb_Click"/>
@@ -29,46 +40,18 @@
                     <ControlTemplate>
                         <Grid>
                             <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="2"></Border>
-                            <DatePicker Name="dp1" Margin="5,0,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90" SelectedDateChanged="dp_SelectedDateChanged"/>
+                            <DatePicker Name="dp_start" Margin="5,0,0,0" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left" Width="90" SelectedDateChanged="dp_SelectedDateChanged"/>
                             <Label Content="—" Margin="90,00,0,0" HorizontalContentAlignment="Center" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="50"/>
-                            <DatePicker Name="dp2" Margin="140,0,5,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90" SelectedDateChanged="dp_SelectedDateChanged"/>
+                            <DatePicker Name="dp_end" Margin="140,0,5,0" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left" Width="90" SelectedDateChanged="dp_SelectedDateChanged"/>
                         </Grid>
                     </ControlTemplate>
                 </RadioButton.Template>
             </RadioButton>
-            <TreeView Name="tree_area" Margin="0,120,60,10">
-                <TreeViewItem Header="厦门士林电机有限公司" IsExpanded="True" Tag="0">
-                    <TreeViewItem Header="楼层一" Tag="1">
-                        <TreeViewItem Header="空调" Tag="2"/>
-                        <TreeViewItem Header="照明" Tag="2"/>
-                        <TreeViewItem Header="厂线一" Tag="2"/>
-                        <TreeViewItem Header="厂线二" Tag="2"/>
-                    </TreeViewItem>
-                    <TreeViewItem Header="楼层二" Tag="1">
-                        <TreeViewItem Header="空调" Tag="2"/>
-                        <TreeViewItem Header="照明" Tag="2"/>
-                        <TreeViewItem Header="厂线一" Tag="2"/>
-                        <TreeViewItem Header="厂线二" Tag="2"/>
-                    </TreeViewItem>
-                    <TreeViewItem Header="楼层三" Tag="1">
-                        <TreeViewItem Header="空调" Tag="2"/>
-                        <TreeViewItem Header="照明" Tag="2"/>
-                        <TreeViewItem Header="厂线一" Tag="2"/>
-                        <TreeViewItem Header="厂线二" Tag="2"/>
-                    </TreeViewItem>
-                    <TreeViewItem Header="楼层四" Tag="1">
-                        <TreeViewItem Header="空调" Tag="2"/>
-                        <TreeViewItem Header="照明" Tag="2"/>
-                        <TreeViewItem Header="设备" Tag="2"/>
-                    </TreeViewItem>
-                    <TreeViewItem Header="其他" Tag="1">
-                        <TreeViewItem Header="电梯" Tag="2"/>
-                        <TreeViewItem Header="机房" Tag="2"/>
-                        <TreeViewItem Header="室外照明" Tag="2"/>
-                    </TreeViewItem>
-                </TreeViewItem>
+
+            <TreeView Name="tree_area" Margin="0,120,60,10" ItemsSource="{Binding}" ItemTemplate="{StaticResource template}">
             </TreeView>
-            <Button Name="btn_query" FontSize="40" Padding="0" Content="🔍"  Height="70" Width="50" HorizontalAlignment="Right" Margin="0,200,5,200" Click="btn_query_Click"/>
+            <local:ImageButton x:Name="btn_query" Height="115" Width="50" HorizontalAlignment="Right" Margin="0,200,7,200"  Click="btn_query_Click" Template="{StaticResource ImageButtonTemplate}"
+                                ImgPath="/Images/search_v.png"/>
         </Grid>
         <Grid Grid.Column="1" Grid.ColumnSpan="2">
             <Label Name="title" Content="能耗分析  (单位：kWh)" VerticalAlignment="Top" HorizontalAlignment="Center" Height="30"/>

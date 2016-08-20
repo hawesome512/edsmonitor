@@ -21,9 +21,21 @@ namespace Monitor
                 {
                         this.InitializeComponent();
                         countInit = LayoutRoot.Children.Count;
+                        myTab.PreRemoteModify += (s, o) =>
+                        {
+                                progress.start();
+                        };
+                        myTab.RemoteModified += (s, o) =>
+                        {
+                                progress.end(o.Fail);
+                                if (o.Fail)
+                                {
+                                        MsgBox.Show("操作失败，请稍后重试", "失败", MsgBox.Buttons.OK, MsgBox.Icon.Error, MsgBox.AnimateStyle.FadeIn);
+                                }
+                        };
                 }
 
-                public int GetAddr()
+                public byte GetAddr()
                 {
                         return device.Address;
                 }

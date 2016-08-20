@@ -30,7 +30,7 @@ namespace Monitor
                 }
 
                 public static ComType CType;
-                public static int SelectedAddress = -1;
+                public static int  SelectedAddress;
                 public static bool IsSaveData;
                 public static Sms SmsAlarm;
                 public static List<Device> Devices;

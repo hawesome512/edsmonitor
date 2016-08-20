@@ -8,6 +8,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
 using System.Threading;
+using System.Threading.Tasks;
 using System.ServiceModel;
 
 namespace Monitor
@@ -21,21 +22,14 @@ namespace Monitor
                 Common common;
                 List<Device> devices = null;
                 List<UIElement> mainContainer = null;
-                Thread threadRun = null;
+                CancellationTokenSource cancelToken;
                 ServiceHost host;
                 ServiceReference1.EDSServiceClient client;
                 public MainWindow()
                 {
                         InitializeComponent();
                         init();
-                        Thread t = new Thread(() =>
-                        {
-                                this.Dispatcher.Invoke(new Action(() =>
-                                {
-                                        initDiagram();
-                                }));
-                        });
-                        t.Start();
+                        initDiagram();
                 }
 
                 private void init()
@@ -48,6 +42,7 @@ namespace Monitor
                 {
                         common = new Common();
                         com = new Com(Common.CType);
+                        DataLib.EDSCom = com;
                         if (Common.CType == ComType.WCF)
                         {
                                 client = new ServiceReference1.EDSServiceClient();
@@ -64,8 +59,6 @@ namespace Monitor
                         Binding bind = new Binding();
                         bind.Source = dvPage;
                         bind.Path = new PropertyPath("IsVisible");
-                        btn_back.SetBinding(ImageButton.IsEnabledProperty, bind);
-                        btn_back.Click += new RoutedEventHandler(btn_back_Click);
 
                         bind = new Binding();
                         bind.Source = dvPage;
@@ -86,15 +79,22 @@ namespace Monitor
 
                         dvDevices.ReloadDevices += new EventHandler<EventArgs>(dvDevices_ReloadDevices);
 
-                        loginPage.LoginSucceeded += loginPage_LoginSucceeded;
+                        startPage.Enter += (s, o) =>
+                        {
+                                tg_back.IsChecked = true;
+                        };
 
-                        mainContainer = new List<UIElement>() { diagram, dvPage, dvDevices, img_link, loginPage, energy };
-                }
+                        mainContainer = new List<UIElement>() { diagram, dvPage, dvDevices, img_link, energy };
 
-                void loginPage_LoginSucceeded(object sender, EventArgs e)
-                {
-                        common.UserLevel = User.ADMIN;
-                        btn_run_Click(btn_run, null);
+                        if (Tool.GetConfig("UPS") == "true")
+                        {
+                                power.InitPower();
+                        }
+                        else
+                        {
+                                power.Visibility = Visibility.Hidden;
+                        }
+                        progress.start();
                 }
 
                 void dvDevices_ReloadDevices(object sender, EventArgs e)
@@ -107,34 +107,49 @@ namespace Monitor
 
                 private void initDiagram()
                 {
-                        if (threadRun != null)
-                                threadRun.Suspend();
-                        loadDevices();
-                        if (Common.CType == ComType.SP)
+                        Task.Factory.StartNew(() =>
                         {
-                                testComs();
-                        }
+                                loadDevices();
+                                this.Dispatcher.Invoke(new Action(()=>
+                                {
+                                        diagram.InitDiagram(devices);
+                                        diagram.EnterDevice += new EventHandler<EnterDeviceArgs>(diagram_EnterDevice);
+                                }));
+                                bool comUseful = com.TestCom(devices.Select(d => d.Address).ToArray());
+                                if (comUseful)
+                                {
+                                        getDataTask();
+                                }
+                                else
+                                {
+                                        progress.end(true);
+                                        MsgBox.Show("请检查设备连接及通信配置信息！", "通信失败", MsgBox.Buttons.OK, MsgBox.Icon.Error, MsgBox.AnimateStyle.FadeIn);
+                                }
+                        });
+                }
 
-                        diagram.InitDiagram(devices);
-
-                        diagram.EnterDevice += new EventHandler<EnterDeviceArgs>(diagram_EnterDevice);
-                        threadRun = new Thread(() =>
+                private void getDataTask()
+                {
+                        Task.Factory.StartNew(() =>
                         {
+                                cancelToken = new CancellationTokenSource();
+                                ParallelOptions option = new ParallelOptions();
+                                option.CancellationToken = cancelToken.Token;
                                 while (true)
                                 {
                                         foreach (var dv in devices)
                                         {
+                                                option.CancellationToken.ThrowIfCancellationRequested();
                                                 dv.GetData();
-                                                if (Common.SelectedAddress != -1 && Common.SelectedAddress != dv.Address)
+                                                if (Common.SelectedAddress != 0 && Common.SelectedAddress != dv.Address)
                                                 {
                                                         Device dvSelected = (Device)devices.Find(d => d.Address == Common.SelectedAddress);
                                                         dvSelected.GetData();
                                                 }
                                         }
+                                        progress.end();
                                 }
                         });
-                        threadRun.IsBackground = true;
-                        threadRun.Start();
                 }
 
                 void btn_back_Click(object sender, RoutedEventArgs e)
@@ -146,7 +161,7 @@ namespace Monitor
                 {
                         setMainVisibility(dvPage);
                         dvPage.InitDevice(e.Dv, common);
-                        Common.SelectedAddress = dvPage.GetAddr();
+                        com.ChangeSelectedAddress(dvPage.GetAddr());
                 }
 
 
@@ -166,15 +181,15 @@ namespace Monitor
                                 DeviceType dvType = (DeviceType)Enum.Parse(typeof(DeviceType), type);
                                 Device device = Activator.CreateInstance(Type.GetType("Monitor.Dv" + type)) as Device;
                                 device.InitDevice(addr, dvType, name, alias, tag, parent);
-                                device.MyCom = com;
                                 device.PreRemoteModify += (s, o) =>
                                 {
-                                        threadRun.Suspend();
+                                        cancelToken.Cancel();
                                 };
                                 device.RemoteModified += (s, o) =>
                                 {
-                                        threadRun.Resume();
+                                        getDataTask();
                                 };
+                                device.MyCom = com;
                                 device.InitAddress();
                                 devices.Add(device);
                         }
@@ -182,20 +197,6 @@ namespace Monitor
                         {
                                 dv.Dependence = Tool.FindParents(devices, dv.Address);
                         }
-                }
-
-                void testComs()
-                {
-                        foreach (var d in devices)
-                        {
-                                string resultCom = com.TestCom(d.Address, Tool.GetConfig("ComTag"));
-                                if (resultCom != null)
-                                {
-                                        Tool.SetConfig("ComTag", resultCom);
-                                        return;
-                                }
-                        }
-                        MsgBox.Show("请检查串口连接和设备通信地址是否正确.", "无信号", MsgBox.Buttons.OK, MsgBox.Icon.Error, MsgBox.AnimateStyle.FadeIn);
                 }
 
                 private void btn_close_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -241,8 +242,12 @@ namespace Monitor
                                 common.UserLevel = User.UNKNOWN;
                                 return;
                         }
-                        setHerePosition(sender);
-                        setMainVisibility(loginPage);
+                        Login login = new Login();
+                        login.LoginSucceeded += (s, o) =>
+                        {
+                                common.UserLevel = User.ADMIN;
+                        };
+                        login.ShowDialog();
                 }
 
                 void setHerePosition(Object sender)
@@ -257,7 +262,7 @@ namespace Monitor
                         {
                                 u.Visibility = (u == ui) ? Visibility.Visible : Visibility.Hidden;
                         }
-                        Common.SelectedAddress = -1;
+                        com.ChangeSelectedAddress(0);
                 }
 
                 private void btn_min_Click(object sender, RoutedEventArgs e)
@@ -308,7 +313,14 @@ namespace Monitor
                 private void system_Click(object sender, RoutedEventArgs e)
                 {
                         Setting setting = new Setting();
+                        setting.InitSetting(common);
                         setting.ShowDialog();
                 }
+
+                private void tg_back_Click(object sender, RoutedEventArgs e)
+                {
+                        startPage.showStart();
+                }
+
         }
 }

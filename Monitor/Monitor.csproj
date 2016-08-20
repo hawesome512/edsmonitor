@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ApplicationIcon>Images\logo.ico</ApplicationIcon>
+    <ApplicationIcon>Images\monitor.ico</ApplicationIcon>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <PublishUrl>发布\</PublishUrl>
@@ -108,8 +108,18 @@
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Compile Include="DataLib.cs" />
     <Compile Include="Devices\DvACREL.cs" />
     <Compile Include="Devices\DvMIC.cs" />
+    <Compile Include="MyControls\Login.xaml.cs">
+      <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControls\Power.xaml.cs">
+      <DependentUpon>Power.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControls\Progress.xaml.cs">
+      <DependentUpon>Progress.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Service References\ServiceReference1\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -131,7 +141,7 @@
     <Compile Include="ComConverter.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Converts.cs" />
-    <Compile Include="Devices\DvMCCB.cs" />
+    <Compile Include="Devices\DvMCCB_BMA.cs" />
     <Compile Include="Devices\Device.cs" />
     <Compile Include="MyControls\DevicePage.xaml.cs">
       <DependentUpon>DevicePage.xaml</DependentUpon>
@@ -156,8 +166,8 @@
     <Compile Include="MyControls\MICRemote.xaml.cs">
       <DependentUpon>MICRemote.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MyControls\Record.xaml.cs">
-      <DependentUpon>Record.xaml</DependentUpon>
+    <Compile Include="MyControls\RecordPage.xaml.cs">
+      <DependentUpon>RecordPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MyControls\Setting.xaml.cs">
       <DependentUpon>Setting.xaml</DependentUpon>
@@ -173,9 +183,12 @@
       <DependentUpon>DiagramForBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Sms.cs" />
+    <Compile Include="MyControls\Start.xaml.cs">
+      <DependentUpon>Start.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tool.cs" />
     <Compile Include="Devices\DvATS.cs" />
-    <Compile Include="Devices\DvMCCB_old.cs" />
+    <Compile Include="Devices\DvMCCB_BM.cs" />
     <Compile Include="Devices\DvACB_philippine.cs" />
     <Compile Include="MyControls\Triangle.xaml.cs">
       <DependentUpon>Triangle.xaml</DependentUpon>
@@ -201,6 +214,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="MyControls\Energy.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -251,7 +268,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MyControls\Record.xaml">
+    <Page Include="MyControls\Progress.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\RecordPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -270,6 +291,14 @@
     <Page Include="MyControls\DiagramForBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MyControls\Power.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\Start.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -295,6 +324,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Service References\ServiceReference1\Monitor.ServiceReference1.Record.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\ServiceReference1\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -302,6 +334,11 @@
     <None Include="Service References\ServiceReference1\configuration.svcinfo" />
     <None Include="Service References\ServiceReference1\configuration91.svcinfo" />
     <None Include="Service References\ServiceReference1\EDSService.disco" />
+    <None Include="Properties\DataSources\EDSLot.Energy.datasource" />
+    <None Include="Properties\DataSources\EDSLot.Record1.datasource" />
+    <None Include="Properties\DataSources\EDSLot.Record_MCCB.datasource" />
+    <None Include="Properties\DataSources\EDSLot.Record.datasource" />
+    <None Include="Properties\DataSources\EDSLot.Trip.datasource" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -327,9 +364,18 @@
     <None Include="Service References\ServiceReference1\EDSService1.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\ServiceReference1\EDSService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference1\EDSService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference1\EDSService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <Resource Include="Images\down.png" />
     <Resource Include="Images\up.png" />
-    <Content Include="Config\DeviceList.xml">
+    <Content Include="Config\DeviceList_1.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -342,6 +388,20 @@
       <SubType>Designer</SubType>
     </Content>
     <Resource Include="Images\title.png" />
+    <Resource Include="Images\search.png" />
+    <Resource Include="Images\search_v.png" />
+    <Resource Include="Images\指示图.png" />
+    <Resource Include="Images\power_off.png" />
+    <Resource Include="Images\power_on.png" />
+    <Resource Include="Images\done.png" />
+    <Resource Include="Images\wrong.png" />
+    <Resource Include="Images\monitor.ico" />
+    <Resource Include="Images\start.png" />
+    <Resource Include="Images\option.png" />
+    <Content Include="Config\DeviceList.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="MonitorHelp.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -367,7 +427,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Config\MCCB.xml">
+    <Content Include="Config\MCCB_BMA.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -395,8 +455,6 @@
     <Resource Include="Images\content.jpg" />
     <Resource Include="Images\正常.png" />
     <Resource Include="Images\最大化.png" />
-    <Resource Include="Images\指示图.png" />
-    <Resource Include="Images\logo.ico" />
     <Resource Include="Images\here.png" />
     <Resource Include="Images\run.png" />
     <Resource Include="Images\config.png" />
@@ -413,7 +471,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Config\MCCB_old.xml">
+    <Content Include="Config\MCCB_BM.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
@@ -436,13 +494,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\EDSLot\EDSLot.csproj">
       <Project>{77bf0430-1a26-445d-bd47-dc077a688a4a}</Project>
       <Name>EDSLot</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\ServiceReference1\" />

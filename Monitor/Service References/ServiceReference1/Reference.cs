@@ -9,7 +9,150 @@
 //------------------------------------------------------------------------------
 
 namespace Monitor.ServiceReference1 {
+    using System.Runtime.Serialization;
+    using System;
     
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Record", Namespace="http://schemas.datacontract.org/2004/07/Monitor")]
+    [System.SerializableAttribute()]
+    public partial class Record : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int AddressField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<double> INField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<double> IaField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<double> IbField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<double> IcField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<double> IgfField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime TimeField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Address {
+            get {
+                return this.AddressField;
+            }
+            set {
+                if ((this.AddressField.Equals(value) != true)) {
+                    this.AddressField = value;
+                    this.RaisePropertyChanged("Address");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<double> IN {
+            get {
+                return this.INField;
+            }
+            set {
+                if ((this.INField.Equals(value) != true)) {
+                    this.INField = value;
+                    this.RaisePropertyChanged("IN");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<double> Ia {
+            get {
+                return this.IaField;
+            }
+            set {
+                if ((this.IaField.Equals(value) != true)) {
+                    this.IaField = value;
+                    this.RaisePropertyChanged("Ia");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<double> Ib {
+            get {
+                return this.IbField;
+            }
+            set {
+                if ((this.IbField.Equals(value) != true)) {
+                    this.IbField = value;
+                    this.RaisePropertyChanged("Ib");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<double> Ic {
+            get {
+                return this.IcField;
+            }
+            set {
+                if ((this.IcField.Equals(value) != true)) {
+                    this.IcField = value;
+                    this.RaisePropertyChanged("Ic");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<double> Igf {
+            get {
+                return this.IgfField;
+            }
+            set {
+                if ((this.IgfField.Equals(value) != true)) {
+                    this.IgfField = value;
+                    this.RaisePropertyChanged("Igf");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime Time {
+            get {
+                return this.TimeField;
+            }
+            set {
+                if ((this.TimeField.Equals(value) != true)) {
+                    this.TimeField = value;
+                    this.RaisePropertyChanged("Time");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceReference1.IEDSService")]
@@ -20,6 +163,36 @@ namespace Monitor.ServiceReference1 {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/UpdateDevice", ReplyAction="http://tempuri.org/IEDSService/UpdateDeviceResponse")]
         System.Threading.Tasks.Task<byte[]> UpdateDeviceAsync(byte address, int zoneIndex);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/RemoteControl", ReplyAction="http://tempuri.org/IEDSService/RemoteControlResponse")]
+        byte[] RemoteControl(byte[] snd);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/RemoteControl", ReplyAction="http://tempuri.org/IEDSService/RemoteControlResponse")]
+        System.Threading.Tasks.Task<byte[]> RemoteControlAsync(byte[] snd);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/QueryData", ReplyAction="http://tempuri.org/IEDSService/QueryDataResponse")]
+        Monitor.ServiceReference1.Record[] QueryData(byte address, System.DateTime start, System.DateTime end);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/QueryData", ReplyAction="http://tempuri.org/IEDSService/QueryDataResponse")]
+        System.Threading.Tasks.Task<Monitor.ServiceReference1.Record[]> QueryDataAsync(byte address, System.DateTime start, System.DateTime end);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/QueryTrip", ReplyAction="http://tempuri.org/IEDSService/QueryTripResponse")]
+        EDSLot.Trip[] QueryTrip(byte address, System.DateTime start, System.DateTime end);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/QueryTrip", ReplyAction="http://tempuri.org/IEDSService/QueryTripResponse")]
+        System.Threading.Tasks.Task<EDSLot.Trip[]> QueryTripAsync(byte address, System.DateTime start, System.DateTime end);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/ChangeSelectedAddress", ReplyAction="http://tempuri.org/IEDSService/ChangeSelectedAddressResponse")]
+        void ChangeSelectedAddress(byte address);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/ChangeSelectedAddress", ReplyAction="http://tempuri.org/IEDSService/ChangeSelectedAddressResponse")]
+        System.Threading.Tasks.Task ChangeSelectedAddressAsync(byte address);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/QueryEnergy", ReplyAction="http://tempuri.org/IEDSService/QueryEnergyResponse")]
+        EDSLot.Energy[] QueryEnergy(int[] addrs, System.DateTime start, System.DateTime end);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/QueryEnergy", ReplyAction="http://tempuri.org/IEDSService/QueryEnergyResponse")]
+        System.Threading.Tasks.Task<EDSLot.Energy[]> QueryEnergyAsync(int[] addrs, System.DateTime start, System.DateTime end);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -55,6 +228,46 @@ namespace Monitor.ServiceReference1 {
         
         public System.Threading.Tasks.Task<byte[]> UpdateDeviceAsync(byte address, int zoneIndex) {
             return base.Channel.UpdateDeviceAsync(address, zoneIndex);
+        }
+        
+        public byte[] RemoteControl(byte[] snd) {
+            return base.Channel.RemoteControl(snd);
+        }
+        
+        public System.Threading.Tasks.Task<byte[]> RemoteControlAsync(byte[] snd) {
+            return base.Channel.RemoteControlAsync(snd);
+        }
+        
+        public Monitor.ServiceReference1.Record[] QueryData(byte address, System.DateTime start, System.DateTime end) {
+            return base.Channel.QueryData(address, start, end);
+        }
+        
+        public System.Threading.Tasks.Task<Monitor.ServiceReference1.Record[]> QueryDataAsync(byte address, System.DateTime start, System.DateTime end) {
+            return base.Channel.QueryDataAsync(address, start, end);
+        }
+        
+        public EDSLot.Trip[] QueryTrip(byte address, System.DateTime start, System.DateTime end) {
+            return base.Channel.QueryTrip(address, start, end);
+        }
+        
+        public System.Threading.Tasks.Task<EDSLot.Trip[]> QueryTripAsync(byte address, System.DateTime start, System.DateTime end) {
+            return base.Channel.QueryTripAsync(address, start, end);
+        }
+        
+        public void ChangeSelectedAddress(byte address) {
+            base.Channel.ChangeSelectedAddress(address);
+        }
+        
+        public System.Threading.Tasks.Task ChangeSelectedAddressAsync(byte address) {
+            return base.Channel.ChangeSelectedAddressAsync(address);
+        }
+        
+        public EDSLot.Energy[] QueryEnergy(int[] addrs, System.DateTime start, System.DateTime end) {
+            return base.Channel.QueryEnergy(addrs, start, end);
+        }
+        
+        public System.Threading.Tasks.Task<EDSLot.Energy[]> QueryEnergyAsync(int[] addrs, System.DateTime start, System.DateTime end) {
+            return base.Channel.QueryEnergyAsync(addrs, start, end);
         }
     }
 }

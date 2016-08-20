@@ -12,5 +12,20 @@ namespace Monitor
         {
                 [OperationContract]
                 byte[] UpdateDevice(byte address,int zoneIndex);
+
+                [OperationContract]
+                byte[] RemoteControl(byte[] snd);
+
+                [OperationContract]
+                Record[] QueryData(byte address,DateTime start, DateTime end);
+
+                [OperationContract]
+                EDSLot.Trip[] QueryTrip(byte address,DateTime start, DateTime end);
+
+                [OperationContract]
+                void ChangeSelectedAddress(byte address);
+
+                [OperationContract]
+                EDSLot.Energy[] QueryEnergy(int[] addrs, DateTime start, DateTime end);
         }
 }

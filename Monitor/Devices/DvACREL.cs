@@ -45,7 +45,10 @@ namespace Monitor
                                 state.QE = str2doubleE("QE");
                         }
                         State = state;
-                        SaveDate();
+                        if (Common.IsSaveData)
+                        {
+                                SaveDate();
+                        }
                 }
 
                 double str2double(string name)
@@ -95,17 +98,6 @@ namespace Monitor
                                 catch
                                 {
                                 }
-                        }
-                }
-
-                public override List<Object> QueryData(DateTime start, DateTime end)
-                {
-                        using (EDSEntities context = new EDSEntities())
-                        {
-                                var result = from m in context.Record_Measure
-                                             where m.Address == this.Address && (m.Time >= start && m.Time <= end)
-                                             select m;
-                                return result.ToList<object>();
                         }
                 }
         }

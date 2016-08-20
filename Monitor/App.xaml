@@ -6,16 +6,15 @@
     <Application.Resources>
 
         <ResourceDictionary>
-            <!--.Net4.5以下时，此部分必须注释-->
+            
+            <!--.Net4.5以下时，↓此部分必须注释-->
             <ResourceDictionary.MergedDictionaries>
-
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Teal.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Red.xaml" />
-
             </ResourceDictionary.MergedDictionaries>
-            
+            <!--.Net4.5以下时，↑此部分必须注释-->
             
             <!--Foreground-->
             <SolidColorBrush x:Key="Foreground" Color="#FFFFFF"/>
@@ -324,7 +323,7 @@
                     </Trigger>
                 </ControlTemplate.Triggers>
             </ControlTemplate>
-            
+
             <Style TargetType="DataGrid">
                 <!--网格线颜色-->
                 <Setter Property="CanUserResizeColumns" Value="false"/>

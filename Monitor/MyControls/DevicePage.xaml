@@ -17,8 +17,9 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="180"/>
 			<RowDefinition Height="320*"/>
-		</Grid.RowDefinitions>
-		<local:Tab x:Name="myTab" Grid.RowSpan="2" Grid.Column="1"></local:Tab>
+        </Grid.RowDefinitions>
+        <local:Tab x:Name="myTab" Grid.RowSpan="2" Grid.Column="1"></local:Tab>
+        <local:Progress x:Name="progress" Grid.Column="1" Grid.RowSpan="2"></local:Progress>
         <Image Name="dvImg"  Grid.RowSpan="2" Height="150" HorizontalAlignment="Left" Margin="20,20,0,0" Stretch="Fill" VerticalAlignment="Top" Width="150" Source="/Monitor;component/Images/ACB.jpg" />
         <Label Content="模式:" Height="28" HorizontalAlignment="Left" Margin="180,50,0,0" Name="label1" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" />
         <Label Content="Unknown" Height="28" HorizontalAlignment="Left" Margin="230,50,0,0" Name="lblMode" VerticalAlignment="Top" Background="LightGray" FontStyle="Italic" Width="65" FontStretch="Normal"/>

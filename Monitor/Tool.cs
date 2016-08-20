@@ -194,7 +194,8 @@ namespace Monitor
 
                 public static string GetConfig(string key)
                 {
-                        return ConfigurationSettings.AppSettings[key];
+                        //return ConfigurationSettings.AppSettings[key];
+                        return ConfigurationManager.AppSettings[key];
                 }
                 public static void SetConfig(string key,string value)
                 {
@@ -246,6 +247,11 @@ namespace Monitor
                                 parents.Add(dv);
                         }
                         return parents;
+                }
+
+                public static double Ndb2db(double? source)
+                {
+                        return source == null ? 0 : (double)source;
                 }
         }
 }

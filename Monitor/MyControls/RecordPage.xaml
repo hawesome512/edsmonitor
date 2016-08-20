@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="Monitor.RecordPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
+            xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+		    xmlns:local="clr-namespace:Monitor"
+            xmlns:Chr="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="1000" FontSize="14">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="6*"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <DatePicker Name="dp_start" Width="100" Height="25" Margin="-150,0,0,0" Foreground="Black"/>
+            <Label Content="——" Width="30" Height="30" VerticalContentAlignment="Center"/>
+            <DatePicker Name="dp_end" Width="100" Height="25" Margin="150,0,0,0" Foreground="Black"/>
+            <local:ImageButton x:Name="btn_query" FontSize="24" Width="80" Height="35" Margin="400,0,0,0" Click="btn_query_Click" Template="{StaticResource ImageButtonTemplate}"
+                                ImgPath="/Images/search.png"/>
+        </Grid>
+        <Label Name="txt_error" Grid.Row="1" Foreground="Red" Content="此类型设备暂未提供脱扣记录查询功能"></Label>
+        <DataGrid x:Name="dg_trips" Grid.Row="1" CanUserAddRows="True" ItemsSource="{Binding}" SelectionUnit="FullRow"  AutoGenerateColumns="False" Visibility="Hidden" SelectionChanged="dg_trips_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="150" Header="脱扣时间"  Binding="{Binding Time,StringFormat=\{0:yyyy/MM/dd HH:mm:ss\}}"/>
+                <DataGridTextColumn Width="90" Header="脱扣相极"  Binding="{Binding Phase}"/>
+                <DataGridTextColumn Width="90" Header="故障类型"  Binding="{Binding Type}"/>
+                <DataGridTextColumn Width="90" Header="Ia(A)"  Binding="{Binding Ia}"/>
+                <DataGridTextColumn Width="90" Header="Ib(A)"  Binding="{Binding Ib}"/>
+                <DataGridTextColumn Width="90" Header="Ic(A)"  Binding="{Binding Ic}"/>
+                <DataGridTextColumn Width="90" Header="IN(A)"  Binding="{Binding IN}"/>
+                <DataGridTextColumn Width="90" Header="整定电流(A)"  Binding="{Binding It}"/>
+                <DataGridTextColumn Width="90" Header="整定时间(S)"  Binding="{Binding Tt}"/>
+                <DataGridTextColumn Width="90" Header="故障电流(A)"  Binding="{Binding Ip}"/>
+                <DataGridTextColumn Width="90" Header="脱扣延时(S)"  Binding="{Binding Tp}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <WindowsFormsHost Name="myHost" Grid.Row="2">
+            <Chr:Chart Name="myChart" BackColor="Transparent" MouseDown="myChart_MouseDown" MouseUp="myChart_MouseUp"/>
+        </WindowsFormsHost>
+    </Grid>
+</UserControl>

@@ -29,7 +29,6 @@ namespace Monitor
                 string strCom;
                 ComType cType;
                 bool disposed = false;
-
                 public Com(ComType type)
                 {
                         cType = type;
@@ -55,7 +54,6 @@ namespace Monitor
                                 GC.SuppressFinalize(this);
                         }
                 }
-
                 /// <summary>
                 /// 执行通信：读、写
                 /// </summary>
@@ -72,19 +70,27 @@ namespace Monitor
                                         return tcpCom(snd);
                                 case ComType.WCF:
                                         int zoneIndex = int.Parse(tag);
-                                        return wcfCom(snd,zoneIndex);
+                                        Thread.Sleep(500);
+                                        return wcfCom(snd, zoneIndex);
                                 default:
                                         return null;
                         }
                 }
 
-                private byte[] wcfCom(byte[] snd,int zoneIndex)
+                private byte[] wcfCom(byte[] snd, int zoneIndex)
                 {
                         if (wcf == null)
                         {
                                 wcf = new ServiceReference1.EDSServiceClient();
                         }
-                        return wcf.UpdateDevice(snd[0], zoneIndex);
+                        if (zoneIndex == 3)
+                        {
+                                return wcf.RemoteControl(snd);
+                        }
+                        else
+                        {
+                                return wcf.UpdateDevice(snd[0], zoneIndex);
+                        }
                 }
 
                 private byte[] tcpCom(byte[] _snd)
@@ -160,7 +166,6 @@ namespace Monitor
                         }
                         sp.Write(Tool.CRCck(snd), 0, snd.Length + 2);
                         Thread.Sleep(500);
-                        //Thread.Sleep(snd[1]==16?500:200);//写模式设置长时间，否则容易出错
                         if (sp.BytesToRead > 0)
                                 sp.Read(rcv, 0, rcv.Length);
                         if (rcv[1] == 3)
@@ -182,12 +187,47 @@ namespace Monitor
                 /// <summary>
                 /// 测试可用的串口
                 /// </summary>
-                public string TestCom(byte addr, string defaultCom)
+                public bool TestCom(byte[] addrs)
+                {
+                        switch (cType)
+                        {
+                                case ComType.SP:
+                                        return testSPCom(addrs);
+                                case ComType.WCF:
+                                        return testWCFCom(addrs);
+                                default:
+                                        return false;
+                        }
+                }
+
+                private bool testWCFCom(byte[] addrs)
+                {
+                        if (wcf == null)
+                        {
+                                wcf = new ServiceReference1.EDSServiceClient();
+                        }
+                        foreach (byte addr in addrs)
+                        {
+                                try
+                                {
+                                        byte[] tmp = wcf.UpdateDevice(addr, 0);
+                                        if (tmp != null)
+                                                return true;
+                                }
+                                catch
+                                {
+                                }
+                        }
+                        return false;
+                }
+
+                private bool testSPCom(byte[] addrs)
                 {
                         if (sp == null || !sp.IsOpen)
                         {
                                 strCom = null;
                                 List<string> ports = System.IO.Ports.SerialPort.GetPortNames().ToList();
+                                string defaultCom = Tool.GetConfig("ComTag");
                                 if (ports.Contains(defaultCom))
                                 {
                                         ports.Remove(defaultCom);
@@ -200,32 +240,82 @@ namespace Monitor
                                         sp.ReadTimeout = 500;
                                         sp.WriteTimeout = 500;
                                         sp.RtsEnable = true;
-                                        sp.Open();
-                                        byte[] tmp = new byte[] { addr, 3, 0, 0, 0, 1 };
-                                        sp.Write(Tool.CRCck(tmp), 0, tmp.Length + 2);
-                                        Thread.Sleep(500);
-                                        byte[] rcv = new byte[256];
-                                        try
+                                        foreach (byte addr in addrs)
                                         {
-                                                sp.Read(rcv, 0, rcv.Length);
-                                                if (rcv[1] == 3)
+                                                sp.Open();
+                                                byte[] tmp = new byte[] { addr, 3, 0, 0, 0, 1 };
+                                                sp.Write(Tool.CRCck(tmp), 0, tmp.Length + 2);
+                                                Thread.Sleep(500);
+                                                byte[] rcv = new byte[256];
+                                                try
                                                 {
-                                                        strCom = port;
-                                                        break;
+                                                        sp.Read(rcv, 0, rcv.Length);
+                                                        if (rcv[1] == 3)
+                                                        {
+                                                                strCom = port;
+                                                                Tool.SetConfig("ComTag", strCom);
+                                                                return true;
+                                                        }
                                                 }
-                                        }
-                                        catch
-                                        {
+                                                catch
+                                                {
 
-                                        }
-                                        finally
-                                        {
-                                                sp.Close();//及时释放串口资源，否则容易出错
-                                                sp.Dispose();
+                                                }
+                                                finally
+                                                {
+                                                        sp.Close();//及时释放串口资源，否则容易出错
+                                                        sp.Dispose();
+                                                }
                                         }
                                 }
                         }
-                        return strCom;
+                        return false;
+                }
+
+                public List<Record> QueryData(byte address, DateTime start, DateTime end)
+                {
+                        if (wcf == null)
+                        {
+                                wcf = new ServiceReference1.EDSServiceClient();
+                        }
+                        var result = wcf.QueryData(address, start, end);
+                        List<Record> records = new List<Record>();
+                        foreach (var r in result)
+                        {
+                                records.Add(new Record(r));
+                        }
+                        return records;
+                }
+
+                public List<EDSLot.Trip> QueryTrip(byte address, DateTime start, DateTime end)
+                {
+                        if (wcf == null)
+                        {
+                                wcf = new ServiceReference1.EDSServiceClient();
+                        }
+                        return wcf.QueryTrip(address, start, end).ToList();
+                }
+
+                public void ChangeSelectedAddress(byte address)
+                {
+                        Common.SelectedAddress = address;
+                        if (cType == ComType.WCF)
+                        {
+                                if (wcf == null)
+                                {
+                                        wcf = new ServiceReference1.EDSServiceClient();
+                                }
+                                wcf.ChangeSelectedAddress(address);
+                        }
+                }
+
+                public List<EDSLot.Energy> QueryEnergy(int[] addrs, DateTime start, DateTime end)
+                {
+                        if (wcf == null)
+                        {
+                                wcf = new ServiceReference1.EDSServiceClient();
+                        }
+                        return wcf.QueryEnergy(addrs, start, end).ToList();
                 }
         }
 }

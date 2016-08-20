@@ -181,18 +181,18 @@ namespace Monitor
                                 //第三片区：进入设备页时循环读取
                                 if (_basicData["Device"].ShowValue == null)
                                 {
-                                        _basicData = getZoneData(_basicData,0);
+                                        _basicData = getZoneData(_basicData, 0);
                                 }
-                                _realData = getZoneData(_realData,1);
+                                _realData = getZoneData(_realData, 1);
                                 if (Address == Common.SelectedAddress || _params["LocalOrRemote"].ShowValue == null)
                                 {
-                                        _params = getZoneData(_params,2);
+                                        _params = getZoneData(_params, 2);
                                 }
                                 updateState();
                         }
                 }
 
-                protected Dictionary<string, DValues> getZoneData(Dictionary<string, DValues> dic,int zoneIndex=-1)
+                protected Dictionary<string, DValues> getZoneData(Dictionary<string, DValues> dic, int zoneIndex = -1)
                 {
                         byte[] snd = { Address, 3, 0, 0, 0, 1 };
                         int addr = dic.First().Value.Addr;
@@ -202,7 +202,8 @@ namespace Monitor
                         snd[5] = (byte)length;
                         string tag = Common.CType == ComType.WCF ? zoneIndex.ToString() : IP;
                         byte[] rcv = MyCom.Execute(snd, tag);
-                        if (zoneIndex!=-1)
+                        //只有0000/1000/2000片区数据需要通过WCF共享zoneIndex=0/1/2
+                        if (zoneIndex != -1)
                         {
                                 DataList[zoneIndex] = rcv;
                         }
@@ -227,29 +228,61 @@ namespace Monitor
                 #endregion
 
                 #region Remote Control
-                public byte[] SetParams(List<string> dataList)
+                public bool SetParams(List<string> dataList)
                 {
-                        PreRemoteModify(null, new EventArgs());
-                        System.Threading.Thread.Sleep(500);
+                        PreRemoteModify(this, null);
+                        System.Threading.Thread.Sleep(2000);
+                        string tag = Common.CType == ComType.WCF ? "3" : IP;
+
                         byte[] snd = GetValidParams(dataList);
-                        var result = MyCom.Execute(snd, IP);
-                        RemoteModified(null, new EventArgs());
-                        return result;
+                        int len = snd.Length / 4 * 2;//参数成对出现，必须为偶数
+                        byte[] snd1 = snd.Take(len).ToArray();
+                        byte[] snd2 = snd.Skip(len).ToArray();
+                        byte[] baseSnd = new byte[7];
+                        baseSnd[0] = Address;
+                        baseSnd[1] = 16;
+                        baseSnd[2] = 0x20;
+
+                        baseSnd[3] = 0x02;
+                        baseSnd[5] = (byte)(snd1.Length / 2);
+                        baseSnd[6] = (byte)snd1.Length;
+                        byte[] rcv1 = MyCom.Execute(baseSnd.Concat(snd1).ToArray(),tag);
+                        baseSnd[3] = (byte)(2 + snd1.Length);
+                        baseSnd[5] = (byte)(snd2.Length / 2);
+                        baseSnd[6] = (byte)snd2.Length;
+                        byte[] rcv2 = MyCom.Execute(baseSnd.Concat(snd2).ToArray(),tag);
+
+                        RemoteModified(this, null);
+                        if (rcv1.Length == 1 && rcv2.Length == 1)
+                        {
+                                return true;
+                        }
+                        else
+                        {
+                                return false;
+                        }
                 }
+
 
                 protected abstract byte[] GetValidParams(List<string> dataList);
 
                 public byte[] RemoteControl(string p)
                 {
-                        PreRemoteModify(null, new EventArgs());
-                        System.Threading.Thread.Sleep(500);
                         byte[] snd = GetValidRemote(p);
-                        var result = MyCom.Execute(snd, IP);
-                        RemoteModified(null, new EventArgs());
-                        return result;
+                        return Remote(snd);
                 }
 
                 protected abstract byte[] GetValidRemote(string p);
+
+                public byte[] Remote(byte[] snd)
+                {
+                        PreRemoteModify(this, null);
+                        System.Threading.Thread.Sleep(2000);
+                        string tag = Common.CType == ComType.WCF ? "3" : IP;
+                        var result = MyCom.Execute(snd, tag);
+                        RemoteModified(this, null);
+                        return result;
+                }
                 #endregion
 
                 #region Init
@@ -331,7 +364,7 @@ namespace Monitor
                 protected virtual void SmsAlarm()
                 {
                         string info = string.Format("{0}-{1}", TripData["Phase"].ShowValue, TripData["Type"].ShowValue);
-                        Common.SmsAlarm.SendSms(Address, info);
+                        Common.SmsAlarm.SendSms(Address.ToString(), info);
                 }
 
                 private double getIr()
@@ -346,19 +379,22 @@ namespace Monitor
                         return data;
                 }
 
-                public virtual List<object> QueryData(DateTime start, DateTime end)
+                public virtual List<Record> QueryData(DateTime start, DateTime end)
                 {
                         return null;
                 }
-                public virtual List<object> QueryTrip(DateTime start, DateTime end)
+                public virtual List<Trip> QueryTrip(DateTime start, DateTime end)
                 {
+                        if (Common.CType == ComType.WCF)
+                                return MyCom.QueryTrip(Address, start, end);
+
                         using (EDSEntities context = new EDSEntities())
                         {
                                 var result = from m in context.Trip
                                              where m.Address == this.Address && (m.Time >= start && m.Time <= end)
                                              orderby m.Time descending
                                              select m;
-                                return result.ToList<object>();
+                                return result.ToList();
                         }
                 }
         }

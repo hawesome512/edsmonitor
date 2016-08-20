@@ -9,13 +9,31 @@
 
 namespace EDSLot
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class Record_ACB:Record
-    {
-        public Nullable<double> Ua { get; set; }
-        public Nullable<double> Ub { get; set; }
-        public Nullable<double> Uc { get; set; }
-    }
+        using System;
+        using System.Collections.Generic;
+        using System.ServiceModel;
+        using System.Runtime.Serialization;
+
+        [DataContract]
+        public partial class Record_ACB : Record
+        {
+                [DataMember]
+                public Nullable<double> Ua
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> Ub
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> Uc
+                {
+                        get;
+                        set;
+                }
+        }
 }

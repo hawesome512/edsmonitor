@@ -25,6 +25,7 @@ namespace EDSLot
             throw new UnintentionalCodeFirstException();
         }
     
+        public DbSet<Energy> Energy { get; set; }
         public DbSet<Record_ACB> Record_ACB { get; set; }
         public DbSet<Record_MCCB> Record_MCCB { get; set; }
         public DbSet<Record_Measure> Record_Measure { get; set; }

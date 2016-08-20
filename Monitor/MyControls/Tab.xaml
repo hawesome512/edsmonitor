@@ -216,23 +216,11 @@
                 </TabItem.Header>
                 <Grid Name="remote"/>
             </TabItem>
-            <!--<TabItem>
-                <TabItem.Header>
-                    <Label Foreground="White">记录</Label>
-                </TabItem.Header>
-                <Grid Name="history">
-                    <DatePicker Name="dt_day" Foreground="Black" Width="100" Height="30" Margin="0,0,0,0" VerticalAlignment="Top" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
-                    <WindowsFormsHost Name="myHost" Margin="0,50,0,0">
-                        <Chr:Chart Name="myChart"/>
-                    </WindowsFormsHost>
-                    <Label HorizontalAlignment="Right" Foreground="Gray" Content="做演示用时本页为虚拟数值"/>
-                </Grid>
-            </TabItem>-->
             <TabItem>
                 <TabItem.Header>
                     <Label Foreground="White" MouseDown="Label_MouseDown_2">记录</Label>
                 </TabItem.Header>
-                <local:Record x:Name="record"/>
+                <local:RecordPage x:Name="record"/>
             </TabItem>
         </TabControl>
     </Grid>

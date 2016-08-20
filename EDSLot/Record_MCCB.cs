@@ -9,10 +9,13 @@
 
 namespace EDSLot
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class Record_MCCB:Record
-    {
-    }
+        using System;
+        using System.Collections.Generic;
+        using System.ServiceModel;
+        using System.Runtime.Serialization;
+
+        [DataContract]
+        public partial class Record_MCCB : Record
+        {
+        }
 }

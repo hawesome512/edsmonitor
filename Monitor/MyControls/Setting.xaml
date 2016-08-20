@@ -12,7 +12,6 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <Grid/>
         <Border BorderBrush="SeaGreen" BorderThickness="1" Grid.RowSpan="3"></Border>
         <Grid Grid.Row="0">
             <Grid.Background>
@@ -26,6 +25,7 @@
                 <RadioButton Name="rb_com" Content="通信模式" IsChecked="True" Style="{DynamicResource RadioLableStyle}"></RadioButton>
                 <RadioButton Name="rb_data" Content="数据存储" Style="{DynamicResource RadioLableStyle}"></RadioButton>
                 <RadioButton Name="rb_sms" Content="短信报警"  Style="{DynamicResource RadioLableStyle}"></RadioButton>
+                <RadioButton Name="rb_power" Content="系统供电"  Style="{DynamicResource RadioLableStyle}"></RadioButton>
             </StackPanel>
             <Grid Margin="100,10,10,0" Background="#55d3d3d3">
                 <Grid Name="grid_com" Visibility="{Binding IsChecked, Converter={StaticResource BoolToVisibilityConverter}, ElementName=rb_com}">
@@ -43,12 +43,19 @@
                     <TextBlock Margin="20,80,20,20" Text="短信接收号码。支持单个或多个手机号码，传入号码为11位手机号码，不能加0或+86。群发短信需传入多个号码，以英文逗号分隔，一次调用最多传入200个号码。示例：18600000000,13911111111,13322222222" VerticalAlignment="Center" TextWrapping="Wrap"/>
                     <TextBox Name="txt_tel" VerticalAlignment="Center" Margin="20,-80,20,0" Background="White">18759282157</TextBox>
                 </Grid>
+                <Grid Name="grid_power" Visibility="{Binding IsChecked, Converter={StaticResource BoolToVisibilityConverter}, ElementName=rb_power}">
+                    <RadioButton Name="rb_noUps" GroupName="power"
+                                  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,-100,0,0">市电</RadioButton>
+                    <RadioButton Name="rb_ups" GroupName="power" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0">市电+UPS</RadioButton>
+                    <ComboBox Name="cbox_upsCom"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="150" Margin="150,0,0,0"/>
+                    <Label Content="*UPS连接串口"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="150" Margin="170,60,0,0"/>
+                </Grid>
             </Grid>
         </Grid>
         <Grid Grid.Row="2">
             <Label Content="*重启生效" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10"/>
-            <Button Name="btn_save" HorizontalAlignment="Right" Margin="0,0,10,0" Content="确定" Width="80" Click="btn_save_Click"/>
-            <Button HorizontalAlignment="Right" Margin="0,0,100,0" Background="#B2DFDB" Content="取消" Width="80" Click="btn_close_Click"/>
+            <Button Name="btn_save" HorizontalAlignment="Right" Margin="0,0,10,0" Content="确定" Width="80" Height="35" Click="btn_save_Click" IsDefault="True"/>
+            <Button HorizontalAlignment="Right" Margin="0,0,100,0" Background="#55009688" Content="取消" Width="80" Height="35" Click="btn_close_Click" IsCancel="True"/>
         </Grid>
     </Grid>
 </Window>

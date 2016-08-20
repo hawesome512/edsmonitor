@@ -201,13 +201,7 @@ namespace Monitor
                 {
                         dataList.RemoveAt(0);//MIC没有开关量
                         byte len = (byte)dataList.Count;
-                        byte[] snd = new byte[7 + len * 2];
-                        snd[0] = Address;
-                        snd[1] = 16;
-                        snd[2] = 0x20;
-                        snd[3] = 0x02;
-                        snd[5] = len;
-                        snd[6] = (byte)(2 * len);
+                        byte[] snd = new byte[len * 2];
 
                         List<string> keys = new List<string>(Params.Keys);
                         keys.RemoveRange(0, 2);
@@ -215,7 +209,7 @@ namespace Monitor
                         {
                                 DValues d = _params[keys[i]];
                                 var temp = comcvt.CvtWrite(dataList[i], d.Cvt, d.Tag);
-                                temp.ToList().CopyTo(0, snd, i * 2 + 7, 2);
+                                temp.ToList().CopyTo(0, snd, i * 2, 2);
                         }
                         return snd;
                 }

@@ -11,9 +11,19 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Timers;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace Monitor
 {
+        public class RemoteEventArgs : EventArgs
+        {
+                public bool Fail;
+                public RemoteEventArgs(bool fail)
+                {
+                        Fail = fail;
+                }
+        }
         /// <summary>
         /// Tab.xaml 的交互逻辑
         /// </summary>
@@ -25,8 +35,8 @@ namespace Monitor
                 double factorX, factorY;
                 double gridX, gridY;
                 double wid;
-                UIChart uiChart;
                 List<string> switchList, cboxList;
+                public event EventHandler<RemoteEventArgs> PreRemoteModify, RemoteModified;
                 public Tab()
                 {
                         this.InitializeComponent();
@@ -57,7 +67,6 @@ namespace Monitor
                         removeOldControls();
                         //dt_day.Text = "";
                         myTab.SelectedIndex = 0;
-
                         this.DataContext = _device;
                         device = _device;
                         common = _common;
@@ -194,6 +203,8 @@ namespace Monitor
                         btn.Height = 38 * factorY;
                         btn.VerticalAlignment = VerticalAlignment.Top;
                         btn.toggleSwitch.SetBinding(WPFSpark.ToggleSwitch.IsCheckedProperty, Tool.addBinding("State", new StateToBoolConverter()));
+                        btn.toggleSwitch.CheckedBackground = Brushes.Red;
+                        btn.toggleSwitch.UncheckedBackground = Brushes.SeaGreen;
                         btn.toggleSwitch.Click += new RoutedEventHandler(RemoteSwitch_Click);
                         btn.Margin = new Thickness(0, 310 * factorY, 0, 0);
                         remote.Children.Add(btn);
@@ -227,7 +238,7 @@ namespace Monitor
                         string[] items = null;
                         switch (device.DvType)
                         {
-                                case DeviceType.MCCB:
+                                case DeviceType.MCCB_BMA:
                                         items = new string[] { "Ia", "Ib", "Ic" };
                                         break;
                                 default:
@@ -269,7 +280,7 @@ namespace Monitor
                         dial.myGauge2.RatedValue = nIn;
                         double Ir = 1;
                         double.TryParse(device.Params["Ir"].ShowValue, out Ir);
-                        dial.myGauge2.OptimalRangeStartValue = 0.9*Ir;
+                        dial.myGauge2.OptimalRangeStartValue = 0.9 * Ir;
                         dial.myGauge2.OptimalRangeEndValue = 1.05 * Ir;
                         return dial;
                 }
@@ -484,15 +495,17 @@ namespace Monitor
                         }
                         else
                         {
-                                if (getSetting())
+                                List<string> dataList = getSetting();
+                                PreRemoteModify(this, null);
+                                Task.Factory.StartNew(new Action(() =>
                                 {
-                                        MsgBox.Show("参数修改成功", "成功", MsgBox.Buttons.OK, MsgBox.Icon.Shield, MsgBox.AnimateStyle.FadeIn);
-                                }
-                                else
-                                {
-                                        MsgBox.Show("参数修改失败", "失败", MsgBox.Buttons.OK, MsgBox.Icon.Error, MsgBox.AnimateStyle.FadeIn);
-                                }
-                                param.Background = Brushes.Transparent;
+                                        bool fail = device.SetParams(dataList);
+                                        RemoteModified(this,new RemoteEventArgs(fail));
+                                        this.Dispatcher.Invoke(new Action(() =>
+                                        {
+                                                param.Background = Brushes.Transparent;
+                                        }));
+                                }));
                         }
                 }
 
@@ -508,18 +521,16 @@ namespace Monitor
                         {
                                 command = "Close";
                         }
-                        var result = device.RemoteControl(command);
-                        if (result.Length == 1)
+                        PreRemoteModify(this, null);
+                        Task.Factory.StartNew(new Action(() =>
                         {
-                                MsgBox.Show(string.Format("{0} 处于 {1}状态.", device.Name, command), "Succeed", MsgBox.Buttons.OK, MsgBox.Icon.Shield, MsgBox.AnimateStyle.FadeIn);
-                        }
-                        else
-                        {
-                                MsgBox.Show(string.Format("{0} {1}操作失败.", device.Name, command), "Fail", MsgBox.Buttons.OK, MsgBox.Icon.Error, MsgBox.AnimateStyle.FadeIn);
-                        }
+                                var result = device.RemoteControl(command);
+                                bool fail = (result.Length != 1);
+                                RemoteModified(this, new RemoteEventArgs(fail));
+                        }));
                 }
 
-                private bool getSetting()
+                private List<string> getSetting()
                 {
                         List<string> dataList = new List<string>();
                         int data = 0;
@@ -537,24 +548,12 @@ namespace Monitor
                                 ComboBox cbox = Tool.FindChild<ComboBox>(param, name);
                                 dataList.Add(cbox.SelectionBoxItem.ToString());
                         }
-                        var t = device.SetParams(dataList);
-                        return t.Length == 1;
+                        return dataList;
                 }
 
                 private void Label_MouseDown(object sender, MouseButtonEventArgs e)
                 {
                         setDeviceParams();
-                }
-
-                private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-                {
-                        int nIn = 1000, nUn = 127;
-                        int.TryParse(device.BasicData["In"].ShowValue, out nIn);
-                        if (device.BasicData.ContainsKey("Un"))
-                        {
-                                int.TryParse(device.BasicData["Un"].ShowValue, out nUn);
-                        }
-                        uiChart.SetData(nIn, nUn);
                 }
 
                 private void Label_MouseDown_1(object sender, MouseButtonEventArgs e)
