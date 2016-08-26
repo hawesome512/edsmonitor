@@ -16,12 +16,20 @@ using System.Windows.Media.Animation;
 
 namespace Monitor
 {
+        public class StartEventArgs : EventArgs
+        {
+                public byte ZID;
+                public StartEventArgs(byte zid)
+                {
+                        ZID = zid;
+                }
+        }
         /// <summary>
         /// Start.xaml 的交互逻辑
         /// </summary>
         public partial class Start : UserControl
         {
-                public EventHandler<EventArgs> Enter;
+                public EventHandler<StartEventArgs> Enter;
                 public Start()
                 {
                         InitializeComponent();
@@ -30,7 +38,9 @@ namespace Monitor
                 private void Button_Click(object sender, RoutedEventArgs e)
                 {
                         setScaleAnimation(1, 0);
-                        Enter(this, null);
+                        string strZID = (sender as Button).Name.Split('_')[1];
+                        byte zid = byte.Parse(strZID);
+                        Enter(this, new StartEventArgs(zid));
                 }
 
                 public void showStart()

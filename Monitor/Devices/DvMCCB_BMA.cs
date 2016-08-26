@@ -17,9 +17,9 @@ namespace Monitor
                         {
                                 byte data1 = (Byte)(data / 256);
                                 if ((data1 >> 6 & 1) == 1)
-                                        state.SwitchState = Switch.Close;
+                                        state.SwitchState = SwitchStatus.Close;
                                 else
-                                        state.SwitchState = Switch.Open;
+                                        state.SwitchState = SwitchStatus.Open;
                                 //MCCB低位在前/高位在后不符合常规逻辑，转换为高位在前/低位在后
                                 data = data % 256 * 256 + data / 256;
                                 int nCircuit = data & 0x4CBF;
@@ -47,9 +47,9 @@ namespace Monitor
                         state.Ib = str2int("Ib");
                         state.Ic = str2int("Ic");
                         State = state;
-                        if (Common.IsSaveData)
+                        if (Common.IsServer)
                         {
-                                SaveDate();
+                                SaveData();
                                 //产生新的脱扣记录
                                 if (Tool.isOne(data, 12))
                                 {
@@ -64,7 +64,7 @@ namespace Monitor
                 {
                         double data;
                         double.TryParse(RealData[name].ShowValue, out data);
-                        return data;//+new Random().Next(1, 10) / 100f;
+                        return data+new Random().Next(1, 10) / 100f;
                         //加随机数的原因：使用模拟信号时电流一直保存不变的情况下，NotifyPropertyChanged不会被触发，实际运行时不会出现此状况
                 }
 
@@ -167,7 +167,7 @@ namespace Monitor
                 }
 
                 #region Data
-                protected override void SaveDate()
+                protected override void SaveData()
                 {
                         using (EDSLot.EDSEntities context = new EDSLot.EDSEntities())
                         {
@@ -175,6 +175,7 @@ namespace Monitor
                                 {
                                         context.Record_MCCB.Add(new EDSLot.Record_MCCB()
                                         {
+                                                ZID=this.ZID,
                                                 Address = this.Address,
                                                 Time = DateTime.Now,
                                                 Ia = State.Ia,
@@ -193,12 +194,12 @@ namespace Monitor
 
                 public override List<Record> QueryData(DateTime start, DateTime end)
                 {
-                        if (Common.CType == ComType.WCF)
+                        if (!Common.IsServer)
                                 return MyCom.QueryData(Address, start, end);
                         using (EDSEntities context = new EDSEntities())
                         {
                                 var result = from m in context.Record_MCCB
-                                             where m.Address == this.Address && (m.Time >= start && m.Time <= end)
+                                             where m.ZID==this.ZID&& m.Address == this.Address && (m.Time >= start && m.Time <= end)
                                              select m;
                                 List<Record> records = new List<Record>();
                                 foreach (var r in result)

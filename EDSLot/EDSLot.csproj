@@ -50,57 +50,57 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EDSLot_EF.Context.cs">
+    <Compile Include="EDSLot.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>EDSLot_EF.Context.tt</DependentUpon>
+      <DependentUpon>EDSLot.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="EDSLot_EF.cs">
+    <Compile Include="EDSLot.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>EDSLot_EF.tt</DependentUpon>
+      <DependentUpon>EDSLot.tt</DependentUpon>
     </Compile>
-    <Compile Include="EDSLot_EF.Designer.cs">
+    <Compile Include="EDSLot.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>EDSLot_EF.edmx</DependentUpon>
+      <DependentUpon>EDSLot.edmx</DependentUpon>
     </Compile>
     <Compile Include="Energy.cs">
-      <DependentUpon>EDSLot_EF.tt</DependentUpon>
+      <DependentUpon>EDSLot.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Record.cs" />
     <Compile Include="Record_ACB.cs">
-      <DependentUpon>EDSLot_EF.tt</DependentUpon>
+      <DependentUpon>EDSLot.tt</DependentUpon>
     </Compile>
     <Compile Include="Record_MCCB.cs">
-      <DependentUpon>EDSLot_EF.tt</DependentUpon>
+      <DependentUpon>EDSLot.tt</DependentUpon>
     </Compile>
     <Compile Include="Record_Measure.cs">
-      <DependentUpon>EDSLot_EF.tt</DependentUpon>
+      <DependentUpon>EDSLot.tt</DependentUpon>
     </Compile>
     <Compile Include="Trip.cs">
-      <DependentUpon>EDSLot_EF.tt</DependentUpon>
+      <DependentUpon>EDSLot.tt</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
-    <EntityDeploy Include="EDSLot_EF.edmx">
+    <EntityDeploy Include="EDSLot.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>EDSLot_EF.Designer.cs</LastGenOutput>
+      <LastGenOutput>EDSLot.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="EDSLot_EF.Context.tt">
+    <None Include="EDSLot.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>EDSLot_EF.edmx</DependentUpon>
-      <LastGenOutput>EDSLot_EF.Context.cs</LastGenOutput>
+      <DependentUpon>EDSLot.edmx</DependentUpon>
+      <LastGenOutput>EDSLot.Context.cs</LastGenOutput>
     </None>
-    <None Include="EDSLot_EF.edmx.diagram">
-      <DependentUpon>EDSLot_EF.edmx</DependentUpon>
+    <None Include="EDSLot.edmx.diagram">
+      <DependentUpon>EDSLot.edmx</DependentUpon>
     </None>
-    <None Include="EDSLot_EF.tt">
+    <None Include="EDSLot.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>EDSLot_EF.edmx</DependentUpon>
-      <LastGenOutput>EDSLot_EF.cs</LastGenOutput>
+      <DependentUpon>EDSLot.edmx</DependentUpon>
+      <LastGenOutput>EDSLot.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
   </ItemGroup>

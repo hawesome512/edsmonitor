@@ -17,7 +17,11 @@ namespace Monitor
                 public List<byte[]> DataList = new List<byte[]>();
 
                 public Com MyCom;
-
+                public byte ZID
+                {
+                        get;
+                        set;
+                }
                 public byte Address
                 {
                         get;
@@ -47,12 +51,6 @@ namespace Monitor
                         get;
                         set;
                 }
-
-                public string IP
-                {
-                        get;
-                        set;
-                }
                 public List<Device> Dependence
                 {
                         get;
@@ -61,14 +59,15 @@ namespace Monitor
                 protected ComConverter comcvt = new ComConverter();
                 protected int nComFailed;
                 public event EventHandler<EventArgs> PreRemoteModify, RemoteModified;
+                public bool HasInited = false;
 
-                public void InitDevice(byte addr, DeviceType type, string name, string alias, string ip, byte parent)
+                public void InitDevice(byte zid,byte addr, DeviceType type, string name, string alias, byte parent)
                 {
+                        ZID = zid;
                         Address = addr;
                         DvType = type;
                         Name = name;
                         Alias = alias;
-                        IP = ip;
                         ParentAddr = parent;
                 }
 
@@ -190,6 +189,7 @@ namespace Monitor
                                 }
                                 updateState();
                         }
+                        HasInited = true;
                 }
 
                 protected Dictionary<string, DValues> getZoneData(Dictionary<string, DValues> dic, int zoneIndex = -1)
@@ -200,8 +200,7 @@ namespace Monitor
                         snd[2] = (byte)(addr / 256);
                         snd[3] = (byte)(addr % 256);
                         snd[5] = (byte)length;
-                        string tag = Common.CType == ComType.WCF ? zoneIndex.ToString() : IP;
-                        byte[] rcv = MyCom.Execute(snd, tag);
+                        byte[] rcv = MyCom.Execute(snd, zoneIndex);
                         //只有0000/1000/2000片区数据需要通过WCF共享zoneIndex=0/1/2
                         if (zoneIndex != -1)
                         {
@@ -232,7 +231,7 @@ namespace Monitor
                 {
                         PreRemoteModify(this, null);
                         System.Threading.Thread.Sleep(2000);
-                        string tag = Common.CType == ComType.WCF ? "3" : IP;
+                        int tag = Common.IsServer ?-1:3;
 
                         byte[] snd = GetValidParams(dataList);
                         int len = snd.Length / 4 * 2;//参数成对出现，必须为偶数
@@ -278,7 +277,7 @@ namespace Monitor
                 {
                         PreRemoteModify(this, null);
                         System.Threading.Thread.Sleep(2000);
-                        string tag = Common.CType == ComType.WCF ? "3" : IP;
+                        int tag = Common.IsServer ? -1:3;
                         var result = MyCom.Execute(snd, tag);
                         RemoteModified(this, null);
                         return result;
@@ -328,7 +327,7 @@ namespace Monitor
                 }
                 #endregion
 
-                protected virtual void SaveDate()
+                protected virtual void SaveData()
                 {
                 }
                 protected virtual void SaveTrip()
@@ -337,6 +336,7 @@ namespace Monitor
                         {
                                 context.Trip.Add(new Trip()
                                 {
+                                        ZID=this.ZID,
                                         Address = this.Address,
                                         Time = DateTime.Now,
                                         Phase = TripData["Phase"].ShowValue,
@@ -375,8 +375,15 @@ namespace Monitor
                 double tripStr2int(string name)
                 {
                         double data;
-                        double.TryParse(TripData[name].ShowValue, out data);
-                        return data;
+                        if (!TripData.Keys.Contains(name))
+                        {
+                                return 0;
+                        }
+                        else
+                        {
+                                double.TryParse(TripData[name].ShowValue, out data);
+                                return data;
+                        }
                 }
 
                 public virtual List<Record> QueryData(DateTime start, DateTime end)
@@ -385,13 +392,13 @@ namespace Monitor
                 }
                 public virtual List<Trip> QueryTrip(DateTime start, DateTime end)
                 {
-                        if (Common.CType == ComType.WCF)
+                        if (!Common.IsServer)
                                 return MyCom.QueryTrip(Address, start, end);
 
                         using (EDSEntities context = new EDSEntities())
                         {
                                 var result = from m in context.Trip
-                                             where m.Address == this.Address && (m.Time >= start && m.Time <= end)
+                                             where m.ZID==this.ZID&& m.Address == this.Address && (m.Time >= start && m.Time <= end)
                                              orderby m.Time descending
                                              select m;
                                 return result.ToList();

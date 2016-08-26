@@ -13,11 +13,18 @@ namespace EDSLot
         using System.Collections.Generic;
         using System.ServiceModel;
         using System.Runtime.Serialization;
+
         [DataContract]
         public partial class Trip
         {
                 [DataMember]
                 public System.DateTime Time
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public int ZID
                 {
                         get;
                         set;

@@ -25,9 +25,8 @@
                 <DataGridComboBoxColumn Width="90" Header="产品类型" SelectedItemBinding="{Binding DvType}" ItemsSource="{Binding Source={StaticResource deviceTypeEnum}}"/>
                 <DataGridTextColumn Width="90" Header="设备编号"  Binding="{Binding Name}"/>
                 <DataGridTextColumn Width="90" Header="通信地址"  Binding="{Binding Address}"/>
-                <DataGridTextColumn Width="85" Header="上级地址"  Binding="{Binding ParentAddr}"/>
-                <DataGridTextColumn Width="45" Header="备注"  Binding="{Binding Tag}"/>
-                <DataGridTemplateColumn Width="45" Header="删除">
+                <DataGridTextColumn Width="90" Header="上级地址"  Binding="{Binding ParentAddr}"/>
+                <DataGridTemplateColumn Width="90" Header="删除">
                         <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <local:ImageButton Width="25" Height="25" x:Name="btn_back" ImgPath="/Images/关闭.png" Command="Delete" Template="{StaticResource ImageButtonTemplate}"></local:ImageButton>

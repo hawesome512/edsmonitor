@@ -45,9 +45,9 @@ namespace Monitor
                                 state.QE = str2doubleE("QE");
                         }
                         State = state;
-                        if (Common.IsSaveData)
+                        if (Common.IsServer)
                         {
-                                SaveDate();
+                                SaveData();
                         }
                 }
 
@@ -74,7 +74,7 @@ namespace Monitor
                         throw new NotImplementedException();
                 }
 
-                protected override void SaveDate()
+                protected override void SaveData()
                 {
                         using (EDSLot.EDSEntities context = new EDSLot.EDSEntities())
                         {
@@ -82,6 +82,7 @@ namespace Monitor
                                 {
                                         context.Record_Measure.Add(new EDSLot.Record_Measure()
                                         {
+                                                ZID=this.ZID,
                                                 Address = this.Address,
                                                 Time = DateTime.Now,
                                                 U = State.Ua,

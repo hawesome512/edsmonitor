@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="CBPnw2U+d5YKpptv92fV6yeV9TI=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="z7hinSxnJqCjFg4XIjZAUeyDpKI=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="netTcpBinding" name="NetTcpBinding_IEDSService1">
       <properties>
@@ -119,10 +119,10 @@
         </property>
       </properties>
     </bindingConfiguration>
-    <bindingConfiguration bindingType="wsHttpBinding" name="WSHttpBinding_IEDSService1">
+    <bindingConfiguration bindingType="wsHttpBinding" name="WSHttpBinding_IEDSService">
       <properties>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>WSHttpBinding_IEDSService1</serializedValue>
+          <serializedValue>WSHttpBinding_IEDSService</serializedValue>
         </property>
         <property path="/closeTimeout" isComplexType="false" isExplicitlyDefined="true" clrType="System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -245,7 +245,7 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="WSHttpBinding_IEDSService" contract="ServiceReference1.IEDSService" bindingType="wsHttpBinding" address="http://localhost:7070/EDSService" bindingConfiguration="WSHttpBinding_IEDSService1">
+    <endpoint name="WSHttpBinding_IEDSService" contract="ServiceReference1.IEDSService" bindingType="wsHttpBinding" address="http://localhost:7070/EDSService" bindingConfiguration="WSHttpBinding_IEDSService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>http://localhost:7070/EDSService</serializedValue>
@@ -257,7 +257,7 @@
           <serializedValue>wsHttpBinding</serializedValue>
         </property>
         <property path="/bindingConfiguration" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>WSHttpBinding_IEDSService1</serializedValue>
+          <serializedValue>WSHttpBinding_IEDSService</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>ServiceReference1.IEDSService</serializedValue>
@@ -330,7 +330,7 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="NetTcpBinding_IEDSService1" contract="ServiceReference1.IEDSService" bindingType="netTcpBinding" address="net.tcp://localhost:7071/EDSService" bindingConfiguration="NetTcpBinding_IEDSService1">
+    <endpoint name="NetTcpBinding_IEDSService" contract="ServiceReference1.IEDSService" bindingType="netTcpBinding" address="net.tcp://localhost:7071/EDSService" bindingConfiguration="NetTcpBinding_IEDSService1">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>net.tcp://localhost:7071/EDSService</serializedValue>
@@ -405,7 +405,7 @@
           <serializedValue>False</serializedValue>
         </property>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>NetTcpBinding_IEDSService1</serializedValue>
+          <serializedValue>NetTcpBinding_IEDSService</serializedValue>
         </property>
         <property path="/kind" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

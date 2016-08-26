@@ -38,13 +38,13 @@ namespace Monitor
                                 switch (data & 3)
                                 {
                                         case 0:
-                                                state.SwitchState = Switch.Wait;
+                                                state.SwitchState = SwitchStatus.Wait;
                                                 break;
                                         case 1:
-                                                state.SwitchState = Switch.Ready;
+                                                state.SwitchState = SwitchStatus.Ready;
                                                 break;
                                         case 2:
-                                                state.SwitchState = Switch.Run;
+                                                state.SwitchState = SwitchStatus.Run;
                                                 break;
                                 }
                         }
@@ -62,6 +62,9 @@ namespace Monitor
                         state.PF = str2int("Factor");
 
                         State = state;
+                        //保存数据模块
+
+                        //保护数据模块
                 }
 
                 double str2int(string name)

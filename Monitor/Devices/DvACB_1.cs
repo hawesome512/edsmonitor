@@ -6,7 +6,7 @@ using EDSLot;
 
 namespace Monitor
 {
-        public class DvACB : Device
+        public class DvACB_1 : Device
         {
                 public override void updateState()
                 {
@@ -16,10 +16,11 @@ namespace Monitor
                         if (int.TryParse(dv.ShowValue, out data))
                         {
                                 byte data1 = (Byte)(data % 256);
-                                if ((data1>> 6 & 1) == 1)
-                                        state.SwitchState = Switch.Open;
+                                //ACB_1和ACB_2合分闸标志位相反
+                                if ((data1>> 6 & 1) == 0)
+                                        state.SwitchState = SwitchStatus.Open;
                                 else
-                                        state.SwitchState = Switch.Close;
+                                        state.SwitchState = SwitchStatus.Close;
                                 int nCircuit = data & 0x278f;
                                 if (nCircuit>0)
                                         state.RunState = Run.Alarm;
@@ -48,9 +49,9 @@ namespace Monitor
                         state.Ub = str2int("Ub");
                         state.Uc = str2int("Uc");
                         State = state;
-                        if (Common.IsSaveData)
+                        if (Common.IsServer)
                         {
-                                SaveDate();
+                                SaveData();
                                 //产生新的脱扣记录
                                 if (Tool.isOne(data, 12))
                                 {
@@ -65,7 +66,7 @@ namespace Monitor
                 {
                         double data;
                         double.TryParse(RealData[name].ShowValue, out data);
-                        return data;
+                        return data + new Random().Next(1, 10) / 100f;
                 }
 
                 protected override Dictionary<string, DValues> cvtBasic()
@@ -262,7 +263,7 @@ namespace Monitor
                         return string.Join("_", tags.ToArray());
                 }
 
-                protected override void SaveDate()
+                protected override void SaveData()
                 {
                         using (EDSLot.EDSEntities context = new EDSLot.EDSEntities())
                         {
@@ -270,6 +271,7 @@ namespace Monitor
                                 {
                                         context.Record_ACB.Add(new EDSLot.Record_ACB()
                                         {
+                                                ZID=this.ZID,
                                                 Address = this.Address,
                                                 Time = DateTime.Now,
                                                 Ia = State.Ia,
@@ -291,13 +293,13 @@ namespace Monitor
 
                 public override List<Record> QueryData(DateTime start, DateTime end)
                 {
-                        if (Common.CType == ComType.WCF)
+                        if (!Common.IsServer)
                                 return MyCom.QueryData(Address, start, end);
 
                         using (EDSEntities context = new EDSEntities())
                         {
                                 var result = from m in context.Record_ACB
-                                             where m.Address == this.Address && (m.Time >= start && m.Time <= end)
+                                             where m.ZID==this.ZID&& m.Address == this.Address && (m.Time >= start && m.Time <= end)
                                              select m;
                                 List<Record> records = new List<Record>();
                                 foreach (var r in result)

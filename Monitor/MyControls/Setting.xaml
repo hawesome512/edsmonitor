@@ -22,18 +22,16 @@
         </Grid>
         <Grid Grid.Row="1">
             <StackPanel Orientation="Vertical" Width="90" HorizontalAlignment="Left" Margin="10">
-                <RadioButton Name="rb_com" Content="通信模式" IsChecked="True" Style="{DynamicResource RadioLableStyle}"></RadioButton>
+                <RadioButton Name="rb_com" Content="软件功能" IsChecked="True" Style="{DynamicResource RadioLableStyle}"></RadioButton>
                 <RadioButton Name="rb_data" Content="数据存储" Style="{DynamicResource RadioLableStyle}"></RadioButton>
                 <RadioButton Name="rb_sms" Content="短信报警"  Style="{DynamicResource RadioLableStyle}"></RadioButton>
                 <RadioButton Name="rb_power" Content="系统供电"  Style="{DynamicResource RadioLableStyle}"></RadioButton>
             </StackPanel>
             <Grid Margin="100,10,10,0" Background="#55d3d3d3">
                 <Grid Name="grid_com" Visibility="{Binding IsChecked, Converter={StaticResource BoolToVisibilityConverter}, ElementName=rb_com}">
-                    <RadioButton Name="rb_sp" GroupName="com"
-                                  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,-100,0,0">串口通信</RadioButton>
-                    <RadioButton Name="rb_tcp" GroupName="com" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0">TCP/IP</RadioButton>
-                    <RadioButton Name="rb_wcf" GroupName="com" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,100,0,0">WCF</RadioButton>
-                    <TextBox HorizontalAlignment="Left" VerticalAlignment="Center" Margin="100,142,0,42" Width="280" Text="net.tcp://172.16.65.88:8090/EDSService"></TextBox>
+                    <RadioButton Name="rb_client" GroupName="com"
+                                  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,-100,0,0">客户端</RadioButton>
+                    <RadioButton Name="rb_server" GroupName="com" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0">服务器</RadioButton>
                 </Grid>
                 <Grid Name="grid_data" Visibility="{Binding IsChecked, Converter={StaticResource BoolToVisibilityConverter}, ElementName=rb_data}">
                     <Label Margin="20,10,0,0" Content="数据库连接地址:" VerticalAlignment="Top" HorizontalAlignment="Left"/>

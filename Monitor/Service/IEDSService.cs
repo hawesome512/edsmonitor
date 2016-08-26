@@ -23,9 +23,15 @@ namespace Monitor
                 EDSLot.Trip[] QueryTrip(byte address,DateTime start, DateTime end);
 
                 [OperationContract]
-                void ChangeSelectedAddress(byte address);
+                void ChangeSelAddress(byte address);
+
+                [OperationContract]
+                void ChangeSelZone(byte zid);
 
                 [OperationContract]
                 EDSLot.Energy[] QueryEnergy(int[] addrs, DateTime start, DateTime end);
+
+                [OperationContract]
+                string GetUpsState();
         }
 }

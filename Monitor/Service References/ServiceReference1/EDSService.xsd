@@ -64,14 +64,26 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ChangeSelectedAddress">
+  <xs:element name="ChangeSelAddress">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="address" type="xs:unsignedByte" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ChangeSelectedAddressResponse">
+  <xs:element name="ChangeSelAddressResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ChangeSelZone">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="zid" type="xs:unsignedByte" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ChangeSelZoneResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
@@ -89,6 +101,18 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/EDSLot" minOccurs="0" name="QueryEnergyResult" nillable="true" type="q4:ArrayOfEnergy" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetUpsState">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetUpsStateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetUpsStateResult" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

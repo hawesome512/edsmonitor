@@ -16,7 +16,7 @@
         <Grid Grid.Row="0">
             <StackPanel x:Name="Title" Orientation="Horizontal" FlowDirection="RightToLeft" Margin="7,4">
                 <local:ImageButton x:Name="btn_close" Width="27" Height="26" VerticalAlignment="Top"  ImgPath="/Images/关闭.png" Template="{StaticResource ImageButtonTemplate}" Click="btn_close_Click"/>
-                <local:ImageButton x:Name="btn_size" Width="27" FlowDirection="LeftToRight" Height="26" VerticalAlignment="Top"  ImgPath="/Images/最大化.png" Template="{DynamicResource ImageButtonTemplate}" Click="btn_size_Click"/>
+                <local:ImageButton x:Name="btn_size" Width="27" FlowDirection="LeftToRight" Height="26" VerticalAlignment="Top"  ImgPath="/Images/最大化.png" Template="{DynamicResource ImageButtonTemplate}" Click="btn_size_Click" IsEnabled="False"/>
                 <local:ImageButton x:Name="btn_min" Width="27" Height="26" VerticalAlignment="Top"  ImgPath="/Images/最小化.png" Template="{StaticResource ImageButtonTemplate}" Click="btn_min_Click"/>
                 <local:ImageButton x:Name="btn_set" Width="27" Height="26" VerticalAlignment="Top"  ImgPath="/Images/设置菜单.png" Template="{StaticResource ImageButtonTemplate}" Click="btn_set_Click">
                     <local:ImageButton.ContextMenu>
@@ -114,16 +114,15 @@
             <Grid.Background>
                 <ImageBrush ImageSource="Images/content.jpg" Stretch="None"/>
             </Grid.Background>
-            <!--<local:Diagram x:Name="diagram"></local:Diagram>-->
-            <local:DiagramForBox x:Name="diagram"></local:DiagramForBox>
+            <local:Network x:Name="network" Visibility="Hidden"></local:Network>
             <local:Energy x:Name="energy" Visibility="Hidden"></local:Energy>
             <local:DevicePage x:Name="dvPage" Grid.Row="2" Visibility="Hidden"></local:DevicePage>
-            <local:MyDataGrid x:Name="dvDevices" Grid.Row="2" Visibility="Hidden"></local:MyDataGrid>
+            <!--<local:MyDataGrid x:Name="dvDevices" Grid.Row="2" Visibility="Hidden"></local:MyDataGrid>-->
             <Image x:Name="img_link" Grid.Row="2" Visibility="Hidden" Source="/Monitor;component/Images/指示图.png"></Image>
-            <local:Progress x:Name="progress" Grid.Row="2" Width="100" Height="100" Panel.ZIndex="100"></local:Progress>
+            <local:Progress x:Name="progress" Grid.Row="2" Width="100" Height="100"></local:Progress>
         </Grid>
 
         <local:Start x:Name="startPage" Margin="3,0,3,3" Grid.Row="1" Grid.RowSpan="3"/>
-        <ToggleButton Name="tg_back" Grid.Row="1" Margin="5,0,0,0"  Style="{DynamicResource MaterialDesignHamburgerToggleButton}" Foreground="#FFE43030" Click="tg_back_Click" HorizontalAlignment="Left"/>
+        <ToggleButton Name="tg_back" Grid.Row="1" Margin="5,0,0,0"  Style="{DynamicResource MaterialDesignHamburgerToggleButton}" Foreground="#FFE43030" Click="tg_back_Click" HorizontalAlignment="Left" IsEnabled="False"/>
     </Grid>
 </Window>

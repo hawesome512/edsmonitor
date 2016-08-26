@@ -45,7 +45,7 @@ namespace Monitor
 
                 public Run RunState;
 
-                public Switch SwitchState;
+                public SwitchStatus SwitchState;
 
                 public ControlMode ControlState;
 
@@ -60,7 +60,7 @@ namespace Monitor
                 {
                         get
                         {
-                                return Math.Round(_Ia, 0);
+                                return Math.Round(_Ia, 1);
                         }
                         set
                         {
@@ -73,7 +73,7 @@ namespace Monitor
                 {
                         get
                         {
-                                return Math.Round(_Ib, 0);
+                                return Math.Round(_Ib, 1);
                         }
                         set
                         {
@@ -86,7 +86,7 @@ namespace Monitor
                 {
                         get
                         {
-                                return Math.Round(_Ic, 0);
+                                return Math.Round(_Ic,1);
                         }
                         set
                         {
@@ -99,7 +99,7 @@ namespace Monitor
                 {
                         get
                         {
-                                return Math.Round(_Ua, 0);
+                                return Math.Round(_Ua, 1);
                         }
                         set
                         {
@@ -112,7 +112,7 @@ namespace Monitor
                 {
                         get
                         {
-                                return Math.Round(_Ub, 0);
+                                return Math.Round(_Ub, 1);
                         }
                         set
                         {
@@ -125,7 +125,7 @@ namespace Monitor
                 {
                         get
                         {
-                                return Math.Round(_Uc, 0);
+                                return Math.Round(_Uc, 1);
                         }
                         set
                         {
@@ -221,7 +221,7 @@ namespace Monitor
 
                 Alarm
         }
-        public enum Switch
+        public enum SwitchStatus
         {
 
                 Unknown,
@@ -253,8 +253,8 @@ namespace Monitor
 
         public enum DeviceType
         {
-
-                ACB,
+                ACB_1,
+                ACB_2,
                 MCCB_BM,
                 MCCB_BMA,
                 ATS,

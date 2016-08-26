@@ -32,6 +32,7 @@ namespace GenerateEDSData
                         Console.ReadLine();
                 }
 
+
                 static void setDayData(DateTime time)
                 {
                         context = new EDSEntities();

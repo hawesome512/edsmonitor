@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using EDSLot;
 
 namespace Monitor
 {
-        public class DvACB_philippine : Device
+        public class DvACB_2 : Device
         {
                 public override void updateState()
                 {
@@ -16,13 +17,22 @@ namespace Monitor
                         {
                                 byte data1 = (Byte)(data % 256);
                                 if ((data1>> 6 & 1) == 1)
-                                        state.SwitchState = Switch.Open;
+                                        state.SwitchState = SwitchStatus.Open;
                                 else
-                                        state.SwitchState = Switch.Close;
-                                if ((data1 & 0x0f) == 1)
+                                        state.SwitchState = SwitchStatus.Close;
+                                int nCircuit = data & 0x278f;
+                                if (nCircuit>0)
                                         state.RunState = Run.Alarm;
                                 else
                                         state.RunState = Run.Normal;
+                                string[] items = dv.Tag.Split('_');
+                                for (int i = 0; i < items.Length; i++)
+                                {
+                                        if (Tool.isOne(nCircuit, i))
+                                        {
+                                                state.ErrorMsg += items[i] + " ";
+                                        }
+                                }
 
                                 if (Params["LocalOrRemote"].ShowValue == "Local")
                                         state.ControlState = ControlMode.Local;
@@ -37,16 +47,25 @@ namespace Monitor
                         state.Ua =str2int("Ua");
                         state.Ub = str2int("Ub");
                         state.Uc = str2int("Uc");
-
                         State = state;
+                        if (Common.IsServer)
+                        {
+                                SaveData();
+                                //产生新的脱扣记录
+                                if (Tool.isOne(data, 12))
+                                {
+                                        _tripData = getZoneData(_tripData);
+                                        SaveTrip();
+                                        SmsAlarm();
+                                }
+                        }
                 }
 
                 double str2int(string name)
                 {
                         double data;
                         double.TryParse(RealData[name].ShowValue, out data);
-                        Random r = new Random();
-                        return data+r.Next(1,100)/1000.0;
+                        return data + new Random().Next(1, 10) / 100f;
                 }
 
                 protected override Dictionary<string, DValues> cvtBasic()
@@ -110,13 +129,6 @@ namespace Monitor
                                         switch (p.Key)
                                         {
                                                 case "Ir":
-                                                        int nIndex = ((nSwH / 256 % 32) & 0x1C)>> 2;
-                                                        string[] curves = { "1", "EIT", "HVF", "DT", "SIT", "VIT" };
-                                                        string tag = string.Join("_", curves);
-                                                        DValues dvCurve = new DValues() { ShowValue = curves[nIndex + 1], Unit = "/", Tag = tag };
-                                                        dvCurve.Alias = "曲线";
-                                                        tmps.Add("Curve", dvCurve);
-
                                                         tmps.Add(p.Key, d);
                                                         break;
                                                 case "Output12":
@@ -142,11 +154,7 @@ namespace Monitor
                                                         tmps.Add("Output.4", d);
                                                         break;
                                                 case "Tsd":
-                                                        List<string> steps1 = new List<string>() { "0", "0.1", "0.2", "0.3", "0.4" };
-                                                        if ((btSwH>>4 & 0x1) == 1)
-                                                        {
-                                                                steps1.RemoveAt(0);
-                                                        }
+                                                        List<string> steps1 = new List<string>() {"0.1", "0.2", "0.3", "0.4" };
                                                         d.Tag += "_" + string.Join("_", steps1.ToArray());
                                                         tmps.Add(p.Key, d);
                                                         break;
@@ -163,7 +171,7 @@ namespace Monitor
                                                         }
                                                         else
                                                         {
-                                                                string[] steps3 = { "0.2", "0.3","0.4", "0.5","0.6", "0.7", "0.8", "1"};
+                                                                string[] steps3 = { "0.2", "0.3","0.4", "0.5","0.6", "0.7", "0.8","0.9", "1"};
                                                                 d.Tag += "_" + string.Join("_", steps3.ToArray());
                                                                 d.Alias = "Ig";
                                                                 tmps.Add("Ig", d);
@@ -172,18 +180,14 @@ namespace Monitor
                                                 case "Tg/Tf":
                                                         if (breaker.Contains("F"))
                                                         {
-                                                                string[] steps4 = { "0", "0.1", "0.2", "0.3", "0.4", "0.6", "0.8", "1" };
+                                                                string[] steps4 = { "0.06", "0.1", "0.2", "0.3", "0.4", "0.6", "0.8", "1" };
                                                                 d.Tag += "_" + string.Join("_", steps4.ToArray());
                                                                 d.Alias = "Tf";
                                                                 tmps.Add("Tf", d);
                                                         }
                                                         else
                                                         {
-                                                                List<string> steps5 = new List<string>() { "0", "0.1", "0.2", "0.3", "0.4" };
-                                                                if ((btSwH>>5 & 0x1) == 1)
-                                                                {
-                                                                        steps5.RemoveAt(0);
-                                                                }
+                                                                List<string> steps5 = new List<string>() {"0.1", "0.2", "0.4", "0.8" };
                                                                 d.Tag += "_" + string.Join("_", steps5.ToArray());
                                                                 d.Alias = "Tg";
                                                                 tmps.Add("Tg", d);
@@ -204,17 +208,17 @@ namespace Monitor
 
                 protected override byte[] GetValidParams(List<string> dataList)
                 {
-                        dataList[11] = string.Format("{0}_{1}", dataList[11], dataList[12]);
-                        dataList[13] = string.Format("{0}_{1}", dataList[13], dataList[14]);
-                        dataList.RemoveAt(14);
-                        dataList.RemoveAt(12);
+                        dataList[10] = string.Format("{0}_{1}", dataList[10], dataList[11]);
+                        dataList[12] = string.Format("{0}_{1}", dataList[12], dataList[13]);
+                        dataList.RemoveAt(13);
+                        dataList.RemoveAt(11);
 
                         string[] curves = { "EIT", "HVF", "DT", "SIT", "VIT" };
-                        int nIndex = curves.ToList().IndexOf(dataList[1]);
-                        dataList.RemoveAt(1);
+                        int nIndex = curves.ToList().IndexOf("EIT");//现制品固定一条曲线
                         int tmp = int.Parse(dataList[0]);
                         dataList[0] = (tmp % 1024+1024*nIndex).ToString() ;
                         dataList.Insert(1, (tmp/ 1024).ToString());
+
                         byte len = (byte)dataList.Count;
                         byte[] snd = new byte[len * 2];
 
@@ -256,6 +260,53 @@ namespace Monitor
                         List<string> tags = new List<string>(tag.Split('_'));
                         tags=tags.Where((value, id) =>id==0||(id>= index && id < index + length)).ToList();
                         return string.Join("_", tags.ToArray());
+                }
+
+                protected override void SaveData()
+                {
+                        using (EDSLot.EDSEntities context = new EDSLot.EDSEntities())
+                        {
+                                try
+                                {
+                                        context.Record_ACB.Add(new EDSLot.Record_ACB()
+                                        {
+                                                ZID=this.ZID,
+                                                Address = this.Address,
+                                                Time = DateTime.Now,
+                                                Ia = State.Ia,
+                                                Ib = State.Ib,
+                                                Ic = State.Ic,
+                                                IN = str2int("IN"),
+                                                Igf = str2int("Igf"),
+                                                Ua = State.Ua,
+                                                Ub = State.Ub,
+                                                Uc = State.Uc
+                                        });
+                                        context.SaveChanges();
+                                }
+                                catch
+                                {
+                                }
+                        }
+                }
+
+                public override List<Record> QueryData(DateTime start, DateTime end)
+                {
+                        if (!Common.IsServer)
+                                return MyCom.QueryData(Address, start, end);
+
+                        using (EDSEntities context = new EDSEntities())
+                        {
+                                var result = from m in context.Record_ACB
+                                             where m.ZID==this.ZID&& m.Address == this.Address && (m.Time >= start && m.Time <= end)
+                                             select m;
+                                List<Record> records = new List<Record>();
+                                foreach (var r in result)
+                                {
+                                        records.Add(new Record(r));
+                                }
+                                return records;
+                        }
                 }
         }
 }

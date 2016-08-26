@@ -48,17 +48,29 @@
   <wsdl:message name="IEDSService_QueryTrip_OutputMessage">
     <wsdl:part name="parameters" element="tns:QueryTripResponse" />
   </wsdl:message>
-  <wsdl:message name="IEDSService_ChangeSelectedAddress_InputMessage">
-    <wsdl:part name="parameters" element="tns:ChangeSelectedAddress" />
+  <wsdl:message name="IEDSService_ChangeSelAddress_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeSelAddress" />
   </wsdl:message>
-  <wsdl:message name="IEDSService_ChangeSelectedAddress_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ChangeSelectedAddressResponse" />
+  <wsdl:message name="IEDSService_ChangeSelAddress_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeSelAddressResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEDSService_ChangeSelZone_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeSelZone" />
+  </wsdl:message>
+  <wsdl:message name="IEDSService_ChangeSelZone_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeSelZoneResponse" />
   </wsdl:message>
   <wsdl:message name="IEDSService_QueryEnergy_InputMessage">
     <wsdl:part name="parameters" element="tns:QueryEnergy" />
   </wsdl:message>
   <wsdl:message name="IEDSService_QueryEnergy_OutputMessage">
     <wsdl:part name="parameters" element="tns:QueryEnergyResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEDSService_GetUpsState_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUpsState" />
+  </wsdl:message>
+  <wsdl:message name="IEDSService_GetUpsState_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetUpsStateResponse" />
   </wsdl:message>
   <wsdl:portType name="IEDSService">
     <wsdl:operation name="UpdateDevice">
@@ -77,13 +89,21 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEDSService/QueryTrip" message="tns:IEDSService_QueryTrip_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEDSService/QueryTripResponse" message="tns:IEDSService_QueryTrip_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="ChangeSelectedAddress">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEDSService/ChangeSelectedAddress" message="tns:IEDSService_ChangeSelectedAddress_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEDSService/ChangeSelectedAddressResponse" message="tns:IEDSService_ChangeSelectedAddress_OutputMessage" />
+    <wsdl:operation name="ChangeSelAddress">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEDSService/ChangeSelAddress" message="tns:IEDSService_ChangeSelAddress_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEDSService/ChangeSelAddressResponse" message="tns:IEDSService_ChangeSelAddress_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeSelZone">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEDSService/ChangeSelZone" message="tns:IEDSService_ChangeSelZone_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEDSService/ChangeSelZoneResponse" message="tns:IEDSService_ChangeSelZone_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="QueryEnergy">
       <wsdl:input wsaw:Action="http://tempuri.org/IEDSService/QueryEnergy" message="tns:IEDSService_QueryEnergy_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEDSService/QueryEnergyResponse" message="tns:IEDSService_QueryEnergy_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUpsState">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEDSService/GetUpsState" message="tns:IEDSService_GetUpsState_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEDSService/GetUpsStateResponse" message="tns:IEDSService_GetUpsState_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="WSHttpBinding_IEDSService" type="tns:IEDSService">
@@ -125,8 +145,17 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="ChangeSelectedAddress">
-      <soap12:operation soapAction="http://tempuri.org/IEDSService/ChangeSelectedAddress" style="document" />
+    <wsdl:operation name="ChangeSelAddress">
+      <soap12:operation soapAction="http://tempuri.org/IEDSService/ChangeSelAddress" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangeSelZone">
+      <soap12:operation soapAction="http://tempuri.org/IEDSService/ChangeSelZone" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -136,6 +165,15 @@
     </wsdl:operation>
     <wsdl:operation name="QueryEnergy">
       <soap12:operation soapAction="http://tempuri.org/IEDSService/QueryEnergy" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUpsState">
+      <soap12:operation soapAction="http://tempuri.org/IEDSService/GetUpsState" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -183,8 +221,17 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="ChangeSelectedAddress">
-      <soap12:operation soapAction="http://tempuri.org/IEDSService/ChangeSelectedAddress" style="document" />
+    <wsdl:operation name="ChangeSelAddress">
+      <soap12:operation soapAction="http://tempuri.org/IEDSService/ChangeSelAddress" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangeSelZone">
+      <soap12:operation soapAction="http://tempuri.org/IEDSService/ChangeSelZone" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -194,6 +241,15 @@
     </wsdl:operation>
     <wsdl:operation name="QueryEnergy">
       <soap12:operation soapAction="http://tempuri.org/IEDSService/QueryEnergy" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUpsState">
+      <soap12:operation soapAction="http://tempuri.org/IEDSService/GetUpsState" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -11,8 +11,7 @@ namespace Monitor
         {
                 public Common()
                 {
-                        CType = (ComType)Enum.Parse(typeof(ComType), Tool.GetConfig("ComType"));
-                        IsSaveData = CType == ComType.WCF ? false : true;
+                        IsServer= bool.Parse(Tool.GetConfig("IsServer"));
                         SmsAlarm = new Sms();
                 }
 
@@ -29,10 +28,9 @@ namespace Monitor
                         }
                 }
 
-                public static ComType CType;
+                public static bool IsServer;
                 public static int  SelectedAddress;
-                public static bool IsSaveData;
                 public static Sms SmsAlarm;
-                public static List<Device> Devices;
+                public static List<Device> OrdDevices,SelDevices;
         }
 }

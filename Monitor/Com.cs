@@ -25,13 +25,13 @@ namespace Monitor
                 SerialPort sp;
                 TcpClient tcp;
                 ServiceReference1.EDSServiceClient wcf;
-                string strIp;
-                string strCom;
+                string comTag;
                 ComType cType;
                 bool disposed = false;
-                public Com(ComType type)
+                public Com(ComType type,string tag)
                 {
                         cType = type;
+                        comTag=tag;
                 }
 
                 ~Com()
@@ -59,17 +59,15 @@ namespace Monitor
                 /// </summary>
                 /// <param name="snd"></param>
                 /// <returns>Array.Length,0:通信失败；1:写入；2*n:读取</returns>
-                public byte[] Execute(byte[] snd, string tag)
+                public byte[] Execute(byte[] snd, int zoneIndex)
                 {
                         switch (cType)
                         {
                                 case ComType.SP:
                                         return spCom(snd);
                                 case ComType.TCP:
-                                        strIp = tag;
                                         return tcpCom(snd);
                                 case ComType.WCF:
-                                        int zoneIndex = int.Parse(tag);
                                         Thread.Sleep(500);
                                         return wcfCom(snd, zoneIndex);
                                 default:
@@ -100,7 +98,7 @@ namespace Monitor
                         tcp.ReceiveTimeout = 300;
                         try
                         {
-                                tcp.Connect(strIp, 502);
+                                tcp.Connect(comTag, 502);
                         }
                         catch
                         {
@@ -110,7 +108,6 @@ namespace Monitor
                         byte[] snd = new byte[6 + _snd.Length];
                         snd[5] = (byte)_snd.Length;
                         _snd.CopyTo(snd, 6);
-
                         NetworkStream stream = tcp.GetStream();
                         stream.Write(snd, 0, snd.Length);
                         byte[] rcv = new byte[256];
@@ -145,11 +142,11 @@ namespace Monitor
 
                 private byte[] spCom(byte[] snd)
                 {
-                        if (strCom == null || strCom == string.Empty)
+                        if (comTag == null || comTag == string.Empty)
                                 return new byte[] { };
                         if (sp == null || !sp.IsOpen)
                         {
-                                sp = new SerialPort(strCom);
+                                sp = new SerialPort(comTag);
                                 sp.ReadTimeout = 200;
                                 sp.WriteTimeout = 200;
                                 sp.StopBits = StopBits.Two;
@@ -184,6 +181,7 @@ namespace Monitor
                         }
                 }
 
+                #region 测试可用连接
                 /// <summary>
                 /// 测试可用的串口
                 /// </summary>
@@ -225,7 +223,7 @@ namespace Monitor
                 {
                         if (sp == null || !sp.IsOpen)
                         {
-                                strCom = null;
+                                comTag = null;
                                 List<string> ports = System.IO.Ports.SerialPort.GetPortNames().ToList();
                                 string defaultCom = Tool.GetConfig("ComTag");
                                 if (ports.Contains(defaultCom))
@@ -252,8 +250,8 @@ namespace Monitor
                                                         sp.Read(rcv, 0, rcv.Length);
                                                         if (rcv[1] == 3)
                                                         {
-                                                                strCom = port;
-                                                                Tool.SetConfig("ComTag", strCom);
+                                                                comTag = port;
+                                                                Tool.SetConfig("ComTag", comTag);
                                                                 return true;
                                                         }
                                                 }
@@ -271,6 +269,7 @@ namespace Monitor
                         }
                         return false;
                 }
+                #endregion
 
                 public List<Record> QueryData(byte address, DateTime start, DateTime end)
                 {
@@ -296,7 +295,7 @@ namespace Monitor
                         return wcf.QueryTrip(address, start, end).ToList();
                 }
 
-                public void ChangeSelectedAddress(byte address)
+                public void ChangeSelAddress(byte address)
                 {
                         Common.SelectedAddress = address;
                         if (cType == ComType.WCF)
@@ -305,7 +304,29 @@ namespace Monitor
                                 {
                                         wcf = new ServiceReference1.EDSServiceClient();
                                 }
-                                wcf.ChangeSelectedAddress(address);
+                                wcf.ChangeSelAddress(address);
+                        }
+                }
+
+                public void ChangeSelZone(byte zid)
+                {
+                        if (zid == 0)
+                        {
+                                Common.OrdDevices.AddRange(Common.SelDevices);
+                                Common.SelDevices.Clear();
+                        }
+                        else
+                        {
+                                Common.SelDevices = Common.OrdDevices.FindAll(d => d.ZID == zid);
+                                Common.OrdDevices.RemoveAll(d => d.ZID == zid);
+                        }
+                        if (cType == ComType.WCF)
+                        {
+                                if (wcf == null)
+                                {
+                                        wcf = new ServiceReference1.EDSServiceClient();
+                                }
+                                wcf.ChangeSelZone(zid);
                         }
                 }
 

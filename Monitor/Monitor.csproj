@@ -111,6 +111,7 @@
     <Compile Include="DataLib.cs" />
     <Compile Include="Devices\DvACREL.cs" />
     <Compile Include="Devices\DvMIC.cs" />
+    <Compile Include="Devices\DvACB_1.cs" />
     <Compile Include="MyControls\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
@@ -146,7 +147,7 @@
     <Compile Include="MyControls\DevicePage.xaml.cs">
       <DependentUpon>DevicePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Devices\DvACB.cs" />
+    <Compile Include="Devices\DvACB_2.cs" />
     <Compile Include="MyControls\Energy.xaml.cs">
       <DependentUpon>Energy.xaml</DependentUpon>
     </Compile>
@@ -179,8 +180,8 @@
     <Compile Include="MyControls\MyDataGrid.xaml.cs">
       <DependentUpon>MyDataGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MyControls\DiagramForBox.xaml.cs">
-      <DependentUpon>DiagramForBox.xaml</DependentUpon>
+    <Compile Include="MyControls\Network.xaml.cs">
+      <DependentUpon>Network.xaml</DependentUpon>
     </Compile>
     <Compile Include="Sms.cs" />
     <Compile Include="MyControls\Start.xaml.cs">
@@ -189,7 +190,6 @@
     <Compile Include="Tool.cs" />
     <Compile Include="Devices\DvATS.cs" />
     <Compile Include="Devices\DvMCCB_BM.cs" />
-    <Compile Include="Devices\DvACB_philippine.cs" />
     <Compile Include="MyControls\Triangle.xaml.cs">
       <DependentUpon>Triangle.xaml</DependentUpon>
     </Compile>
@@ -288,7 +288,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MyControls\DiagramForBox.xaml">
+    <Page Include="MyControls\Network.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -375,7 +375,7 @@
     </None>
     <Resource Include="Images\down.png" />
     <Resource Include="Images\up.png" />
-    <Content Include="Config\DeviceList_1.xml">
+    <Content Include="Config\DeviceList.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -398,7 +398,11 @@
     <Resource Include="Images\monitor.ico" />
     <Resource Include="Images\start.png" />
     <Resource Include="Images\option.png" />
-    <Content Include="Config\DeviceList.xml">
+    <Content Include="Config\DeviceList_0.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\ACB_1.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -431,15 +435,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Config\ACB_philippine.xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Config\ATS_en.xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Config\ACB_en.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -458,7 +454,7 @@
     <Resource Include="Images\here.png" />
     <Resource Include="Images\run.png" />
     <Resource Include="Images\config.png" />
-    <Resource Include="Images\Types\MCCB.jpg" />
+    <Resource Include="Images\Types\BM400.jpg" />
     <Resource Include="Images\unknown.png" />
     <Resource Include="Images\close.png" />
     <Resource Include="Images\open.png" />
@@ -467,7 +463,7 @@
     <Resource Include="Images\in.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Config\ACB.xml">
+    <Content Include="Config\ACB_2.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
@@ -497,13 +493,13 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Service References\ServiceReference1\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\EDSLot\EDSLot.csproj">
       <Project>{77bf0430-1a26-445d-bd47-dc077a688a4a}</Project>
       <Name>EDSLot</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\ServiceReference1\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -28,17 +28,13 @@ namespace Monitor
 
                 public void InitSetting(Common common)
                 {
-                        switch (Common.CType)
+                        if (Common.IsServer)
                         {
-                                case ComType.SP:
-                                        rb_sp.IsChecked = true;
-                                        break;
-                                case ComType.TCP:
-                                        rb_tcp.IsChecked = true;
-                                        break;
-                                default:
-                                        rb_wcf.IsChecked = true;
-                                        break;
+                                rb_server.IsChecked = true;
+                        }
+                        else
+                        {
+                                rb_client.IsChecked = true;
                         }
                         var ports = System.IO.Ports.SerialPort.GetPortNames().ToList();
                         cbox_upsCom.ItemsSource = ports;
@@ -69,8 +65,8 @@ namespace Monitor
                 private void btn_save_Click(object sender, RoutedEventArgs e)
                 {
                         Configuration cfa = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                        string comType = (bool)rb_sp.IsChecked ? "SP" : ((bool)rb_tcp.IsChecked ? "TCP" : "WCF");
-                        cfa.AppSettings.Settings["ComType"].Value = comType;
+                        string isServer = (bool)rb_server.IsChecked ? "true" : "false";
+                        cfa.AppSettings.Settings["IsServer"].Value = isServer;
                         cfa.AppSettings.Settings["Telephones"].Value = txt_tel.Text;
                         cfa.AppSettings.Settings["UPS"].Value = (bool)rb_ups.IsChecked ? "true" : "false";
                         cfa.AppSettings.Settings["UPSCom"].Value = (bool)rb_ups.IsChecked ? cbox_upsCom.SelectedValue.ToString() : string.Empty;

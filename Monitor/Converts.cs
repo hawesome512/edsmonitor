@@ -42,9 +42,9 @@ namespace Monitor
                         Brush brush = Brushes.SeaGreen;
                         switch (state.SwitchState)
                         {
-                                case Switch.Close:
-                                case Switch.ATS_N:
-                                case Switch.ATS_R:
+                                case SwitchStatus.Close:
+                                case SwitchStatus.ATS_N:
+                                case SwitchStatus.ATS_R:
                                         brush = Brushes.Red;
                                         break;
                                 default:
@@ -77,7 +77,7 @@ namespace Monitor
                                                 foreach (var value in values)
                                                 {
                                                         DState state = (DState)value;
-                                                        if (state.SwitchState != Switch.Close)
+                                                        if (state.SwitchState != SwitchStatus.Close)
                                                         {
                                                                 return Brushes.SeaGreen;
                                                         }
@@ -102,7 +102,7 @@ namespace Monitor
                         double opacity = 0;
                         switch (state.SwitchState)
                         {
-                                case Switch.Open:
+                                case SwitchStatus.Open:
                                         opacity = 1;
                                         break;
                                 default:
@@ -125,7 +125,7 @@ namespace Monitor
                         double opacity = 0;
                         switch (state.SwitchState)
                         {
-                                case Switch.Close:
+                                case SwitchStatus.Close:
                                         opacity = 1;
                                         break;
                                 default:
@@ -147,7 +147,7 @@ namespace Monitor
                         double opacity = 0;
                         switch (state.SwitchState)
                         {
-                                case Switch.ATS_N:
+                                case SwitchStatus.ATS_N:
                                         opacity = 1;
                                         break;
                                 default:
@@ -169,7 +169,7 @@ namespace Monitor
                         double opacity = 0;
                         switch (state.SwitchState)
                         {
-                                case Switch.ATS_R:
+                                case SwitchStatus.ATS_R:
                                         opacity = 1;
                                         break;
                                 default:
@@ -192,19 +192,19 @@ namespace Monitor
                         DState state = (DState)value;
                         switch (state.SwitchState)
                         {
-                                case Switch.Close:
+                                case SwitchStatus.Close:
                                         return "合闸";
-                                case Switch.Open:
+                                case SwitchStatus.Open:
                                         return "分闸";
-                                case Switch.ATS_N:
+                                case SwitchStatus.ATS_N:
                                         return "投常";
-                                case Switch.ATS_R:
+                                case SwitchStatus.ATS_R:
                                         return "投备";
-                                case Switch.Run:
+                                case SwitchStatus.Run:
                                         return "运行";
-                                case Switch.Wait:
+                                case SwitchStatus.Wait:
                                         return "等待";
-                                case Switch.Ready:
+                                case SwitchStatus.Ready:
                                         return "就绪";
                                 default:
                                         return "未知";
@@ -306,10 +306,10 @@ namespace Monitor
                         string packUri;
                         switch (state.SwitchState)
                         {
-                                case Switch.Close:
+                                case SwitchStatus.Close:
                                         packUri = "pack://application:,,,/Monitor;component/Images/close.png";
                                         break;
-                                case Switch.Open:
+                                case SwitchStatus.Open:
                                         packUri = "pack://application:,,,/Monitor;component/Images/open.png";
                                         break;
                                 default:
@@ -333,13 +333,13 @@ namespace Monitor
                         string packUri;
                         switch (state.SwitchState)
                         {
-                                case Switch.ATS_N:
+                                case SwitchStatus.ATS_N:
                                         packUri = "pack://application:,,,/Monitor;component/Images/ATS/ATS_N.png";
                                         break;
-                                case Switch.ATS_R:
+                                case SwitchStatus.ATS_R:
                                         packUri = "pack://application:,,,/Monitor;component/Images/ATS/ATS_R.png";
                                         break;
-                                case Switch.Open:
+                                case SwitchStatus.Open:
                                         packUri = "pack://application:,,,/Monitor;component/Images/ATS/ATS_OPEN.png";
                                         break;
                                 default:
@@ -363,10 +363,10 @@ namespace Monitor
                         bool? isChecked;
                         switch (state.SwitchState)
                         {
-                                case Switch.Close:
+                                case SwitchStatus.Close:
                                         isChecked = false;
                                         break;
-                                case Switch.Open:
+                                case SwitchStatus.Open:
                                         isChecked = true;
                                         break;
                                 default:

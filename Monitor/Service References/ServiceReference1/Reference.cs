@@ -182,17 +182,29 @@ namespace Monitor.ServiceReference1 {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/QueryTrip", ReplyAction="http://tempuri.org/IEDSService/QueryTripResponse")]
         System.Threading.Tasks.Task<EDSLot.Trip[]> QueryTripAsync(byte address, System.DateTime start, System.DateTime end);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/ChangeSelectedAddress", ReplyAction="http://tempuri.org/IEDSService/ChangeSelectedAddressResponse")]
-        void ChangeSelectedAddress(byte address);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/ChangeSelAddress", ReplyAction="http://tempuri.org/IEDSService/ChangeSelAddressResponse")]
+        void ChangeSelAddress(byte address);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/ChangeSelectedAddress", ReplyAction="http://tempuri.org/IEDSService/ChangeSelectedAddressResponse")]
-        System.Threading.Tasks.Task ChangeSelectedAddressAsync(byte address);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/ChangeSelAddress", ReplyAction="http://tempuri.org/IEDSService/ChangeSelAddressResponse")]
+        System.Threading.Tasks.Task ChangeSelAddressAsync(byte address);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/ChangeSelZone", ReplyAction="http://tempuri.org/IEDSService/ChangeSelZoneResponse")]
+        void ChangeSelZone(byte zid);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/ChangeSelZone", ReplyAction="http://tempuri.org/IEDSService/ChangeSelZoneResponse")]
+        System.Threading.Tasks.Task ChangeSelZoneAsync(byte zid);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/QueryEnergy", ReplyAction="http://tempuri.org/IEDSService/QueryEnergyResponse")]
         EDSLot.Energy[] QueryEnergy(int[] addrs, System.DateTime start, System.DateTime end);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/QueryEnergy", ReplyAction="http://tempuri.org/IEDSService/QueryEnergyResponse")]
         System.Threading.Tasks.Task<EDSLot.Energy[]> QueryEnergyAsync(int[] addrs, System.DateTime start, System.DateTime end);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/GetUpsState", ReplyAction="http://tempuri.org/IEDSService/GetUpsStateResponse")]
+        string GetUpsState();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/GetUpsState", ReplyAction="http://tempuri.org/IEDSService/GetUpsStateResponse")]
+        System.Threading.Tasks.Task<string> GetUpsStateAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -254,12 +266,20 @@ namespace Monitor.ServiceReference1 {
             return base.Channel.QueryTripAsync(address, start, end);
         }
         
-        public void ChangeSelectedAddress(byte address) {
-            base.Channel.ChangeSelectedAddress(address);
+        public void ChangeSelAddress(byte address) {
+            base.Channel.ChangeSelAddress(address);
         }
         
-        public System.Threading.Tasks.Task ChangeSelectedAddressAsync(byte address) {
-            return base.Channel.ChangeSelectedAddressAsync(address);
+        public System.Threading.Tasks.Task ChangeSelAddressAsync(byte address) {
+            return base.Channel.ChangeSelAddressAsync(address);
+        }
+        
+        public void ChangeSelZone(byte zid) {
+            base.Channel.ChangeSelZone(zid);
+        }
+        
+        public System.Threading.Tasks.Task ChangeSelZoneAsync(byte zid) {
+            return base.Channel.ChangeSelZoneAsync(zid);
         }
         
         public EDSLot.Energy[] QueryEnergy(int[] addrs, System.DateTime start, System.DateTime end) {
@@ -268,6 +288,14 @@ namespace Monitor.ServiceReference1 {
         
         public System.Threading.Tasks.Task<EDSLot.Energy[]> QueryEnergyAsync(int[] addrs, System.DateTime start, System.DateTime end) {
             return base.Channel.QueryEnergyAsync(addrs, start, end);
+        }
+        
+        public string GetUpsState() {
+            return base.Channel.GetUpsState();
+        }
+        
+        public System.Threading.Tasks.Task<string> GetUpsStateAsync() {
+            return base.Channel.GetUpsStateAsync();
         }
     }
 }

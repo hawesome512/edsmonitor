@@ -8,28 +8,35 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Microsoft.Expression.Shapes;
+using System.Threading.Tasks;
 
 namespace Monitor
 {
         /// <summary>
         /// Diagram.xaml 的交互逻辑
         /// </summary>
-        public partial class DiagramForBox : UserControl
+        public partial class Network : UserControl
         {
                 public event EventHandler<EnterDeviceArgs> EnterDevice;
                 double factorX;
                 double factorY;
                 List<Device> devices;
-                public DiagramForBox()
+                public Network()
                 {
                         this.InitializeComponent();
                 }
 
-                public void InitDiagram(List<Device> _devices)
+                public void InitNetwork(List<Device> _devices)
                 {
                         devices = _devices;
                         this.DataContext = devices;
                         draw();
+                }
+
+                public void ClearNetwork()
+                {
+                        this.DataContext = null;
+                        DgmGrid.Children.Clear();
                 }
 
                 private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -42,6 +49,57 @@ namespace Monitor
                 }
 
                 void draw()
+                {
+                        if (devices.Count == 0)
+                        {
+                                return;
+                        }
+                        switch (devices[0].ZID)
+                        {
+                                case 1:
+                                        drawBox();
+                                        break;
+                                case 2:
+                                        drawCY();
+                                        break;
+                                default:
+                                        Task.Factory.StartNew(new Action(() =>
+                                        {
+                                                while (true)
+                                                {
+                                                        System.Threading.Thread.Sleep(1000);
+                                                        if (devices[0].HasInited)
+                                                        {
+                                                                this.Dispatcher.Invoke(new Action(() =>
+                                                                {
+                                                                        EnterDevice(this, new EnterDeviceArgs(devices[0]));
+                                                                }));
+                                                                break;
+                                                        }
+                                                }
+                                        }));
+                                        break;
+                        }
+                }
+
+                void drawCY()
+                {
+                        addTriangle(new Thickness(50 * factorX - 10, 25 * factorY + 20, 0, 0), 20, 20, 180);
+                        addLine(new Point(50 * factorX, 25 * factorY), new Point(50 * factorX, 250 * factorY - 25)).Stroke = Brushes.Red;
+                        addCircle(new Thickness(50 * factorX - 15, 250 * factorY - 25, 0, 0), 30, 30);
+                        addCircle(new Thickness(50 * factorX - 15, 250 * factorY - 5, 0, 0), 30, 30);
+                        addLine(new Point(50 * factorX, 250 * factorY + 25), new Point(50 * factorX, 475 * factorY)).Stroke = Brushes.Red;
+                        addLine(new Point(50 * factorX, 475 * factorY), new Point(300 * factorX, 475 * factorY)).Stroke = Brushes.Red;
+
+                        addBreaker(450 * factorY, new Thickness(300 * factorX - 20, 25 * factorY, 0, 0), 1, false);
+                        Line line = addLine(new Point(290 * factorX, 25 * factorY), new Point(910 * factorX, 25 * factorY), 3);
+                        line.SetBinding(Line.StrokeProperty, Tool.addMulBinding(new List<string> { "[0].State" }));
+
+                        addBreaker(450 * factorY, new Thickness(600 * factorX - 20, 25 * factorY, 0, 0), 2, true);
+                        addBreaker(450 * factorY, new Thickness(900 * factorX - 20, 25 * factorY, 0, 0), 3, true);
+                }
+
+                void drawBox()
                 {
                         addTriangle(new Thickness(50 * factorX - 10, 25 * factorY + 20, 0, 0), 20, 20, 180);
                         addLine(new Point(50 * factorX, 25 * factorY), new Point(50 * factorX, 250 * factorY - 25)).Stroke = Brushes.Red;

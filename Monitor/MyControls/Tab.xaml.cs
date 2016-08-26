@@ -238,6 +238,7 @@ namespace Monitor
                         string[] items = null;
                         switch (device.DvType)
                         {
+                                case DeviceType.MCCB_BM:
                                 case DeviceType.MCCB_BMA:
                                         items = new string[] { "Ia", "Ib", "Ic" };
                                         break;
@@ -492,6 +493,7 @@ namespace Monitor
                         if (b == true)
                         {
                                 param.Background = Brushes.LightGray;
+                                setDeviceParams();
                         }
                         else
                         {

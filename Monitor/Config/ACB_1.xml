@@ -1,16 +1,23 @@
 <Device Type="ACB">
+  <!--现制品-->
+  <!--与菲律宾版的区别：可调参数，曲线和触点选项-->
   <!--显示模式ShowType-->
   <!--0   16进制    [02 3D]    默认-->
   <!--1   10进制    [100/系数]-->
   <!--2   固定值     [ACB]-->
   <!--3   开关量-->
+  <!--4    控制器型号-->
+  <!--5    软件版本-->
   <!--10   ACB:框架等级，决定寄存器系数-->
   <!--11   ACB:框架等级的特殊系数-->
   <!--12   ACB:触点-->
   <!--13   ACB:日期    ※高位:月;低位:日-->
   <!--14   ACB:断路器型号    ※高低位计算方式不同-->
   <!--15   ACB:软件版本 ※高位低位之间[.]-->
-  <Zone length="13" address="0000">
+  <!--16   ACB脱扣跟脱扣类型和框架等级相关-->
+  <!--17   ACB脱扣跟脱扣类型和框架等级相关-->
+  <!--18   ACB脱扣跟脱扣类型和框架等级相关-->
+  <Zone length="11" address="0000">
     <Item>
       <Address>0000</Address>
       <Name>Device</Name>
@@ -107,27 +114,8 @@
       <Alias>软件版本</Alias>
       <Unit>/</Unit>
       <Authority>R</Authority>
-      <ShowType>15</ShowType>
+      <ShowType>5</ShowType>
       <Extra></Extra>
-    </Item>
-    <Item>
-      <Address>000B</Address>
-      <Name>ControllerType</Name>
-      <Alias>控制器类型</Alias>
-      <Unit>
-      </Unit>
-      <Authority>R</Authority>
-      <ShowType>0</ShowType>
-      <Extra></Extra>
-    </Item>
-    <Item>
-      <Address>000C</Address>
-      <Name>Fn</Name>
-      <Alias>频率</Alias>
-      <Unit>Hz</Unit>
-      <Authority>R</Authority>
-      <ShowType>1</ShowType>
-      <Extra>1</Extra>
     </Item>
   </Zone>
   <Zone length="10" address="1000">
@@ -147,7 +135,7 @@
       <Unit>/</Unit>
       <Authority>R</Authority>
       <ShowType>3</ShowType>
-      <Extra>过载_短路_瞬动_接地/漏电_负载监控1卸载_负载监控2卸载_断路器状态_设备故障脱扣_触头磨损_超温_拒动_自诊断故障_脱扣记录</Extra>
+      <Extra>过载_短路_瞬动_接地/漏电_负载监控1卸载_负载监控2卸载_断路器状态_设备故障脱扣_触头磨损_超温_拒动_自诊断故障_脱扣记录未读_欠相_*_*</Extra>
     </Item>
     <Item>
       <Address>1002</Address>
@@ -187,7 +175,7 @@
     </Item>
     <Item>
       <Address>1006</Address>
-      <Name>IG</Name>
+      <Name>Igf</Name>
       <Alias>接地/漏电电流</Alias>
       <Unit>A</Unit>
       <Authority>R</Authority>
@@ -275,7 +263,7 @@
       <Unit>(S)</Unit>
       <Authority>R/W</Authority>
       <ShowType>1</ShowType>
-      <Extra>10_0.5_1_2_4_8_12_16_20_24</Extra>
+      <Extra>10_5_10_20_29_41_83_125_167_250</Extra>
     </Item>
     <Item>
       <Address>2006</Address>
@@ -284,7 +272,7 @@
       <Unit>*Ir</Unit>
       <Authority>R/W</Authority>
       <ShowType>1</ShowType>
-      <Extra>1_1.5_2_3_4_5_6_8_10</Extra>
+      <Extra>1_1.5_2_2.5_3_4_5_6_8_10</Extra>
     </Item>
     <Item>
       <Address>2007</Address>
@@ -380,120 +368,120 @@
   <Zone length="13" address="6000">
     <Item>
       <Address>6000</Address>
-      <Name>TripTimeH_1</Name>
+      <Name>Time1</Name>
       <Alias>脱扣时间（年、月）</Alias>
       <Unit>/</Unit>
       <Authority>R</Authority>
       <ShowType>1</ShowType>
-      <Extra></Extra>
+      <Extra>1</Extra>
     </Item>
     <Item>
       <Address>6001</Address>
-      <Name>TripTimeM_1</Name>
+      <Name>Time2</Name>
       <Alias>脱扣时间（日、时）</Alias>
       <Unit>/</Unit>
       <Authority>R</Authority>
       <ShowType>1</ShowType>
-      <Extra></Extra>
+      <Extra>1</Extra>
     </Item>
     <Item>
       <Address>6002</Address>
-      <Name>TripTimeL_1</Name>
+      <Name>Time3</Name>
       <Alias>脱扣时间（分、秒）</Alias>
       <Unit>/</Unit>
       <Authority>R</Authority>
       <ShowType>1</ShowType>
-      <Extra></Extra>
+      <Extra>1</Extra>
     </Item>
     <Item>
       <Address>6003</Address>
-      <Name>TripPhase_1</Name>
+      <Name>Phase</Name>
       <Alias>脱扣相极</Alias>
       <Unit>/</Unit>
       <Authority>R</Authority>
-      <ShowType>1</ShowType>
-      <Extra></Extra>
+      <ShowType>2</ShowType>
+      <Extra>65_A相_66_B相_67_C相_78_N相</Extra>
     </Item>
     <Item>
       <Address>6004</Address>
-      <Name>TripType_1</Name>
+      <Name>Type</Name>
       <Alias>脱扣故障类型</Alias>
       <Unit>/</Unit>
       <Authority>R</Authority>
-      <ShowType>1</ShowType>
-      <Extra></Extra>
+      <ShowType>16</ShowType>
+      <Extra>76_过载脱扣_83_短路脱扣_73_瞬动脱扣_71_接地脱扣_85_相电流不平衡_74_堵塞_66_堵转_90_ZSI</Extra>
     </Item>
     <Item>
       <Address>6005</Address>
-      <Name>TripIa_1</Name>
+      <Name>Ia</Name>
       <Alias>当前A相电流值</Alias>
       <Unit>A</Unit>
       <Authority>R</Authority>
-      <ShowType>1</ShowType>
-      <Extra></Extra>
+      <ShowType>11</ShowType>
+      <Extra>1</Extra>
     </Item>
     <Item>
       <Address>6006</Address>
-      <Name>TripIb_1</Name>
+      <Name>Ib</Name>
       <Alias>当前B相电流值</Alias>
       <Unit>A</Unit>
       <Authority>R</Authority>
-      <ShowType>1</ShowType>
-      <Extra></Extra>
+      <ShowType>11</ShowType>
+      <Extra>1</Extra>
     </Item>
     <Item>
       <Address>6007</Address>
-      <Name>TripIc_1</Name>
+      <Name>Ic</Name>
       <Alias>当前C相电流值</Alias>
       <Unit>A</Unit>
       <Authority>R</Authority>
-      <ShowType>1</ShowType>
-      <Extra></Extra>
+      <ShowType>11</ShowType>
+      <Extra>1</Extra>
     </Item>
     <Item>
       <Address>6008</Address>
-      <Name>TripIN_1</Name>
+      <Name>IN</Name>
       <Alias>当前N相电流值</Alias>
       <Unit>A</Unit>
       <Authority>R</Authority>
-      <ShowType>1</ShowType>
-      <Extra></Extra>
+      <ShowType>11</ShowType>
+      <Extra>1</Extra>
     </Item>
     <Item>
       <Address>6009</Address>
-      <Name>TripIr_1</Name>
+      <Name>It</Name>
       <Alias>当前整定电流值</Alias>
       <Unit>A</Unit>
       <Authority>R</Authority>
-      <ShowType>1</ShowType>
-      <Extra></Extra>
+      <ShowType>17</ShowType>
+      <Extra>1_1_1_1_1_0.001_0.01</Extra>
     </Item>
     <Item>
       <Address>600A</Address>
-      <Name>TripTr_1</Name>
+      <Name>Tt</Name>
       <Alias>当前整定时间值</Alias>
       <Unit>S</Unit>
       <Authority>R</Authority>
-      <ShowType>1</ShowType>
-      <Extra></Extra>
+      <ShowType>18</ShowType>
+      <Extra>0.1_0.001_0.01_0.01_0.001_0.001_1</Extra>
     </Item>
     <Item>
       <Address>600B</Address>
-      <Name>TripI_1</Name>
+      <Name>Ip</Name>
       <Alias>当前故障电流值</Alias>
       <Unit>A</Unit>
       <Authority>R</Authority>
-      <ShowType>1</ShowType>
-      <Extra></Extra>
+      <ShowType>17</ShowType>
+      <Extra>1_1_1_1_1_0.01_0.001</Extra>
     </Item>
     <Item>
       <Address>600C</Address>
-      <Name>TripT_1</Name>
+      <Name>Tp</Name>
       <Alias>脱扣延时时间</Alias>
       <Unit>S</Unit>
       <Authority>R</Authority>
-      <ShowType>1</ShowType>
-      <Extra></Extra>
+      <ShowType>18</ShowType>
+      <Extra>0.1_0.01_0.01_0.01_0.01_0.01_0.01</Extra>
     </Item>
   </Zone>
   <Zone length="5" address="7000">

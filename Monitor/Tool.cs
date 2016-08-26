@@ -34,9 +34,9 @@ namespace Monitor
                                 {
                                         SH = CRC_H;
                                         SL = CRC_L;
-                                        CRC_H = (byte)(CRC_H>> 1);      //高位右移一位
+                                        CRC_H = (byte)(CRC_H >> 1);      //高位右移一位
                                         //CRC_H = (byte)(CRC_H & 0x7F);
-                                        CRC_L = (byte)(CRC_L>> 1);      //低位右移一位 
+                                        CRC_L = (byte)(CRC_L >> 1);      //低位右移一位 
                                         //CRC_L = (byte)(CRC_L & 0x7F);
                                         if ((SH & 0x01) == 0x01) //如果高位字节最后一位为1 
                                         {
@@ -96,7 +96,7 @@ namespace Monitor
                                 ShowValue = d.ShowValue,
                                 Tag = d.Tag,
                                 Unit = d.Unit,
-                                Alias=d.Alias
+                                Alias = d.Alias
                         };
                         return tmp;
                 }
@@ -165,22 +165,22 @@ namespace Monitor
 
                 public static bool isOne(int raw, int index)
                 {
-                        raw = (int)(raw>> index & 1);
+                        raw = (int)(raw >> index & 1);
                         return raw == 1 ? true : false;
                 }
 
                 public static int BitSet(int bt, int index, int para)
                 {
-                        return para==1?(bt | (0x1 << index)):(bt&~(0x1<<index));
+                        return para == 1 ? (bt | (0x1 << index)) : (bt & ~(0x1 << index));
                 }
 
                 public static bool CheckSubset<T>(T[] complete, T[] subset)
                 {
                         bool isSub = false;
-                        int nLen1=complete.Length;
-                        int nLen2=subset.Length;
+                        int nLen1 = complete.Length;
+                        int nLen2 = subset.Length;
                         T[] tmp = new T[nLen2];
-                        for (int i = 0; i <= nLen1-nLen2; i++)
+                        for (int i = 0; i <= nLen1 - nLen2; i++)
                         {
                                 Array.Copy(complete, i, tmp, 0, nLen2);
                                 if (tmp.SequenceEqual(subset))
@@ -197,7 +197,7 @@ namespace Monitor
                         //return ConfigurationSettings.AppSettings[key];
                         return ConfigurationManager.AppSettings[key];
                 }
-                public static void SetConfig(string key,string value)
+                public static void SetConfig(string key, string value)
                 {
                         Configuration cfa = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                         cfa.AppSettings.Settings[key].Value = value;
@@ -219,7 +219,7 @@ namespace Monitor
                         if (double.TryParse(value, out dValue))
                         {
                                 var t = items.Cast<object>().Select(s => s).ToList();
-                                var array = items.Cast<object>().Select(s =>s).ToList().ConvertAll(s=>cvt2Double(s));
+                                var array = items.Cast<object>().Select(s => s).ToList().ConvertAll(s => cvt2Double(s));
                                 array = array.ConvertAll(s => Math.Abs(s - dValue));
                                 return array.FindIndex(s => s == array.Min());
                         }
@@ -236,17 +236,21 @@ namespace Monitor
                         return d;
                 }
 
-                public static List<Device> FindParents(List<Device> devices, byte address)
+                public static void FindDevicesParents()
                 {
-                        List<Device> parents = new List<Device>();
-                        Device dv = devices.Find(d => d.Address == address);
-                        parents.Add(dv);
-                        while (dv.ParentAddr != 0)
+                        foreach (Device dv in Common.OrdDevices)
                         {
-                                dv = devices.Find(d => d.Address == dv.ParentAddr);
+                                List<Device> parents = new List<Device>();
+                                //待优化：父级不应该包括本身
                                 parents.Add(dv);
+                                Device dvP=dv;
+                                while (dvP.ParentAddr != 0)
+                                {
+                                        dvP = Common.OrdDevices.Find(d => d.ZID == dvP.ZID && d.Address == dvP.ParentAddr);
+                                        parents.Add(dvP);
+                                }
+                                dv.Dependence = parents;
                         }
-                        return parents;
                 }
 
                 public static double Ndb2db(double? source)

@@ -15,6 +15,15 @@ using System.Windows.Shapes;
 
 namespace AutoSizeDemo
 {
+        public class School
+        {
+                public Student1 Stu;
+        }
+        public class Student1
+        {
+                public string Name1;
+        }
+
         /// <summary>
         /// MainWindow.xaml 的交互逻辑
         /// </summary>

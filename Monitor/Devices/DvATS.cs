@@ -16,13 +16,13 @@ namespace Monitor
                         {
                                 byte data1 = (Byte)(data % 256);
                                 if (Tool.isOne(data1, 1))
-                                        state.SwitchState = Switch.ATS_N;
+                                        state.SwitchState = SwitchStatus.ATS_N;
                                 else if (Tool.isOne(data1, 4))
-                                        state.SwitchState = Switch.ATS_R;
+                                        state.SwitchState = SwitchStatus.ATS_R;
                                 else if (!Tool.isOne(data1, 1) && !Tool.isOne(data1, 4))
-                                        state.SwitchState = Switch.Open;
+                                        state.SwitchState = SwitchStatus.Open;
                                 else
-                                        state.SwitchState = Switch.Unknown;
+                                        state.SwitchState = SwitchStatus.Unknown;
 
                                 state.Ia = str2int("Ia");
                                 state.Ib = str2int("Ib");
@@ -61,6 +61,10 @@ namespace Monitor
                         }
 
                         State = state;
+
+                        //保存数据模块
+
+                        //保护数据模块
                 }
 
                 double str2int(string name)

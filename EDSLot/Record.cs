@@ -18,6 +18,12 @@ namespace EDSLot
                         set;
                 }
                 [DataMember]
+                public int ZID
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
                 public int Address
                 {
                         get;

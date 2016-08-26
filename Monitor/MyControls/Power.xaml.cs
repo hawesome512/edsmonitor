@@ -26,6 +26,7 @@ namespace Monitor
                 string[] stateArray = new string[] { "未知", "关机", "测试中", "UPS后备式", "UPS故障", "旁路模式", "电池电压低", "市电异常" };
                 Timer timer;
                 DateTime lastSmsAlarmTime;
+                public static string UpsState;
                 public Power()
                 {
                         InitializeComponent();
@@ -36,16 +37,37 @@ namespace Monitor
                 /// </summary>
                 public void InitPower()
                 {
-                        timer = new Timer((s) =>
+                        bool hasUps = false;
+                        if (Common.IsServer)
                         {
-                                updateUps();
-                        },null,0,1000*60);
+                                hasUps = Tool.GetConfig("UPS") == "true";
+                                if (!hasUps)
+                                {
+                                        UpsState = "no ups";
+                                }
+                        }
+                        else
+                        {
+                                UpsState = getUpsState();
+                                hasUps = UpsState != "no ups";
+                        }
+                        if (hasUps)
+                        {
+                                timer = new Timer((s) =>
+                                {
+                                        updateUps();
+                                }, null, 0, 1000 * 60);
+                        }
+                        else
+                        {
+                                this.Visibility = Visibility.Hidden;
+                        }
                 }
 
                 void updateUps()
                 {
-                        string upsState = getUpsState();
-                        if (string.IsNullOrEmpty(upsState))
+                        UpsState = getUpsState();
+                        if (string.IsNullOrEmpty(UpsState))
                         {
                                 MsgBox.Show("请查看UPS设置是否正确；\r\n若无UPS请修改[系统设置]→[供电系统]，修改后重启生效", "UPS通信失败", MsgBox.Buttons.OK, MsgBox.Icon.Error, MsgBox.AnimateStyle.FadeIn);
                                 timer.Dispose();
@@ -55,10 +77,10 @@ namespace Monitor
                                 }));
                                 return;
                         }
-                        upsState = upsState.Substring(1, upsState.Length - 2);
-                        var states = upsState.Split(' ');
-                        int nState=int.Parse(states[7]);
-                        string strState=null;
+                        UpsState = UpsState.Substring(1, UpsState.Length - 2);
+                        var states = UpsState.Split(' ');
+                        int nState = int.Parse(states[7]);
+                        string strState = null;
                         for (int i = 0; i < stateArray.Length; i++)
                         {
                                 if (Tool.isOne(nState, i))
@@ -93,26 +115,36 @@ namespace Monitor
 
                 string getUpsState()
                 {
-                        using (SerialPort sp = new SerialPort(Tool.GetConfig("UPSCom")))
+                        if (Common.IsServer)
                         {
-                                sp.BaudRate = 2400;
-                                byte[] snd = new byte[] { 0x51, 0x31, 0x0d };
-                                sp.Open();
-                                sp.Write(snd, 0, snd.Length);
-                                System.Threading.Thread.Sleep(500);
-                                return sp.ReadExisting();
+                                using (SerialPort sp = new SerialPort(Tool.GetConfig("UPSCom")))
+                                {
+                                        sp.BaudRate = 2400;
+                                        byte[] snd = new byte[] { 0x51, 0x31, 0x0d };
+                                        sp.Open();
+                                        sp.Write(snd, 0, snd.Length);
+                                        System.Threading.Thread.Sleep(500);
+                                        return sp.ReadExisting();
+                                }
+                        }
+                        else
+                        {
+                                ServiceReference1.EDSServiceClient wcf = new ServiceReference1.EDSServiceClient();
+                                string upsState = wcf.GetUpsState();
+                                wcf.Close();
+                                return upsState;
                         }
                 }
 
                 private void img_power_MouseEnter(object sender, MouseEventArgs e)
                 {
-                        DoubleAnimation da = new DoubleAnimation(32, 600, new Duration(TimeSpan.FromSeconds(1)));
+                        DoubleAnimation da = new DoubleAnimation(32, 600, new Duration(TimeSpan.FromSeconds(0.5)));
                         this.BeginAnimation(UserControl.WidthProperty, da);
                 }
 
                 private void img_power_MouseLeave(object sender, MouseEventArgs e)
                 {
-                        DoubleAnimation da = new DoubleAnimation(600,32, new Duration(TimeSpan.FromSeconds(1)));
+                        DoubleAnimation da = new DoubleAnimation(600, 32, new Duration(TimeSpan.FromSeconds(0.5)));
                         this.BeginAnimation(UserControl.WidthProperty, da);
 
                 }

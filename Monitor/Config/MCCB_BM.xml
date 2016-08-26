@@ -13,7 +13,7 @@
     <Item>
       <Address>0000</Address>
       <Name>Device</Name>
-      <Alias>设备识别号</Alias>
+      <Alias>设备类型</Alias>
       <Unit>/</Unit>
       <Authority>R</Authority>
       <ShowType>2</ShowType>
@@ -22,16 +22,16 @@
     <Item>
       <Address>0001</Address>
       <Name>Factory</Name>
-      <Alias>工厂代码</Alias>
+      <Alias>厂商</Alias>
       <Unit>/</Unit>
       <Authority>R</Authority>
       <ShowType>2</ShowType>
-      <Extra>21324_Shihlin</Extra>
+      <Extra>21324_士林电机</Extra>
     </Item>
     <Item>
       <Address>0002</Address>
       <Name>ProductNumberH</Name>
-      <Alias>产品序列号H</Alias>
+      <Alias>产品序列号</Alias>
       <Unit>/</Unit>
       <Authority>R</Authority>
       <ShowType>0</ShowType>
@@ -49,7 +49,7 @@
     <Item>
       <Address>0004</Address>
       <Name>ProductDateH</Name>
-      <Alias>生产日期（年）</Alias>
+      <Alias>生产日期</Alias>
       <Unit>/</Unit>
       <Authority>R</Authority>
       <ShowType>0</ShowType>
@@ -67,7 +67,7 @@
     <Item>
       <Address>0006</Address>
       <Name>Breaker</Name>
-      <Alias>分断等级及极数</Alias>
+      <Alias>断路器型号</Alias>
       <Unit>/</Unit>
       <Authority>R</Authority>
       <ShowType>21</ShowType>
@@ -76,7 +76,7 @@
     <Item>
       <Address>0007</Address>
       <Name>Inm</Name>
-      <Alias>额定框架电流(待定)</Alias>
+      <Alias>额定框架电流</Alias>
       <Unit>A</Unit>
       <Authority>R</Authority>
       <ShowType>1</ShowType>
@@ -174,7 +174,7 @@
       <Unit>/</Unit>
       <Authority>R/W</Authority>
       <ShowType>3</ShowType>
-      <Extra>Short_Instant_Protect.N/100%/50%_*_I2t(Short)_*_*_*_Thermal Mem</Extra>
+      <Extra>短路_瞬动_N相保护/100%/50%_*_I2t(短路)_*_*_*_热记忆</Extra>
     </Item>
     <Item>
       <Address>2003</Address>
@@ -188,7 +188,7 @@
     <Item>
       <Address>2004</Address>
       <Name>Ir</Name>
-      <Alias>过载长延时整定值</Alias>
+      <Alias>Ir</Alias>
       <Unit>*In</Unit>
       <Authority>R/W</Authority>
       <ShowType>1</ShowType>
@@ -197,7 +197,7 @@
     <Item>
       <Address>2005</Address>
       <Name>Tr</Name>
-      <Alias>长延时整定时间</Alias>
+      <Alias>Tr</Alias>
       <Unit>(S)</Unit>
       <Authority>R/W</Authority>
       <ShowType>1</ShowType>
@@ -206,7 +206,7 @@
     <Item>
       <Address>2006</Address>
       <Name>Isd</Name>
-      <Alias>短路短延时整定值</Alias>
+      <Alias>Isd</Alias>
       <Unit>*Ir</Unit>
       <Authority>R/W</Authority>
       <ShowType>1</ShowType>
@@ -215,7 +215,7 @@
     <Item>
       <Address>2007</Address>
       <Name>Tsd</Name>
-      <Alias>短延时整定时间</Alias>
+      <Alias>Tsd</Alias>
       <Unit>(S)</Unit>
       <Authority>R/W</Authority>
       <ShowType>1</ShowType>
@@ -224,7 +224,7 @@
     <Item>
       <Address>2008</Address>
       <Name>Ii</Name>
-      <Alias>瞬时保护整定值</Alias>
+      <Alias>Ii</Alias>
       <Unit>*In</Unit>
       <Authority>R/W</Authority>
       <ShowType>1</ShowType>

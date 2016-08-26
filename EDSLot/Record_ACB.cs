@@ -15,7 +15,7 @@ namespace EDSLot
         using System.Runtime.Serialization;
 
         [DataContract]
-        public partial class Record_ACB : Record
+        public partial class Record_ACB:Record
         {
                 [DataMember]
                 public Nullable<double> Ua

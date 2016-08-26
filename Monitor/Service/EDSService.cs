@@ -10,7 +10,7 @@ namespace Monitor
         {
                 public byte[] UpdateDevice(byte address,int zoneIndex)
                 {
-                        Device dv = Common.Devices.Find(d => d.Address == address);
+                        Device dv = Common.SelDevices.Find(d => d.Address == address);
                         if (dv == null)
                                 return null;
                         return dv.DataList[zoneIndex];
@@ -18,7 +18,7 @@ namespace Monitor
 
                 public byte[] RemoteControl(byte[] snd)
                 {
-                        Device dv = Common.Devices.Find(d => d.Address == snd[0]);
+                        Device dv = Common.SelDevices.Find(d => d.Address == snd[0]);
                         if (dv == null)
                                 return null;
                         return dv.Remote(snd);
@@ -26,7 +26,7 @@ namespace Monitor
 
                 public Record[] QueryData(byte address, DateTime start, DateTime end)
                 {
-                        Device dv = Common.Devices.Find(d => d.Address == address);
+                        Device dv = Common.SelDevices.Find(d => d.Address == address);
                         if (dv == null)
                                 return null;
                         return dv.QueryData(start, end).ToArray();
@@ -34,22 +34,40 @@ namespace Monitor
 
                 public EDSLot.Trip[] QueryTrip(byte address, DateTime start, DateTime end)
                 {
-                        Device dv = Common.Devices.Find(d => d.Address == address);
+                        Device dv = Common.SelDevices.Find(d => d.Address == address);
                         if (dv == null)
                                 return null;
                         return dv.QueryTrip(start, end).ToArray();
                 }
 
 
-                public void ChangeSelectedAddress(byte address)
+                public void ChangeSelAddress(byte address)
                 {
                         Common.SelectedAddress = address;
                 }
 
+                public void ChangeSelZone(byte zid)
+                {
+                        if (zid == 0)
+                        {
+                                Common.OrdDevices.AddRange(Common.SelDevices);
+                                Common.SelDevices.Clear();
+                        }
+                        else
+                        {
+                                Common.SelDevices = Common.OrdDevices.FindAll(d => d.ZID == zid);
+                                Common.OrdDevices.RemoveAll(d => d.ZID == zid);
+                        }
+                }
 
                 public EDSLot.Energy[] QueryEnergy(int[] addrs, DateTime start, DateTime end)
                 {
                         return DataLib.QueryEnergy(addrs, start, end).ToArray();
+                }
+
+                public string GetUpsState()
+                {
+                        return Power.UpsState;
                 }
         }
 }

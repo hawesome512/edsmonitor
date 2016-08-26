@@ -6,6 +6,7 @@
 //    如果重新生成代码，则将覆盖对此文件的手动更改。
 // </auto-generated>
 //------------------------------------------------------------------------------
+
 namespace EDSLot
 {
         using System;
@@ -18,6 +19,12 @@ namespace EDSLot
         {
                 [DataMember]
                 public System.DateTime Time
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public int ZID
                 {
                         get;
                         set;

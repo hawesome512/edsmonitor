@@ -307,7 +307,7 @@
       <Unit>/</Unit>
       <Authority>R/W</Authority>
       <ShowType>3</ShowType>
-      <Extra>短路_瞬动_N相保护_接地_I2t(短路)/ON/OFF_I2t(接地)/ON/OFF_ZSI_*_*_热记忆_不平衡_阻塞_堵转_*_*_*</Extra>
+      <Extra>短路_瞬动_N相保护/OFF/100%_接地_I2t(短路)/ON/OFF_I2t(接地)/ON/OFF_ZSI_*_*_热记忆_不平衡_阻塞_堵转_*_*_*</Extra>
     </Item>
     <Item>
       <Address>2003</Address>

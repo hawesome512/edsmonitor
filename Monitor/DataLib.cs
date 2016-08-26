@@ -10,12 +10,11 @@ namespace Monitor
 {
         public class DataLib
         {
-                public static Com EDSCom;
                 public static List<EDSLot.Energy> QueryEnergy(int[] addrs, DateTime start, DateTime end)
                 {
-                        if (Common.CType == ComType.WCF)
+                        if (!Common.IsServer)
                         {
-                                return EDSCom.QueryEnergy(addrs, start, end);
+                                return Common.SelDevices.First().MyCom.QueryEnergy(addrs, start, end);
                         }
                         else
                         {

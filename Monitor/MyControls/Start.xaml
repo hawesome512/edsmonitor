@@ -26,9 +26,9 @@
                         <Grid.Background>
                             <ImageBrush ImageSource="/Monitor;component/Images/option.png"/>
                         </Grid.Background>
-                        <Button Margin="127,76,0,0" Background="#FFEF7754" Height="63" HorizontalAlignment="Left" Width="178" VerticalAlignment="Top" Click="Button_Click">拉杆箱</Button>
-                        <Button Margin="127,152,0,0" Background="#FF6BB8C8" Height="63" HorizontalAlignment="Left" Width="178" VerticalAlignment="Top" Click="Button_Click">成宇配电房</Button>
-                        <Button Margin="127,228,0,0" Background="#FF936F57" Height="63" HorizontalAlignment="Left" Width="178" VerticalAlignment="Top" Click="Button_Click">测试</Button>
+                        <Button Name="bnt_1" Margin="127,76,0,0" Background="#FFEF7754" Height="63" HorizontalAlignment="Left" Width="178" VerticalAlignment="Top" Click="Button_Click">拉杆箱</Button>
+                        <Button Name="btn_2" Margin="127,152,0,0" Background="#FF6BB8C8" Height="63" HorizontalAlignment="Left" Width="178" VerticalAlignment="Top" Click="Button_Click">成宇配电房</Button>
+                        <Button Name="btn_3" Margin="127,228,0,0" Background="#FF936F57" Height="63" HorizontalAlignment="Left" Width="178" VerticalAlignment="Top" Click="Button_Click">测试</Button>
                     </Grid>
                 </Grid>
             </materialDesign:Card>
