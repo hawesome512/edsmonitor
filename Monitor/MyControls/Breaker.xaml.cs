@@ -26,34 +26,53 @@ namespace Monitor
                         InitializeComponent();
                 }
 
-                public void InitBreaker(Device device)
+                public void InitBreaker(Device device,bool showImg)
                 {
-                        //string imgUrl =string.Format("pack://application:,,,/Monitor;component/Images/Types/{0}.jpg",device.Name);
-                        //img_device.Source = (new ImageSourceConverter().ConvertFromString(imgUrl) as ImageSource);
-
-
+                        breakerMenu.InitMenu(device);
                         this.DataContext = device.Dependence;
-                        var lines=initLineArray();
-                        List<string> sources = new List<string>();
-                        for (int i = 0; i < device.Dependence.Count; i++)
+                        var lines = initLineArray();
+                        List<string> sources = Tool.GetDeviceDependence(device);
+                        Triangle.SetBinding(Line.StrokeProperty, Tool.addMulBinding(sources));
+                        if (showImg)
                         {
-                                sources.Add(string.Format("[{0}].State", i));
+                                Binding binding = new Binding("[0].State");
+                                binding.Converter = new StateToBreakerImageSource();
+                                binding.ConverterParameter = device.Name;
+                                breakerImg.SetBinding(Image.SourceProperty,binding);
+                                breakerImg.Visibility = Visibility.Visible;
+                                breakerShow.Visibility = Visibility.Hidden;
+                                for (int i = 0; i < 2; i++)
+                                {
+                                        Line line = Tool.FindChild<Line>(MyBreaker, lines[i]);
+                                        line.SetBinding(Line.StrokeProperty, Tool.addMulBinding(sources));
+                                }
                         }
-                        foreach (string name in lines)
+                        else
                         {
-                                Line line=Tool.FindChild<Line>(MyBreaker,name);
-                                line.SetBinding(Line.StrokeProperty, Tool.addMulBinding(sources));
+                                breakerShow.Visibility = Visibility.Visible;
+                                breakerImg.Visibility = Visibility.Hidden;
+                                foreach (string name in lines)
+                                {
+                                        Line line = Tool.FindChild<Line>(MyBreaker, name);
+                                        line.SetBinding(Line.StrokeProperty, Tool.addMulBinding(sources));
+                                }
+                                Switch_open.SetBinding(Line.OpacityProperty, Tool.addBinding("[0].State", new StateToOpenConverter()));
+                                Switch_open.SetBinding(Line.StrokeProperty, Tool.addMulBinding(sources));
+                                Switch_close.SetBinding(Line.OpacityProperty, Tool.addBinding("[0].State", new StateToCloseConverter()));
+                                Switch_close.SetBinding(Line.StrokeProperty, Tool.addMulBinding(sources));
+                                Ia.SetBinding(Label.ContentProperty, Tool.addBinding("[0].State.Ia", new DoubleToInt()));
+                                Ib.SetBinding(Label.ContentProperty, Tool.addBinding("[0].State.Ib", new DoubleToInt()));
+                                Ic.SetBinding(Label.ContentProperty, Tool.addBinding("[0].State.Ic", new DoubleToInt()));
+
+                                Binding binding = new Binding()
+                                {
+                                        Source = Switch_close,
+                                        Path = new PropertyPath("Stroke"),
+                                        Converter = new StrokeToOpacityConverter()
+                                };
+                                grid_current.SetBinding(Line.OpacityProperty, binding);
                         }
-                        Triangle.SetBinding(RegularPolygon.StrokeProperty, Tool.addMulBinding(sources));
-                        Switch_open.SetBinding(Line.OpacityProperty, Tool.addBinding("[0].State", new StateToOpenConverter()));
-                        Switch_close.SetBinding(Line.OpacityProperty, Tool.addBinding("[0].State", new StateToCloseConverter()));
-                        Switch_close.SetBinding(Line.StrokeProperty, Tool.addMulBinding(sources));
-                        Ia.SetBinding(Label.ContentProperty, new Binding("[0].State.Ia"));
-                        Ib.SetBinding(Label.ContentProperty, new Binding("[0].State.Ib"));
-                        Ic.SetBinding(Label.ContentProperty, new Binding("[0].State.Ic"));
                 }
-
-
 
                 private List<string> initLineArray()
                 {
@@ -63,6 +82,11 @@ namespace Monitor
                                 lines.Add("line_" + i);
                         }
                         return lines;
+                }
+
+                private void grid_current_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+                {
+                        breakerMenu.menu.IsOpen = true;
                 }
         }
 }

@@ -7,6 +7,7 @@ using System.Windows.Media;
 
 namespace Monitor
 {
+
         class StateToRectFillConverter : IValueConverter
         {
                 public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -59,9 +60,29 @@ namespace Monitor
                 }
         }
 
+        class StrokeToOpacityConverter : IValueConverter
+        {
+                public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+                {
+                        Brush brush = value as Brush;
+                        if (brush == Brushes.SeaGreen || brush == Brushes.Gray)
+                        {
+                                return 0;
+                        }
+                        else
+                        {
+                                return 1;
+                        }
+                }
+
+                public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+                {
+                        throw new NotImplementedException();
+                }
+        }
+
         class MulStatesToLineStrokeConverter : IMultiValueConverter
         {
-
                 public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
                 {
                         if (values[0] is DState)
@@ -77,9 +98,13 @@ namespace Monitor
                                                 foreach (var value in values)
                                                 {
                                                         DState state = (DState)value;
-                                                        if (state.SwitchState != SwitchStatus.Close)
+                                                        if (state.SwitchState == SwitchStatus.Open)
                                                         {
                                                                 return Brushes.SeaGreen;
+                                                        }
+                                                        else if (state.SwitchState == SwitchStatus.ATS_R)
+                                                        {
+                                                                break;
                                                         }
                                                 }
                                                 return Brushes.Red;
@@ -139,43 +164,26 @@ namespace Monitor
                         throw new NotImplementedException();
                 }
         }
-        class StateToATS_NConverter : IValueConverter
+
+        class StateToATSConverter : IValueConverter
         {
                 public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
                 {
                         DState state = (DState)value;
-                        double opacity = 0;
+                        double x2 = 0;
                         switch (state.SwitchState)
                         {
                                 case SwitchStatus.ATS_N:
-                                        opacity = 1;
+                                        x2=15;
                                         break;
-                                default:
-                                        break;
-                        }
-                        return opacity;
-                }
-
-                public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-                {
-                        throw new NotImplementedException();
-                }
-        }
-        class StateToATS_RConverter : IValueConverter
-        {
-                public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-                {
-                        DState state = (DState)value;
-                        double opacity = 0;
-                        switch (state.SwitchState)
-                        {
                                 case SwitchStatus.ATS_R:
-                                        opacity = 1;
+                                        x2 = 45;
                                         break;
                                 default:
+                                        x2 = 30;
                                         break;
                         }
-                        return opacity;
+                        return x2;
                 }
 
                 public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -307,13 +315,13 @@ namespace Monitor
                         switch (state.SwitchState)
                         {
                                 case SwitchStatus.Close:
-                                        packUri = "pack://application:,,,/Monitor;component/Images/close.png";
+                                        packUri = "pack://application:,,,/EDS;component/Images/close.png";
                                         break;
                                 case SwitchStatus.Open:
-                                        packUri = "pack://application:,,,/Monitor;component/Images/open.png";
+                                        packUri = "pack://application:,,,/EDS;component/Images/open.png";
                                         break;
                                 default:
-                                        packUri = "pack://application:,,,/Monitor;component/Images/unknown.png";
+                                        packUri = "pack://application:,,,/EDS;component/Images/unknown.png";
                                         break;
                         }
                         return (new ImageSourceConverter().ConvertFromString(packUri) as ImageSource);
@@ -334,16 +342,16 @@ namespace Monitor
                         switch (state.SwitchState)
                         {
                                 case SwitchStatus.ATS_N:
-                                        packUri = "pack://application:,,,/Monitor;component/Images/ATS/ATS_N.png";
+                                        packUri = "pack://application:,,,/EDS;component/Images/ATS/ATS_N.png";
                                         break;
                                 case SwitchStatus.ATS_R:
-                                        packUri = "pack://application:,,,/Monitor;component/Images/ATS/ATS_R.png";
+                                        packUri = "pack://application:,,,/EDS;component/Images/ATS/ATS_R.png";
                                         break;
                                 case SwitchStatus.Open:
-                                        packUri = "pack://application:,,,/Monitor;component/Images/ATS/ATS_OPEN.png";
+                                        packUri = "pack://application:,,,/EDS;component/Images/ATS/ATS_OPEN.png";
                                         break;
                                 default:
-                                        packUri = "pack://application:,,,/Monitor;component/Images/ATS/ATS_UK.png";
+                                        packUri = "pack://application:,,,/EDS;component/Images/ATS/ATS_UK.png";
                                         break;
                         }
                         return (new ImageSourceConverter().ConvertFromString(packUri) as ImageSource);
@@ -445,6 +453,36 @@ namespace Monitor
                 {
                         User user = (User)value;
                         return user == User.ADMIN ? "退出" : "登录";
+                }
+
+                public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+                {
+                        throw new NotImplementedException();
+                }
+        }
+
+        class DoubleToInt : IValueConverter
+        {
+                public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+                {
+                        double dValue = (double)value;
+                        return Math.Round(dValue, 0);
+                }
+
+                public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+                {
+                        throw new NotImplementedException();
+                }
+        }
+
+        class StateToBreakerImageSource : IValueConverter
+        {
+                public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+                {
+                        DState state = (DState)value;
+                        string switchState = state.SwitchState == SwitchStatus.Close ? "_ON" : string.Empty;
+                        string packUri=string.Format("pack://application:,,,/EDS;component/Images/Types/{0}{1}.png", parameter.ToString(),switchState);
+                        return (new ImageSourceConverter().ConvertFromString(packUri) as ImageSource);
                 }
 
                 public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

@@ -10,7 +10,7 @@ namespace Monitor
 {
         public class DvACREL : Device
         {
-
+                
                 public override void InitAddress()
                 {
                         string path = string.Format("Config\\{0}.xml", DvType);
@@ -19,20 +19,46 @@ namespace Monitor
                         DataList.Add(null);
                         DataList.Add(new byte[_realData.Count * 2]);
                         DataList.Add(null);
+                        NeedParamsNum = 0;//电能表无参数
                 }
 
                 public override void GetData()
                 {
                         if (nComFailed < 5)
                         {
+                                if (MyCom.GetComType() == ComType.SL)
+                                {
+                                        simulateState();
+                                        return;
+                                }
                                 _realData = getZoneData(_realData,1);
                                 updateState();
                         }
                 }
 
+                protected override void simulateState(string command = null)
+                {
+                        DState state = new DState();
+                        Device parent = Common.ZoneDevices[ZID].Find(d => d.Address == ParentAddr);
+                        Random random = new Random();
+                        state.Ia = parent.State.Ia;
+                        state.Ib = parent.State.Ib;
+                        state.Ic = parent.State.Ic;
+                        state.Ua = 220 + random.Next(-3, 3);
+                        state.Ub = 220 + random.Next(-3, 3);
+                        state.Uc = 220 + random.Next(-3, 3);
+                        state.PF = random.Next(90, 95) / 100f;
+                        state.P = state.Ia * state.Ua * state.PF / 1000;
+                        state.Q = state.Ia * state.Ua * (1-state.PF) / 1000;
+                        state.FR = 50;
+                        state.PE +=State.PE+ random.Next(50,150)/1000f;
+                        State = state;
+                }
+
                 public override void updateState()
                 {
                         DState state = new DState();
+                        state.ControlState = ControlMode.Local;
                         if (!string.IsNullOrEmpty(RealData["U"].ShowValue))
                         {
                                 state.Ua = str2double("U");
@@ -43,6 +69,11 @@ namespace Monitor
                                 state.Q = str2double("Q");
                                 state.PE = str2doubleE("PE");
                                 state.QE = str2doubleE("QE");
+                                state.RunState = Run.Normal;
+                        }
+                        else
+                        {
+                                state.RunState = Run.NonSignal;
                         }
                         State = state;
                         if (Common.IsServer)

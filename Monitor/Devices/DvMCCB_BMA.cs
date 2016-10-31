@@ -64,7 +64,7 @@ namespace Monitor
                 {
                         double data;
                         double.TryParse(RealData[name].ShowValue, out data);
-                        return data+new Random().Next(1, 10) / 100f;
+                        return data+new Random().Next(1, 500) / 1000f;
                         //加随机数的原因：使用模拟信号时电流一直保存不变的情况下，NotifyPropertyChanged不会被触发，实际运行时不会出现此状况
                 }
 
@@ -195,7 +195,7 @@ namespace Monitor
                 public override List<Record> QueryData(DateTime start, DateTime end)
                 {
                         if (!Common.IsServer)
-                                return MyCom.QueryData(Address, start, end);
+                                return MyCom.QueryData(ZID,Address, start, end);
                         using (EDSEntities context = new EDSEntities())
                         {
                                 var result = from m in context.Record_MCCB

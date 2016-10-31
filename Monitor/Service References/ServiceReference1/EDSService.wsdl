@@ -7,14 +7,6 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="NetTcpBinding_IEDSService_policy">
-    <wsp:ExactlyOne>
-      <wsp:All>
-        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
-        <wsaw:UsingAddressing />
-      </wsp:All>
-    </wsp:ExactlyOne>
-  </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="http://localhost:7070/EDSService?xsd=xsd0" namespace="http://tempuri.org/" />
@@ -48,17 +40,11 @@
   <wsdl:message name="IEDSService_QueryTrip_OutputMessage">
     <wsdl:part name="parameters" element="tns:QueryTripResponse" />
   </wsdl:message>
-  <wsdl:message name="IEDSService_ChangeSelAddress_InputMessage">
-    <wsdl:part name="parameters" element="tns:ChangeSelAddress" />
+  <wsdl:message name="IEDSService_ChangeDeviceLiveness_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeDeviceLiveness" />
   </wsdl:message>
-  <wsdl:message name="IEDSService_ChangeSelAddress_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ChangeSelAddressResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEDSService_ChangeSelZone_InputMessage">
-    <wsdl:part name="parameters" element="tns:ChangeSelZone" />
-  </wsdl:message>
-  <wsdl:message name="IEDSService_ChangeSelZone_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ChangeSelZoneResponse" />
+  <wsdl:message name="IEDSService_ChangeDeviceLiveness_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeDeviceLivenessResponse" />
   </wsdl:message>
   <wsdl:message name="IEDSService_QueryEnergy_InputMessage">
     <wsdl:part name="parameters" element="tns:QueryEnergy" />
@@ -89,13 +75,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEDSService/QueryTrip" message="tns:IEDSService_QueryTrip_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEDSService/QueryTripResponse" message="tns:IEDSService_QueryTrip_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="ChangeSelAddress">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEDSService/ChangeSelAddress" message="tns:IEDSService_ChangeSelAddress_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEDSService/ChangeSelAddressResponse" message="tns:IEDSService_ChangeSelAddress_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ChangeSelZone">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEDSService/ChangeSelZone" message="tns:IEDSService_ChangeSelZone_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEDSService/ChangeSelZoneResponse" message="tns:IEDSService_ChangeSelZone_OutputMessage" />
+    <wsdl:operation name="ChangeDeviceLiveness">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEDSService/ChangeDeviceLiveness" message="tns:IEDSService_ChangeDeviceLiveness_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEDSService/ChangeDeviceLivenessResponse" message="tns:IEDSService_ChangeDeviceLiveness_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="QueryEnergy">
       <wsdl:input wsaw:Action="http://tempuri.org/IEDSService/QueryEnergy" message="tns:IEDSService_QueryEnergy_InputMessage" />
@@ -145,93 +127,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="ChangeSelAddress">
-      <soap12:operation soapAction="http://tempuri.org/IEDSService/ChangeSelAddress" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="ChangeSelZone">
-      <soap12:operation soapAction="http://tempuri.org/IEDSService/ChangeSelZone" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="QueryEnergy">
-      <soap12:operation soapAction="http://tempuri.org/IEDSService/QueryEnergy" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetUpsState">
-      <soap12:operation soapAction="http://tempuri.org/IEDSService/GetUpsState" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-  </wsdl:binding>
-  <wsdl:binding name="NetTcpBinding_IEDSService" type="tns:IEDSService">
-    <wsp:PolicyReference URI="#NetTcpBinding_IEDSService_policy" />
-    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
-    <wsdl:operation name="UpdateDevice">
-      <soap12:operation soapAction="http://tempuri.org/IEDSService/UpdateDevice" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="RemoteControl">
-      <soap12:operation soapAction="http://tempuri.org/IEDSService/RemoteControl" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="QueryData">
-      <soap12:operation soapAction="http://tempuri.org/IEDSService/QueryData" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="QueryTrip">
-      <soap12:operation soapAction="http://tempuri.org/IEDSService/QueryTrip" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="ChangeSelAddress">
-      <soap12:operation soapAction="http://tempuri.org/IEDSService/ChangeSelAddress" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="ChangeSelZone">
-      <soap12:operation soapAction="http://tempuri.org/IEDSService/ChangeSelZone" style="document" />
+    <wsdl:operation name="ChangeDeviceLiveness">
+      <soap12:operation soapAction="http://tempuri.org/IEDSService/ChangeDeviceLiveness" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -263,12 +160,6 @@
       <soap12:address location="http://localhost:7070/EDSService" />
       <wsa10:EndpointReference>
         <wsa10:Address>http://localhost:7070/EDSService</wsa10:Address>
-      </wsa10:EndpointReference>
-    </wsdl:port>
-    <wsdl:port name="NetTcpBinding_IEDSService" binding="tns:NetTcpBinding_IEDSService">
-      <soap12:address location="net.tcp://localhost:7071/EDSService" />
-      <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:7071/EDSService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>

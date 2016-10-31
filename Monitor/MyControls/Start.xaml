@@ -8,7 +8,7 @@
              d:DesignHeight="610" d:DesignWidth="1000">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="/Monitor;component/Images/start.png"/>
+            <ImageBrush ImageSource="/EDS;component/Images/start.png"/>
         </Grid.Background>
         <Grid Width="360" Height="450" HorizontalAlignment="Right" Margin="0,25,25,0" VerticalAlignment="Top">
             <materialDesign:Card Width="360" Height="420">
@@ -19,14 +19,14 @@
                     </Grid.RowDefinitions>
                     <Label Content="监控区域选择" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="28" Foreground="White">
                         <Label.Background>
-                            <ImageBrush ImageSource="/Monitor;component/Images/title.png"/>
+                            <ImageBrush ImageSource="/EDS;component/Images/title.png"/>
                         </Label.Background>
                     </Label>
                     <Grid Grid.Row="1">
                         <Grid.Background>
-                            <ImageBrush ImageSource="/Monitor;component/Images/option.png"/>
+                            <ImageBrush ImageSource="/EDS;component/Images/option.png"/>
                         </Grid.Background>
-                        <Button Name="bnt_1" Margin="127,76,0,0" Background="#FFEF7754" Height="63" HorizontalAlignment="Left" Width="178" VerticalAlignment="Top" Click="Button_Click">拉杆箱</Button>
+                        <Button Name="btn_1" Margin="127,76,0,0" Background="#FFEF7754" Height="63" HorizontalAlignment="Left" Width="178" VerticalAlignment="Top" Click="Button_Click">拉杆箱</Button>
                         <Button Name="btn_2" Margin="127,152,0,0" Background="#FF6BB8C8" Height="63" HorizontalAlignment="Left" Width="178" VerticalAlignment="Top" Click="Button_Click">成宇配电房</Button>
                         <Button Name="btn_3" Margin="127,228,0,0" Background="#FF936F57" Height="63" HorizontalAlignment="Left" Width="178" VerticalAlignment="Top" Click="Button_Click">测试</Button>
                     </Grid>

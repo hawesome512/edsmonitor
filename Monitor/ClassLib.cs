@@ -7,6 +7,15 @@ using System.Runtime.Serialization;
 
 namespace Monitor
 {
+        public class EnterDeviceArgs : EventArgs
+        {
+                public Device Dv;
+                public EnterDeviceArgs(Device dv)
+                {
+                        Dv = dv;
+                }
+        }
+
         public class DValues : INotifyPropertyChanged
         {
                 public event PropertyChangedEventHandler PropertyChanged;
@@ -43,11 +52,23 @@ namespace Monitor
         public struct DState
         {
 
-                public Run RunState;
+                public Run RunState
+                {
+                        get;
+                        set;
+                }
 
-                public SwitchStatus SwitchState;
+                public SwitchStatus SwitchState
+                {
+                        get;
+                        set;
+                }
 
-                public ControlMode ControlState;
+                public ControlMode ControlState
+                {
+                        get;
+                        set;
+                }
 
                 public string ErrorMsg
                 {
@@ -60,7 +81,7 @@ namespace Monitor
                 {
                         get
                         {
-                                return Math.Round(_Ia, 1);
+                                return Math.Round(_Ia, 3);
                         }
                         set
                         {
@@ -73,7 +94,7 @@ namespace Monitor
                 {
                         get
                         {
-                                return Math.Round(_Ib, 1);
+                                return Math.Round(_Ib, 3);
                         }
                         set
                         {
@@ -86,7 +107,7 @@ namespace Monitor
                 {
                         get
                         {
-                                return Math.Round(_Ic,1);
+                                return Math.Round(_Ic,3);
                         }
                         set
                         {
@@ -99,7 +120,7 @@ namespace Monitor
                 {
                         get
                         {
-                                return Math.Round(_Ua, 1);
+                                return Math.Round(_Ua, 3);
                         }
                         set
                         {
@@ -112,7 +133,7 @@ namespace Monitor
                 {
                         get
                         {
-                                return Math.Round(_Ub, 1);
+                                return Math.Round(_Ub, 3);
                         }
                         set
                         {
@@ -125,7 +146,7 @@ namespace Monitor
                 {
                         get
                         {
-                                return Math.Round(_Uc, 1);
+                                return Math.Round(_Uc, 3);
                         }
                         set
                         {

@@ -19,7 +19,7 @@
             <ColumnDefinition Width="80"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <Image Name="img_state" Grid.ColumnSpan="5" Source="/Monitor;component/Images/M.png"/>
+        <Image Name="img_state" Grid.ColumnSpan="5" Source="/EDS;component/Images/M.png"/>
         <Button Name="btn_startA" Grid.Row="1" Grid.Column="1" Content="启动 A" Height="30" Click="btn_startA_Click"/>
         <Button Name="btn_startB" Grid.Row="1" Grid.Column="3" Content="启动 B" Height="30" Click="btn_startB_Click"/>
         <Button Name="btn_reset" Grid.Row="2" Grid.Column="1" Content="复位" Height="30" Click="btn_reset_Click"/>

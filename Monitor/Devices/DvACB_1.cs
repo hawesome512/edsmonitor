@@ -294,7 +294,7 @@ namespace Monitor
                 public override List<Record> QueryData(DateTime start, DateTime end)
                 {
                         if (!Common.IsServer)
-                                return MyCom.QueryData(Address, start, end);
+                                return MyCom.QueryData(ZID,Address, start, end);
 
                         using (EDSEntities context = new EDSEntities())
                         {

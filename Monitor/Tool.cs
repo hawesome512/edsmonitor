@@ -236,9 +236,9 @@ namespace Monitor
                         return d;
                 }
 
-                public static void FindDevicesParents()
+                public static void FindDevicesParents(List<Device> devices)
                 {
-                        foreach (Device dv in Common.OrdDevices)
+                        foreach (Device dv in devices)
                         {
                                 List<Device> parents = new List<Device>();
                                 //待优化：父级不应该包括本身
@@ -246,16 +246,54 @@ namespace Monitor
                                 Device dvP=dv;
                                 while (dvP.ParentAddr != 0)
                                 {
-                                        dvP = Common.OrdDevices.Find(d => d.ZID == dvP.ZID && d.Address == dvP.ParentAddr);
+                                        dvP = devices.Find(d => d.ZID == dvP.ZID && d.Address == dvP.ParentAddr);
                                         parents.Add(dvP);
                                 }
                                 dv.Dependence = parents;
                         }
                 }
 
+                public static List<string> GetDeviceDependence(Device device)
+                {
+                        List<string> sources = new List<string>();
+                        for (int i = 0; i < device.Dependence.Count; i++)
+                        {
+                                sources.Add(string.Format("[{0}].State", i));
+                        }
+                        return sources;
+                }
+
                 public static double Ndb2db(double? source)
                 {
                         return source == null ? 0 : (double)source;
+                }
+
+                /// <summary>
+                /// 发送HTTP请求
+                /// </summary>
+                /// <param name="url">请求的URL</param>
+                /// <param name="param">请求的参数</param>
+                /// <returns>请求结果</returns>
+                public static int CheckDateType(DateTime date)
+                {
+                        string strURL = "http://apis.baidu.com/xiaogg/holiday/holiday?d=" + date.ToString("yyyyMMdd");
+                        System.Net.HttpWebRequest request;
+                        request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(strURL);
+                        request.Method = "GET";
+                        // 添加header
+                        request.Headers.Add("apikey", "1c7b90c856a0a68c505591a57e4bdaea");
+                        System.Net.HttpWebResponse response;
+                        response = (System.Net.HttpWebResponse)request.GetResponse();
+                        System.IO.Stream s;
+                        s = response.GetResponseStream();
+                        string StrDate = "";
+                        string strValue = "";
+                        System.IO.StreamReader Reader = new System.IO.StreamReader(s, Encoding.UTF8);
+                        while ((StrDate = Reader.ReadLine()) != null)
+                        {
+                                strValue += StrDate + "\r\n";
+                        }
+                        return int.Parse(strValue.Substring(0, 1));
                 }
         }
 }

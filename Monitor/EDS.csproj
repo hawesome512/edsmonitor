@@ -1,0 +1,561 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ApplicationIcon>Images\monitor.ico</ApplicationIcon>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <PublishUrl>发布\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C1E2C9B3-A161-474C-8E31-E74224445700}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Monitor</RootNamespace>
+    <AssemblyName>EDS</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <ExpressionBlendVersion>5.0.40218.0</ExpressionBlendVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CircularGauge, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\CircularGauge\bin\Release\CircularGauge.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\AutoLotDAL\AutoLotDAL\bin\Debug\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialDesignColors">
+      <HintPath>..\packages\MaterialDesignColors.1.1.2\lib\net45\MaterialDesignColors.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialDesignThemes.Wpf">
+      <HintPath>..\packages\MaterialDesignThemes.1.5.0.523\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Drawing" />
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="RadialMenu, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>G:\Users\haisheng\Desktop\RadialMenu-master\RadialMenu\bin\Debug\RadialMenu.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="TopSdk">
+      <HintPath>..\..\..\Downloads\alidayu\TopSdk.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="WPFSpark">
+      <HintPath>bin\Debug\WPFSpark.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+    <Compile Include="MyControls\BreakerMenu.xaml.cs">
+      <DependentUpon>BreakerMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigSetting.cs" />
+    <Compile Include="DataLib.cs" />
+    <Compile Include="MyControls\DeviceList.xaml.cs">
+      <DependentUpon>DeviceList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\DvACREL.cs" />
+    <Compile Include="Devices\DvMIC.cs" />
+    <Compile Include="Devices\DvACB_1.cs" />
+    <Compile Include="MyControls\Meter3P.xaml.cs">
+      <DependentUpon>Meter3P.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControls\Login.xaml.cs">
+      <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControls\Plan.xaml.cs">
+      <DependentUpon>Plan.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControls\Power.xaml.cs">
+      <DependentUpon>Power.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControls\Power_Mains.xaml.cs">
+      <DependentUpon>Power_Mains.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControls\Progress.xaml.cs">
+      <DependentUpon>Progress.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\ServiceReference1\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service\EDSService.cs" />
+    <Compile Include="Service\IEDSService.cs" />
+    <Compile Include="MyControls\Breaker.xaml.cs">
+      <DependentUpon>Breaker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControls\Account.xaml.cs">
+      <DependentUpon>Account.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControls\ATS.xaml.cs">
+      <DependentUpon>ATS.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ClassLib.cs" />
+    <Compile Include="Com.cs" />
+    <Compile Include="ComConverter.cs" />
+    <Compile Include="Common.cs" />
+    <Compile Include="Converts.cs" />
+    <Compile Include="Devices\DvMCCB_BMA.cs" />
+    <Compile Include="Devices\Device.cs" />
+    <Compile Include="MyControls\DevicePage.xaml.cs">
+      <DependentUpon>DevicePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\DvACB_2.cs" />
+    <Compile Include="MyControls\Energy.xaml.cs">
+      <DependentUpon>Energy.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControls\ImageButton.cs" />
+    <Compile Include="MyControls\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControls\ATSRemote.xaml.cs">
+      <DependentUpon>ATSRemote.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControls\Meter1P.xaml.cs">
+      <DependentUpon>Meter1P.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControls\MIC.xaml.cs">
+      <DependentUpon>MIC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControls\MICRemote.xaml.cs">
+      <DependentUpon>MICRemote.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControls\RecordPage.xaml.cs">
+      <DependentUpon>RecordPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControls\Setting.xaml.cs">
+      <DependentUpon>Setting.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControls\UIChart.cs" />
+    <Compile Include="MyControls\MsgBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MyControls\Network.xaml.cs">
+      <DependentUpon>Network.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Sms.cs" />
+    <Compile Include="MyControls\Start.xaml.cs">
+      <DependentUpon>Start.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tool.cs" />
+    <Compile Include="Devices\DvATS.cs" />
+    <Compile Include="Devices\DvMCCB_BM.cs" />
+    <Compile Include="MyControls\Triangle.xaml.cs">
+      <DependentUpon>Triangle.xaml</DependentUpon>
+    </Compile>
+    <Page Include="MyControls\BreakerMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\DeviceList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\Breaker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\Account.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\ATS.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\DevicePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MyControls\Energy.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\Meter3P.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\Login.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\LoginPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="MyControls\ATSRemote.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\Dial.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MyControls\Meter1P.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\MIC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\MICRemote.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\OnOff.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MyControls\Plan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\Power_Mains.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\Progress.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\RecordPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\Setting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\Tab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MyControls\Triangle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\Network.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MyControls\Power.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyControls\Start.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MyControls\Dial.xaml.cs">
+      <DependentUpon>Dial.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControls\OnOff.xaml.cs">
+      <DependentUpon>OnOff.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyControls\Tab.xaml.cs">
+      <DependentUpon>Tab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Resource Include="Images\Types\METER_1P.png" />
+    <Resource Include="Images\Types\METER_3P.png" />
+    <Resource Include="Images\Types\BW2000_ON.png" />
+    <Resource Include="Images\Types\BMA100_ON.png" />
+    <Resource Include="Images\Types\BMA160_ON.png" />
+    <Resource Include="Images\Types\BMA250_ON.png" />
+    <Resource Include="Images\Types\BMA400_ON.png" />
+    <Resource Include="Images\Types\BMA630_ON.png" />
+    <Resource Include="Images\Types\BMA800_ON.png" />
+    <Resource Include="Images\Types\ATS.png" />
+    <Resource Include="Images\Types\BMA100.png" />
+    <Resource Include="Images\Types\BMA160.png" />
+    <Resource Include="Images\Types\BMA250.png" />
+    <Resource Include="Images\Types\BMA400.png" />
+    <Resource Include="Images\Types\BMA630.png" />
+    <Resource Include="Images\Types\BMA800.png" />
+    <Resource Include="Images\Types\BW2000.png" />
+    <Resource Include="Images\Types\MIC.png" />
+    <Resource Include="Images\menu\close.png" />
+    <Resource Include="Images\menu\detail.png" />
+    <Resource Include="Images\menu\open.png" />
+    <Resource Include="Images\menu\plan.png" />
+    <Resource Include="Images\menu\toB.png" />
+    <Resource Include="Images\menu\toL.png" />
+    <Resource Include="Images\menu\toR.png" />
+    <Resource Include="Images\menu\toT.png" />
+    <Resource Include="Images\menu\closed.png" />
+    <None Include="EDSHelp.pdf" />
+    <None Include="Service References\ServiceReference1\Monitor.ServiceReference1.Record.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\ServiceReference1\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\ServiceReference1\configuration.svcinfo" />
+    <None Include="Service References\ServiceReference1\configuration91.svcinfo" />
+    <None Include="Service References\ServiceReference1\EDSService.disco" />
+    <None Include="Properties\DataSources\EDSLot.Energy.datasource" />
+    <None Include="Properties\DataSources\EDSLot.Record1.datasource" />
+    <None Include="Properties\DataSources\EDSLot.Record_MCCB.datasource" />
+    <None Include="Properties\DataSources\EDSLot.Record.datasource" />
+    <None Include="Properties\DataSources\EDSLot.Trip.datasource" />
+    <EmbeddedResource Include="MyControls\MsgBox.resx">
+      <DependentUpon>MsgBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Config\MIC.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\ACREL.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Grid.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="Service References\ServiceReference1\EDSService.wsdl" />
+    <None Include="Service References\ServiceReference1\EDSService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference1\EDSService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference1\EDSService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference1\EDSService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference1\EDSService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Resource Include="Images\down.png" />
+    <Resource Include="Images\up.png" />
+    <Content Include="Config\DeviceList.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Images\M.png" />
+    <Content Include="Config\SMS.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Resource Include="Images\title.png" />
+    <Resource Include="Images\search.png" />
+    <Resource Include="Images\search_v.png" />
+    <Resource Include="Images\指示图.png" />
+    <Resource Include="Images\power_off.png" />
+    <Resource Include="Images\power_on.png" />
+    <Resource Include="Images\done.png" />
+    <Resource Include="Images\wrong.png" />
+    <Resource Include="Images\monitor.ico" />
+    <Resource Include="Images\start.png" />
+    <Resource Include="Images\option.png" />
+    <Content Include="Config\DeviceList_0.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\ACB_1.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Images\BG_client.png" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\01.png" />
+    <Resource Include="Images\02.png" />
+    <Resource Include="Images\bg.png" />
+    <Resource Include="Images\关闭.png" />
+    <Resource Include="Images\最小化.png" />
+    <Resource Include="Images\设置菜单.png" />
+    <Resource Include="Images\返回.png" />
+    <Resource Include="Images\退出系统.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Config\ATS.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\MCCB_BMA.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\ATS_en.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Images\ATS\ATS_OPEN.png" />
+    <Resource Include="Images\ATS\ATS_N.png" />
+    <Resource Include="Images\ATS\ATS_OFF.png" />
+    <Resource Include="Images\ATS\ATS_R.png" />
+    <Resource Include="Images\ATS\ATS_toN.png" />
+    <Resource Include="Images\ATS\ATS_toS.png" />
+    <Resource Include="Images\ATS\ATS_uk.png" />
+    <Resource Include="Images\登录.png" />
+    <Resource Include="Images\content.jpg" />
+    <Resource Include="Images\正常.png" />
+    <Resource Include="Images\最大化.png" />
+    <Resource Include="Images\here.png" />
+    <Resource Include="Images\run.png" />
+    <Resource Include="Images\config.png" />
+    <Resource Include="Images\unknown.png" />
+    <Resource Include="Images\close.png" />
+    <Resource Include="Images\open.png" />
+    <Resource Include="Images\detial.png" />
+    <Resource Include="Images\in.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Config\ACB_2.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Config\MCCB_BM.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EDSLot\EDSLot.csproj">
+      <Project>{77bf0430-1a26-445d-bd47-dc077a688a4a}</Project>
+      <Name>EDSLot</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\ServiceReference1\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

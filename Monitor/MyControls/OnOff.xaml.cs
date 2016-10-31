@@ -25,9 +25,12 @@ namespace Monitor
 
                 private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
                 {
-                        toggleSwitch.Width = e.NewSize.Width;
-                        toggleSwitch.Height = e.NewSize.Height;
-                        toggleSwitch.CornerRadius =new CornerRadius(e.NewSize.Height / 2);
+                        double facotr1 = e.NewSize.Width / 98;
+                        double factor2 = e.NewSize.Height / 37;
+                        double factor = facotr1 > factor2 ? factor2 : facotr1;
+                        toggleSwitch.Width = 98*factor;
+                        toggleSwitch.Height = 37*factor;
+                        toggleSwitch.CornerRadius = toggleSwitch.ThumbCornerRadius = new CornerRadius(toggleSwitch.Height / 2);
                 }
 	}
 }

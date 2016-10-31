@@ -71,14 +71,17 @@ namespace Monitor
                 void remote()
                 {
                         var result = device.RemoteControl(command);
-                        if (result.Length == 1)
+                        this.Dispatcher.Invoke(new Action(() =>
                         {
-                                MsgBox.Show(string.Format("{0}  {1}操作完成.", device.Name, alias), "Succeed", MsgBox.Buttons.OK, MsgBox.Icon.Shield, MsgBox.AnimateStyle.FadeIn);
-                        }
-                        else
-                        {
-                                MsgBox.Show(string.Format("{0} {1}操作失败.", device.Name, alias), "Fail", MsgBox.Buttons.OK, MsgBox.Icon.Error, MsgBox.AnimateStyle.FadeIn);
-                        }
+                                if (result.Length == 1)
+                                {
+                                        MsgBox.Show(string.Format("{0}  {1}操作完成.", device.Name, alias), "Succeed", MsgBox.Buttons.OK, MsgBox.Icons.Shield);
+                                }
+                                else
+                                {
+                                        MsgBox.Show(string.Format("{0} {1}操作失败.", device.Name, alias), "Fail", MsgBox.Buttons.OK, MsgBox.Icons.Error);
+                                }
+                        }));
                 }
         }
 }

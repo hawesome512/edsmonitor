@@ -18,20 +18,20 @@
             <ColumnDefinition Width="1*"></ColumnDefinition>
             <ColumnDefinition Width="50"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Image Name="img_state" Grid.ColumnSpan="5" Source="/Monitor;component/Images/ATS/ATS_uk.png"/>
+        <Image Name="img_state" Grid.ColumnSpan="5" Source="/EDS;component/Images/ATS/ATS_uk.png"/>
         <Button Name="btn_ton" Grid.Row="1" Grid.Column="0" Margin="0,0,0,0" Height="60" Width="50" Click="btn_ton_Click">
             <Button.Background>
-                <ImageBrush ImageSource="/Monitor;component/Images/ATS/ATS_toN.png"/>
+                <ImageBrush ImageSource="/EDS;component/Images/ATS/ATS_toN.png"/>
             </Button.Background>
         </Button>
         <Button Name="btn_off" Grid.Row="1" Grid.Column="2" Margin="0,0,0,0" Height="60" Width="50" Click="btn_off_Click">
             <Button.Background>
-                <ImageBrush ImageSource="/Monitor;component/Images/ATS/ATS_off.png"/>
+                <ImageBrush ImageSource="/EDS;component/Images/ATS/ATS_off.png"/>
             </Button.Background>
         </Button>
         <Button Name="btn_tos" Grid.Row="1" Grid.Column="4" Margin="0,0,0,0" Height="60" Width="50" Click="btn_tos_Click">
             <Button.Background>
-                <ImageBrush ImageSource="/Monitor;component/Images/ATS/ATS_tos.png"/>
+                <ImageBrush ImageSource="/EDS;component/Images/ATS/ATS_tos.png"/>
             </Button.Background>
         </Button>
     </Grid>

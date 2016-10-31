@@ -27,17 +27,16 @@ namespace Monitor
                         };
                         myTab.RemoteModified += (s, o) =>
                         {
+                                device.MyCom.ChangeDeviceLiveness(device.ZID, device.Address, 6);
                                 progress.end(o.Fail);
                                 if (o.Fail)
                                 {
-                                        MsgBox.Show("操作失败，请稍后重试", "失败", MsgBox.Buttons.OK, MsgBox.Icon.Error, MsgBox.AnimateStyle.FadeIn);
+                                        this.Dispatcher.Invoke(new Action(() =>
+                                        {
+                                                MsgBox.Show("操作失败，请稍后重试", "失败", MsgBox.Buttons.OK, MsgBox.Icons.Error);
+                                        }));
                                 }
                         };
-                }
-
-                public byte GetAddr()
-                {
-                        return device.Address;
                 }
 
                 public void InitDevice(Device _device, Common common)
@@ -65,7 +64,7 @@ namespace Monitor
                         bind3.Converter = new StringToVisibility();
                         lbl_error.SetBinding(Label.VisibilityProperty, bind3);
 
-                        string packUri = string.Format("pack://application:,,,/Monitor;component/Images/Types/{0}.jpg", device.Name);
+                        string packUri = string.Format("pack://application:,,,/EDS;component/Images/Types/{0}.png", device.Name);
                         dvImg.Source = new ImageSourceConverter().ConvertFromString(packUri) as ImageSource;
                 }
 
@@ -120,5 +119,11 @@ namespace Monitor
                         LayoutRoot.Children.Add(border);
                         return border;
                 }
+
+                //private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+                //{
+                //        int liveness=this.Visibility==Visibility.Visible?1:-1;
+                //        device.MyCom.ChangeDeviceLiveness(device.ZID, device.Address, liveness);
+                //}
         }
 }

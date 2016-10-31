@@ -34,7 +34,7 @@
                                ThumbWidth="35"
                                BorderThickness="2"
                                CheckedForeground="White"
-                               CheckedText="On"
+                               CheckedText="ON"
                                CornerRadius="19"
                                FontFamily="Tahoma"
                                FontSize="18"
@@ -47,7 +47,7 @@
                                ThumbGlowColor="Gray"
                                ThumbShineCornerRadius="20,20,0,0"
                                UncheckedForeground="Black"
-                               UncheckedText="Off"
+                               UncheckedText="OFF"
                                Width="98"
                                UncheckedBackground="{StaticResource UncheckedStateBrush}">
             <wpfspark:ToggleSwitch.BorderBrush>

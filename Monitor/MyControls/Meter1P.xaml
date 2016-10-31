@@ -1,0 +1,88 @@
+﻿<UserControl x:Class="Monitor.Meter1P"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="240" d:DesignWidth="240" FontSize="14">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="65"></ColumnDefinition>
+            <ColumnDefinition Width="40"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="1" Grid.Row="1" Name="MeterRect">
+            <Ellipse Name="M_1" Width="20" Height="20" Stroke="SeaGreen" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Line Name="M_2" X1="20" Y1="15" X2="50" Y2="15" Stroke="SeaGreen"/>
+            <Line Name="M_3" X1="25" Y1="22" X2="35" Y2="8" Stroke="SeaGreen"/>
+            <Line Name="M_4" X1="30" Y1="22" X2="40" Y2="8" Stroke="SeaGreen"/>
+        </Grid>
+        <!--<Label Name="DeviceName" Grid.Row="1" Content="ACR10E" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Center" Style="{StaticResource LabelButton}"/>-->
+        <Grid Name="MeterShow" Grid.RowSpan="3" Grid.Column="2" Visibility="Hidden">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <!--U-->
+            <Grid Grid.Row="2">
+                <Label Content="U" HorizontalAlignment="Right" Margin="0,0,100,0" Foreground="Orange" FontWeight="Bold"/>
+                <Label Name="U" Content="0.0" HorizontalAlignment="Right" Margin="0,0,45,0" Foreground="Orange"/>
+                <Label Content="V" Margin="85,0,0,0" Foreground="Orange"/>
+            </Grid>
+            <!--I-->
+            <Grid Grid.Row="3">
+                <Label Content="I" HorizontalAlignment="Right" Margin="0,0,100,0" Foreground="Green" FontWeight="Bold" />
+                <Label Name="I" Content="0.0" HorizontalAlignment="Right" Margin="0,0,45,0" Foreground="Green" />
+                <Label Content="A" Margin="85,0,0,0" Foreground="Green" />
+            </Grid>
+            <!--F-->
+            <Grid Grid.Row="0" Visibility="Hidden">
+                <Label Content="FR" HorizontalAlignment="Right" Margin="0,0,100,0" Foreground="Red"  FontWeight="Bold"/>
+                <Label Name="FR" Content="0.0" HorizontalAlignment="Right" Margin="0,0,45,0" Foreground="Red" />
+                <Label Content="Hz" Margin="85,0,0,0" Foreground="Red" />
+            </Grid>
+            <!--PF-->
+            <Grid Grid.Row="0" Visibility="Hidden">
+                <Label Content="PF" HorizontalAlignment="Right" Margin="0,0,100,0" Foreground="Brown"  FontWeight="Bold"/>
+                <Label Name="PF" Content="0.0" HorizontalAlignment="Right" Margin="0,0,45,0" Foreground="Brown" />
+                <Label Content="%" Margin="85,0,0,0" Foreground="Brown" />
+            </Grid>
+            <!--P-->
+            <Grid Grid.Row="0" Visibility="Hidden">
+                <Label Content="P" HorizontalAlignment="Right" Margin="0,0,100,0" Foreground="Chocolate"  FontWeight="Bold"/>
+                <Label Name="P"  Content="0.0" HorizontalAlignment="Right" Margin="0,0,45,0" Foreground="Chocolate" />
+                <Label Content="W" Margin="85,0,0,0" Foreground="Chocolate" />
+            </Grid>
+            <!--Q-->
+            <Grid Grid.Row="0" Visibility="Hidden">
+                <Label Content="Q" HorizontalAlignment="Right" Margin="0,0,100,0" Foreground="LawnGreen"  FontWeight="Bold"/>
+                <Label Name="Q"  Content="0.0" HorizontalAlignment="Right" Margin="0,0,45,0" Foreground="LimeGreen" />
+                <Label Content="Val" Margin="85,0,0,0" Foreground="LimeGreen" />
+            </Grid>
+            <!--PE-->
+            <Grid Grid.Row="4">
+                <Label Content="PE" HorizontalAlignment="Right" Margin="0,0,100,0" Foreground="Red"  FontWeight="Bold"/>
+                <Label Name="PE" Content="0.0" HorizontalAlignment="Right" Margin="0,0,45,0" Foreground="Red" />
+                <Label Content="kWh" Margin="85,0,0,0" Foreground="Red" />
+            </Grid>
+            <!--QE-->
+            <Grid Grid.Row="0" Visibility="Hidden">
+                <Label Content="QE" HorizontalAlignment="Right" Margin="0,0,100,0" Foreground="Olive"  FontWeight="Bold"/>
+                <Label Name="QE" Content="0.0" HorizontalAlignment="Right" Margin="0,0,45,0" Foreground="Olive" />
+                <Label Content="Varh" Margin="85,0,0,0" Foreground="Olive" />
+            </Grid>
+        </Grid>
+        <Image Name="MeterImage" Grid.RowSpan="3" Grid.Column="2" Width="60" Height="60" HorizontalAlignment="Left" Source="/EDS;component/Images/Types/METER_1P.png" Margin="10,-25,0,0"/>
+    </Grid>
+</UserControl>

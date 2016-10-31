@@ -6,6 +6,7 @@
   <xs:element name="UpdateDevice">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="zid" type="xs:unsignedByte" />
         <xs:element minOccurs="0" name="address" type="xs:unsignedByte" />
         <xs:element minOccurs="0" name="zoneIndex" type="xs:int" />
       </xs:sequence>
@@ -21,6 +22,7 @@
   <xs:element name="RemoteControl">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="zid" type="xs:unsignedByte" />
         <xs:element minOccurs="0" name="snd" nillable="true" type="xs:base64Binary" />
       </xs:sequence>
     </xs:complexType>
@@ -35,6 +37,7 @@
   <xs:element name="QueryData">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="zid" type="xs:unsignedByte" />
         <xs:element minOccurs="0" name="address" type="xs:unsignedByte" />
         <xs:element minOccurs="0" name="start" type="xs:dateTime" />
         <xs:element minOccurs="0" name="end" type="xs:dateTime" />
@@ -51,6 +54,7 @@
   <xs:element name="QueryTrip">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="zid" type="xs:unsignedByte" />
         <xs:element minOccurs="0" name="address" type="xs:unsignedByte" />
         <xs:element minOccurs="0" name="start" type="xs:dateTime" />
         <xs:element minOccurs="0" name="end" type="xs:dateTime" />
@@ -64,26 +68,16 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ChangeSelAddress">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="address" type="xs:unsignedByte" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ChangeSelAddressResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ChangeSelZone">
+  <xs:element name="ChangeDeviceLiveness">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="zid" type="xs:unsignedByte" />
+        <xs:element minOccurs="0" name="address" type="xs:unsignedByte" />
+        <xs:element minOccurs="0" name="liveness" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ChangeSelZoneResponse">
+  <xs:element name="ChangeDeviceLivenessResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>

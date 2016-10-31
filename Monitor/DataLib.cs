@@ -14,7 +14,7 @@ namespace Monitor
                 {
                         if (!Common.IsServer)
                         {
-                                return Common.SelDevices.First().MyCom.QueryEnergy(addrs, start, end);
+                                return Common.ZoneDevices.First().Value.First().MyCom.QueryEnergy(addrs, start, end);
                         }
                         else
                         {

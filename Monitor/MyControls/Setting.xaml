@@ -15,7 +15,7 @@
         <Border BorderBrush="SeaGreen" BorderThickness="1" Grid.RowSpan="3"></Border>
         <Grid Grid.Row="0">
             <Grid.Background>
-                <ImageBrush ImageSource="/Monitor;component/Images/title.png" Stretch="None"/>
+                <ImageBrush ImageSource="/EDS;component/Images/title.png" Stretch="None"/>
             </Grid.Background>
             <Label Content="设置"/>
             <local:ImageButton x:Name="btn_close" HorizontalAlignment="Right" Width="25" Height="25" VerticalAlignment="Top"  ImgPath="/Images/关闭.png" Template="{StaticResource ImageButtonTemplate}" Click="btn_close_Click"/>
@@ -29,9 +29,12 @@
             </StackPanel>
             <Grid Margin="100,10,10,0" Background="#55d3d3d3">
                 <Grid Name="grid_com" Visibility="{Binding IsChecked, Converter={StaticResource BoolToVisibilityConverter}, ElementName=rb_com}">
-                    <RadioButton Name="rb_client" GroupName="com"
-                                  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,-100,0,0">客户端</RadioButton>
-                    <RadioButton Name="rb_server" GroupName="com" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0">服务器</RadioButton>
+                    <RadioButton Name="rb_server" GroupName="com"
+                                  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,-100,0,0">服务器</RadioButton>
+                    <RadioButton Name="rb_client_lan" GroupName="com" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0">内网访问</RadioButton>
+                    <TextBox Name="txt_lan" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="120,0,0,0" Text="http://172.16.65.88:7070/EDSService"/>
+                    <RadioButton Name="rb_client_wan" GroupName="com" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,100,0,0">外网访问</RadioButton>
+                    <TextBox Name="txt_wan" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="120,100,0,0" Text="http://218.97.3.107:7070/EDSService"/>
                 </Grid>
                 <Grid Name="grid_data" Visibility="{Binding IsChecked, Converter={StaticResource BoolToVisibilityConverter}, ElementName=rb_data}">
                     <Label Margin="20,10,0,0" Content="数据库连接地址:" VerticalAlignment="Top" HorizontalAlignment="Left"/>
@@ -51,7 +54,7 @@
             </Grid>
         </Grid>
         <Grid Grid.Row="2">
-            <Label Content="*重启生效" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10"/>
+            <CheckBox Name="cBox_restart" IsChecked="True" Content="重启生效" Margin="10" VerticalAlignment="Center" />
             <Button Name="btn_save" HorizontalAlignment="Right" Margin="0,0,10,0" Content="确定" Width="80" Height="35" Click="btn_save_Click" IsDefault="True"/>
             <Button HorizontalAlignment="Right" Margin="0,0,100,0" Background="#55009688" Content="取消" Width="80" Height="35" Click="btn_close_Click" IsCancel="True"/>
         </Grid>

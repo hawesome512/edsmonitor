@@ -35,7 +35,6 @@ namespace Monitor
                         this.StartPosition = FormStartPosition.CenterScreen;
                         this.Padding = new System.Windows.Forms.Padding(3);
                         this.Width = 400;
-
                         _lblTitle = new Label();
                         _lblTitle.ForeColor = Color.White;
                         _lblTitle.Font = new System.Drawing.Font("Segoe UI", 18);
@@ -150,7 +149,7 @@ namespace Monitor
                         return _buttonResult;
                 }
 
-                public static DialogResult Show(string message, string title, Buttons buttons, Icon icon)
+                public static DialogResult Show(string message, string title, Buttons buttons, Icons icon)
                 {
                         _msgBox = new MsgBox();
                         _msgBox._lblMessage.Text = message;
@@ -160,12 +159,14 @@ namespace Monitor
                         MsgBox.InitIcon(icon);
 
                         _msgBox.Size = MsgBox.MessageSize(message);
-                        _msgBox.ShowDialog();
+                        var owner = System.Windows.Application.Current.MainWindow;
+                        IWin32Window win32 = new WindowWrapper(new System.Windows.Interop.WindowInteropHelper(owner).Handle);
+                        _msgBox.ShowDialog(win32);
                         MessageBeep(0);
                         return _buttonResult;
                 }
 
-                public static DialogResult Show(string message, string title, Buttons buttons, Icon icon, AnimateStyle style)
+                public static DialogResult Show(string message, string title, Buttons buttons, Icons icon, AnimateStyle style)
                 {
                         _msgBox = new MsgBox();
                         _msgBox._lblMessage.Text = message;
@@ -298,35 +299,35 @@ namespace Monitor
                         }
                 }
 
-                private static void InitIcon(Icon icon)
+                private static void InitIcon(Icons icon)
                 {
                         switch (icon)
                         {
-                                case MsgBox.Icon.Application:
+                                case MsgBox.Icons.Application:
                                         _msgBox._picIcon.Image = SystemIcons.Application.ToBitmap();
                                         break;
 
-                                case MsgBox.Icon.Exclamation:
+                                case MsgBox.Icons.Exclamation:
                                         _msgBox._picIcon.Image = SystemIcons.Exclamation.ToBitmap();
                                         break;
 
-                                case MsgBox.Icon.Error:
+                                case MsgBox.Icons.Error:
                                         _msgBox._picIcon.Image = SystemIcons.Error.ToBitmap();
                                         break;
 
-                                case MsgBox.Icon.Info:
+                                case MsgBox.Icons.Info:
                                         _msgBox._picIcon.Image = SystemIcons.Information.ToBitmap();
                                         break;
 
-                                case MsgBox.Icon.Question:
+                                case MsgBox.Icons.Question:
                                         _msgBox._picIcon.Image = SystemIcons.Question.ToBitmap();
                                         break;
 
-                                case MsgBox.Icon.Shield:
+                                case MsgBox.Icons.Shield:
                                         _msgBox._picIcon.Image = SystemIcons.Shield.ToBitmap();
                                         break;
 
-                                case MsgBox.Icon.Warning:
+                                case MsgBox.Icons.Warning:
                                         _msgBox._picIcon.Image = SystemIcons.Warning.ToBitmap();
                                         break;
                         }
@@ -518,7 +519,7 @@ namespace Monitor
                         YesNoCancel = 6
                 }
 
-                public enum Icon
+                public enum Icons
                 {
                         Application = 1,
                         Exclamation = 2,
@@ -537,6 +538,19 @@ namespace Monitor
                         ZoomIn = 3
                 }
 
+                private void InitializeComponent()
+                {
+                        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MsgBox));
+                        this.SuspendLayout();
+                        // 
+                        // MsgBox
+                        // 
+                        this.ClientSize = new System.Drawing.Size(284, 262);
+                        this.Name = "MsgBox";
+                        this.ResumeLayout(false);
+
+                }
+
         }
 
         class AnimateMsgBox
@@ -549,5 +563,28 @@ namespace Monitor
                         this.FormSize = formSize;
                         this.Style = style;
                 }
+        }
+
+        public class WindowWrapper : System.Windows.Forms.IWin32Window
+        {
+                public WindowWrapper(IntPtr handle)
+                {
+                        _hwnd = handle;
+                }
+
+                public WindowWrapper(System.Windows.Window window)
+                {
+                        _hwnd = new System.Windows.Interop.WindowInteropHelper(window).Handle;
+                }
+
+                public IntPtr Handle
+                {
+                        get
+                        {
+                                return _hwnd;
+                        }
+                }
+
+                private IntPtr _hwnd;
         }
 }

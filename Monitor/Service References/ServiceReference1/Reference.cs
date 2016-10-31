@@ -159,40 +159,34 @@ namespace Monitor.ServiceReference1 {
     public interface IEDSService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/UpdateDevice", ReplyAction="http://tempuri.org/IEDSService/UpdateDeviceResponse")]
-        byte[] UpdateDevice(byte address, int zoneIndex);
+        byte[] UpdateDevice(byte zid, byte address, int zoneIndex);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/UpdateDevice", ReplyAction="http://tempuri.org/IEDSService/UpdateDeviceResponse")]
-        System.Threading.Tasks.Task<byte[]> UpdateDeviceAsync(byte address, int zoneIndex);
+        System.Threading.Tasks.Task<byte[]> UpdateDeviceAsync(byte zid, byte address, int zoneIndex);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/RemoteControl", ReplyAction="http://tempuri.org/IEDSService/RemoteControlResponse")]
-        byte[] RemoteControl(byte[] snd);
+        byte[] RemoteControl(byte zid, byte[] snd);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/RemoteControl", ReplyAction="http://tempuri.org/IEDSService/RemoteControlResponse")]
-        System.Threading.Tasks.Task<byte[]> RemoteControlAsync(byte[] snd);
+        System.Threading.Tasks.Task<byte[]> RemoteControlAsync(byte zid, byte[] snd);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/QueryData", ReplyAction="http://tempuri.org/IEDSService/QueryDataResponse")]
-        Monitor.ServiceReference1.Record[] QueryData(byte address, System.DateTime start, System.DateTime end);
+        Monitor.ServiceReference1.Record[] QueryData(byte zid, byte address, System.DateTime start, System.DateTime end);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/QueryData", ReplyAction="http://tempuri.org/IEDSService/QueryDataResponse")]
-        System.Threading.Tasks.Task<Monitor.ServiceReference1.Record[]> QueryDataAsync(byte address, System.DateTime start, System.DateTime end);
+        System.Threading.Tasks.Task<Monitor.ServiceReference1.Record[]> QueryDataAsync(byte zid, byte address, System.DateTime start, System.DateTime end);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/QueryTrip", ReplyAction="http://tempuri.org/IEDSService/QueryTripResponse")]
-        EDSLot.Trip[] QueryTrip(byte address, System.DateTime start, System.DateTime end);
+        EDSLot.Trip[] QueryTrip(byte zid, byte address, System.DateTime start, System.DateTime end);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/QueryTrip", ReplyAction="http://tempuri.org/IEDSService/QueryTripResponse")]
-        System.Threading.Tasks.Task<EDSLot.Trip[]> QueryTripAsync(byte address, System.DateTime start, System.DateTime end);
+        System.Threading.Tasks.Task<EDSLot.Trip[]> QueryTripAsync(byte zid, byte address, System.DateTime start, System.DateTime end);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/ChangeSelAddress", ReplyAction="http://tempuri.org/IEDSService/ChangeSelAddressResponse")]
-        void ChangeSelAddress(byte address);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/ChangeDeviceLiveness", ReplyAction="http://tempuri.org/IEDSService/ChangeDeviceLivenessResponse")]
+        void ChangeDeviceLiveness(byte zid, byte address, int liveness);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/ChangeSelAddress", ReplyAction="http://tempuri.org/IEDSService/ChangeSelAddressResponse")]
-        System.Threading.Tasks.Task ChangeSelAddressAsync(byte address);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/ChangeSelZone", ReplyAction="http://tempuri.org/IEDSService/ChangeSelZoneResponse")]
-        void ChangeSelZone(byte zid);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/ChangeSelZone", ReplyAction="http://tempuri.org/IEDSService/ChangeSelZoneResponse")]
-        System.Threading.Tasks.Task ChangeSelZoneAsync(byte zid);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/ChangeDeviceLiveness", ReplyAction="http://tempuri.org/IEDSService/ChangeDeviceLivenessResponse")]
+        System.Threading.Tasks.Task ChangeDeviceLivenessAsync(byte zid, byte address, int liveness);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEDSService/QueryEnergy", ReplyAction="http://tempuri.org/IEDSService/QueryEnergyResponse")]
         EDSLot.Energy[] QueryEnergy(int[] addrs, System.DateTime start, System.DateTime end);
@@ -234,52 +228,44 @@ namespace Monitor.ServiceReference1 {
                 base(binding, remoteAddress) {
         }
         
-        public byte[] UpdateDevice(byte address, int zoneIndex) {
-            return base.Channel.UpdateDevice(address, zoneIndex);
+        public byte[] UpdateDevice(byte zid, byte address, int zoneIndex) {
+            return base.Channel.UpdateDevice(zid, address, zoneIndex);
         }
         
-        public System.Threading.Tasks.Task<byte[]> UpdateDeviceAsync(byte address, int zoneIndex) {
-            return base.Channel.UpdateDeviceAsync(address, zoneIndex);
+        public System.Threading.Tasks.Task<byte[]> UpdateDeviceAsync(byte zid, byte address, int zoneIndex) {
+            return base.Channel.UpdateDeviceAsync(zid, address, zoneIndex);
         }
         
-        public byte[] RemoteControl(byte[] snd) {
-            return base.Channel.RemoteControl(snd);
+        public byte[] RemoteControl(byte zid, byte[] snd) {
+            return base.Channel.RemoteControl(zid, snd);
         }
         
-        public System.Threading.Tasks.Task<byte[]> RemoteControlAsync(byte[] snd) {
-            return base.Channel.RemoteControlAsync(snd);
+        public System.Threading.Tasks.Task<byte[]> RemoteControlAsync(byte zid, byte[] snd) {
+            return base.Channel.RemoteControlAsync(zid, snd);
         }
         
-        public Monitor.ServiceReference1.Record[] QueryData(byte address, System.DateTime start, System.DateTime end) {
-            return base.Channel.QueryData(address, start, end);
+        public Monitor.ServiceReference1.Record[] QueryData(byte zid, byte address, System.DateTime start, System.DateTime end) {
+            return base.Channel.QueryData(zid, address, start, end);
         }
         
-        public System.Threading.Tasks.Task<Monitor.ServiceReference1.Record[]> QueryDataAsync(byte address, System.DateTime start, System.DateTime end) {
-            return base.Channel.QueryDataAsync(address, start, end);
+        public System.Threading.Tasks.Task<Monitor.ServiceReference1.Record[]> QueryDataAsync(byte zid, byte address, System.DateTime start, System.DateTime end) {
+            return base.Channel.QueryDataAsync(zid, address, start, end);
         }
         
-        public EDSLot.Trip[] QueryTrip(byte address, System.DateTime start, System.DateTime end) {
-            return base.Channel.QueryTrip(address, start, end);
+        public EDSLot.Trip[] QueryTrip(byte zid, byte address, System.DateTime start, System.DateTime end) {
+            return base.Channel.QueryTrip(zid, address, start, end);
         }
         
-        public System.Threading.Tasks.Task<EDSLot.Trip[]> QueryTripAsync(byte address, System.DateTime start, System.DateTime end) {
-            return base.Channel.QueryTripAsync(address, start, end);
+        public System.Threading.Tasks.Task<EDSLot.Trip[]> QueryTripAsync(byte zid, byte address, System.DateTime start, System.DateTime end) {
+            return base.Channel.QueryTripAsync(zid, address, start, end);
         }
         
-        public void ChangeSelAddress(byte address) {
-            base.Channel.ChangeSelAddress(address);
+        public void ChangeDeviceLiveness(byte zid, byte address, int liveness) {
+            base.Channel.ChangeDeviceLiveness(zid, address, liveness);
         }
         
-        public System.Threading.Tasks.Task ChangeSelAddressAsync(byte address) {
-            return base.Channel.ChangeSelAddressAsync(address);
-        }
-        
-        public void ChangeSelZone(byte zid) {
-            base.Channel.ChangeSelZone(zid);
-        }
-        
-        public System.Threading.Tasks.Task ChangeSelZoneAsync(byte zid) {
-            return base.Channel.ChangeSelZoneAsync(zid);
+        public System.Threading.Tasks.Task ChangeDeviceLivenessAsync(byte zid, byte address, int liveness) {
+            return base.Channel.ChangeDeviceLivenessAsync(zid, address, liveness);
         }
         
         public EDSLot.Energy[] QueryEnergy(int[] addrs, System.DateTime start, System.DateTime end) {

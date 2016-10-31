@@ -18,7 +18,7 @@
         <Border BorderBrush="SeaGreen" BorderThickness="1" Grid.RowSpan="4"></Border>
         <Grid Grid.Row="0">
             <Grid.Background>
-                <ImageBrush ImageSource="/Monitor;component/Images/title.png" Stretch="None"/>
+                <ImageBrush ImageSource="/EDS;component/Images/title.png" Stretch="None"/>
             </Grid.Background>
             <Label Content="修改用户名/密码"/>
             <local:ImageButton x:Name="btn_close" HorizontalAlignment="Right" Width="25" Height="25" VerticalAlignment="Top"  ImgPath="/Images/关闭.png" Template="{StaticResource ImageButtonTemplate}" Click="btn_cancel_Click"/>

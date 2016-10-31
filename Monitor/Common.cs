@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
+using System.Threading;
 
 namespace Monitor
 {
@@ -29,8 +30,8 @@ namespace Monitor
                 }
 
                 public static bool IsServer;
-                public static int  SelectedAddress;
                 public static Sms SmsAlarm;
-                public static List<Device> OrdDevices,SelDevices;
+                public static Dictionary<byte, CancellationTokenSource> CancelTokens;
+                public static Dictionary<byte, List<Device>> ZoneDevices;
         }
 }

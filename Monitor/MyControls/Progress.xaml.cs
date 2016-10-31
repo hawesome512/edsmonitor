@@ -49,11 +49,11 @@ namespace Monitor
                                 if (Show)
                                 {
                                         Brush bg = new SolidColorBrush(Color.FromArgb(0xff, 0x00, 0x96, 0x88));
-                                        string img = "pack://application:,,,/Monitor;component/Images/done.png";
+                                        string img = "pack://application:,,,/EDS;component/Images/done.png";
                                         if (hasError)
                                         {
                                                 bg = Brushes.Red;
-                                                img = "pack://application:,,,/Monitor;component/Images/wrong.png";
+                                                img = "pack://application:,,,/EDS;component/Images/wrong.png";
                                         }
                                         Card.Background = bg;
                                         lbl_wait.Visibility = Visibility.Hidden;

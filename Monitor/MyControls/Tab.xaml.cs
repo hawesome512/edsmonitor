@@ -250,7 +250,7 @@ namespace Monitor
                         double spaceY = (gridY - items.Length / 3 * 200 * factorY) / (items.Length / 3 + 1);
                         for (int i = 0; i < items.Length; i++)
                         {
-                                Dial dial = items[i].StartsWith("I") ? initCurDial() : dial = initVolDial();
+                                Dial dial = items[i].StartsWith("I") ? initCurDial() : initVolDial();
                                 string path = string.Format("State.{0}", items[i]);
                                 Binding bind = new Binding(path);
                                 dial.myGauge2.SetBinding(CircularGauge.CircularGaugeControl.CurrentValueProperty, bind);

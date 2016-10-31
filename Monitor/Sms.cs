@@ -12,8 +12,10 @@ namespace Monitor
 {
         public class Sms
         {
+                private Dictionary<string, DateTime> smsHistory;
                 public Sms()
                 {
+                        smsHistory = new Dictionary<string, DateTime>();
                         XmlElement root = Tool.GetXML(@"Config/SMS.xml");
                         Url = root.SelectSingleNode("//URL").InnerText;
                         Appkey = root.SelectSingleNode("//APPKEY").InnerText;
@@ -56,6 +58,19 @@ namespace Monitor
 
                 public void SendSms(string address, string info)
                 {
+                        string record = string.Format("{0}_{1}", address, info);
+                        if (smsHistory.Keys.Contains(record))
+                        {
+                                double interval = (smsHistory[record] - DateTime.Now).TotalMinutes;
+                                if (interval <= 10)
+                                {
+                                        return;
+                                }
+                        }
+                        else
+                        {
+                                smsHistory.Add(record, DateTime.Now);
+                        }
                         try
                         {
                                 ITopClient client = new DefaultTopClient(Url, Appkey, Secret);
@@ -71,7 +86,7 @@ namespace Monitor
                         }
                         catch
                         {
-                                MsgBox.Show("请检查短信报警设置情况！", "发送短信失败", MsgBox.Buttons.OK, MsgBox.Icon.Error, MsgBox.AnimateStyle.FadeIn);
+                                //MsgBox.Show("请检查短信报警设置情况！", "发送短信失败", MsgBox.Buttons.OK, MsgBox.Icons.Error);
                         }
                 }
         }

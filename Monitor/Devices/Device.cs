@@ -22,6 +22,11 @@ namespace Monitor
                         get;
                         set;
                 }
+                public string ZoneName
+                {
+                        get;
+                        set;
+                }
                 public byte Address
                 {
                         get;
@@ -56,14 +61,30 @@ namespace Monitor
                         get;
                         set;
                 }
+                private int needParamsNum = 1;//初始时应当采集一次
+                public int NeedParamsNum
+                {
+                        get
+                        {
+                                return needParamsNum;
+                        }
+                        set
+                        {
+                                needParamsNum = value;
+                                //预防未知Bug
+                                needParamsNum = needParamsNum < 0 ? 0 : needParamsNum;
+                                needParamsNum = needParamsNum > 10 ? 10 : needParamsNum;
+                        }
+                }
                 protected ComConverter comcvt = new ComConverter();
                 protected int nComFailed;
                 public event EventHandler<EventArgs> PreRemoteModify, RemoteModified;
-                public bool HasInited = false;
+                //public bool HasInited = false;
 
-                public void InitDevice(byte zid,byte addr, DeviceType type, string name, string alias, byte parent)
+                public void InitDevice(byte zid, string zoneName, byte addr, DeviceType type, string name, string alias, byte parent)
                 {
                         ZID = zid;
+                        ZoneName = zoneName;
                         Address = addr;
                         DvType = type;
                         Name = name;
@@ -162,8 +183,94 @@ namespace Monitor
                                         this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("State"));
                         }
                 }
+
+                protected List<PlanData> _plans=new List<PlanData>();
+                public List<PlanData> Plans
+                {
+                        get
+                        {
+                                return _plans;
+                        }
+                        set
+                        {
+                                _plans = value;
+                        }
+                }
+
                 public virtual void updateState()
                 {
+                }
+
+                //为了模拟仿真而设定的属性，后期应当移除
+                private double nISlider=0.4;
+                public double ISlider
+                {
+                        get
+                        {
+                                return nISlider;
+                        }
+                        set
+                        {
+                                if (value >= 0.1 && value <= 1)
+                                {
+                                        nISlider = value;
+                                }
+                        }
+                }
+                protected virtual void simulateState(string command = null)
+                {
+                        NeedParamsNum = 0;
+                        Params["Ir"].ShowValue = "1";
+                        DState state = new DState();
+                        state.ControlState = ControlMode.Remote;
+                        state.SwitchState = State.SwitchState == SwitchStatus.Unknown ? SwitchStatus.Close : State.SwitchState;
+                        if (command != null)
+                        {
+                                state.SwitchState = (SwitchStatus)Enum.Parse(typeof(SwitchStatus), command);
+                        }
+                        state.RunState = Run.Normal;
+                        int nIn;
+                        if (int.TryParse(Alias, out nIn) && state.SwitchState != SwitchStatus.Open)
+                        {
+                                var children = Common.ZoneDevices[ZID].FindAll(d => d.ParentAddr == Address && d.DvType != DeviceType.ACREL);
+                                double factor;
+                                if (children.Count == 0)
+                                {
+                                        Random random = new Random();
+                                        factor =Math.Round(random.Next(10) / 100f + nISlider-0.1,2);
+                                        state.Ia = factor * nIn + random.Next(5);
+                                        state.Ib = factor * nIn + random.Next(5);
+                                        state.Ic = factor * nIn + random.Next(5);
+                                }
+                                else
+                                {
+                                        state.Ia = children.Sum(d => d.State.Ia);
+                                        state.Ib = children.Sum(d => d.State.Ib);
+                                        state.Ic = children.Sum(d => d.State.Ic);
+                                        var max = new double[] { state.Ia, state.Ib, state.Ic }.Max();
+                                        factor = max / nIn;
+                                }
+                                if (factor > nISlider||factor>0.85)
+                                {
+                                        state.RunState = Run.Alarm;
+                                        Common.SmsAlarm.SendSms(Address.ToString(),"电流过载");
+                                }
+                        }
+                        State = state;
+
+                        //执行计划任务
+                        foreach (PlanData plan in Plans)
+                        {
+                                if (plan.ExecuteNow())
+                                {
+                                        if (!plan.Time.Contains("工作日") && !plan.Time.Contains("节假日"))
+                                        {
+                                                Plans.Remove(plan);
+                                        }
+                                        RemoteControl(plan.getAction());
+                                        break;
+                                }
+                        }
                 }
                 #endregion
 
@@ -177,19 +284,30 @@ namespace Monitor
                         {
                                 //第一片区：只读一次
                                 //第二片区：循环读取
-                                //第三片区：进入设备页时循环读取
+                                //第三片区：NeedParamsNum>0读取
+                                if (MyCom.GetComType() == ComType.SL)
+                                {
+                                        simulateState();
+                                        System.Threading.Thread.Sleep(100);
+                                        return;
+                                }
                                 if (_basicData["Device"].ShowValue == null)
                                 {
                                         _basicData = getZoneData(_basicData, 0);
                                 }
                                 _realData = getZoneData(_realData, 1);
-                                if (Address == Common.SelectedAddress || _params["LocalOrRemote"].ShowValue == null)
+                                if (NeedParamsNum-- > 0 || _params["LocalOrRemote"].ShowValue == null)
                                 {
                                         _params = getZoneData(_params, 2);
                                 }
                                 updateState();
                         }
-                        HasInited = true;
+                        else
+                        {
+                                nComFailed++;
+                                nComFailed = nComFailed == 15 ? 4 : nComFailed;
+                        }
+                        //HasInited = true;
                 }
 
                 protected Dictionary<string, DValues> getZoneData(Dictionary<string, DValues> dic, int zoneIndex = -1)
@@ -200,7 +318,7 @@ namespace Monitor
                         snd[2] = (byte)(addr / 256);
                         snd[3] = (byte)(addr % 256);
                         snd[5] = (byte)length;
-                        byte[] rcv = MyCom.Execute(snd, zoneIndex);
+                        byte[] rcv = MyCom.Execute(ZID, snd, zoneIndex);
                         //只有0000/1000/2000片区数据需要通过WCF共享zoneIndex=0/1/2
                         if (zoneIndex != -1)
                         {
@@ -220,6 +338,7 @@ namespace Monitor
                                 {
                                         dv.ShowValue = null;
                                 }
+
                                 dic[keys[i]] = dv;
                         }
                         return dic;
@@ -231,7 +350,7 @@ namespace Monitor
                 {
                         PreRemoteModify(this, null);
                         System.Threading.Thread.Sleep(2000);
-                        int tag = Common.IsServer ?-1:3;
+                        int tag = Common.IsServer ? -1 : 3;
 
                         byte[] snd = GetValidParams(dataList);
                         int len = snd.Length / 4 * 2;//参数成对出现，必须为偶数
@@ -245,11 +364,11 @@ namespace Monitor
                         baseSnd[3] = 0x02;
                         baseSnd[5] = (byte)(snd1.Length / 2);
                         baseSnd[6] = (byte)snd1.Length;
-                        byte[] rcv1 = MyCom.Execute(baseSnd.Concat(snd1).ToArray(),tag);
+                        byte[] rcv1 = MyCom.Execute(ZID, baseSnd.Concat(snd1).ToArray(), tag);
                         baseSnd[3] = (byte)(2 + snd1.Length);
                         baseSnd[5] = (byte)(snd2.Length / 2);
                         baseSnd[6] = (byte)snd2.Length;
-                        byte[] rcv2 = MyCom.Execute(baseSnd.Concat(snd2).ToArray(),tag);
+                        byte[] rcv2 = MyCom.Execute(ZID, baseSnd.Concat(snd2).ToArray(), tag);
 
                         RemoteModified(this, null);
                         if (rcv1.Length == 1 && rcv2.Length == 1)
@@ -267,6 +386,11 @@ namespace Monitor
 
                 public byte[] RemoteControl(string p)
                 {
+                        if (MyCom.GetComType() == ComType.SL)
+                        {
+                                simulateState(p);
+                                return null;
+                        }
                         byte[] snd = GetValidRemote(p);
                         return Remote(snd);
                 }
@@ -277,8 +401,8 @@ namespace Monitor
                 {
                         PreRemoteModify(this, null);
                         System.Threading.Thread.Sleep(2000);
-                        int tag = Common.IsServer ? -1:3;
-                        var result = MyCom.Execute(snd, tag);
+                        int tag = Common.IsServer ? -1 : 3;
+                        var result = MyCom.Execute(ZID, snd, tag);
                         RemoteModified(this, null);
                         return result;
                 }
@@ -336,7 +460,7 @@ namespace Monitor
                         {
                                 context.Trip.Add(new Trip()
                                 {
-                                        ZID=this.ZID,
+                                        ZID = this.ZID,
                                         Address = this.Address,
                                         Time = DateTime.Now,
                                         Phase = TripData["Phase"].ShowValue,
@@ -393,12 +517,12 @@ namespace Monitor
                 public virtual List<Trip> QueryTrip(DateTime start, DateTime end)
                 {
                         if (!Common.IsServer)
-                                return MyCom.QueryTrip(Address, start, end);
+                                return MyCom.QueryTrip(ZID, Address, start, end);
 
                         using (EDSEntities context = new EDSEntities())
                         {
                                 var result = from m in context.Trip
-                                             where m.ZID==this.ZID&& m.Address == this.Address && (m.Time >= start && m.Time <= end)
+                                             where m.ZID == this.ZID && m.Address == this.Address && (m.Time >= start && m.Time <= end)
                                              orderby m.Time descending
                                              select m;
                                 return result.ToList();

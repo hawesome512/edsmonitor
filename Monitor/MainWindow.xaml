@@ -49,17 +49,23 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Margin="7,0" Grid.Column="0">
-                <Border x:Name="border_grid" Width="140" Height="28" Margin="50,0,0,0">
+                <Border x:Name="border_list" Width="140" Height="28" Margin="50,0,0,0">
                     <Border.Background>
                         <ImageBrush ImageSource="/Images/01.png" />
                     </Border.Background>
-                    <TextBlock x:Name="txt_grid" Text="配电网" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="14" FontWeight="Bold"></TextBlock>
+                    <TextBlock x:Name="txt_list" Text="监控区域" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="14" FontWeight="Bold"></TextBlock>
+                </Border>
+                <Border x:Name="border_zone" Width="140" Height="28">
+                    <Border.Background>
+                        <ImageBrush ImageSource="/Images/02.png" />
+                    </Border.Background>
+                    <TextBlock x:Name="txt_zone" Text="区域" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="14" FontWeight="Bold"></TextBlock>
                 </Border>
                 <Border x:Name="border_device" Width="140" Height="28">
                     <Border.Background>
                         <ImageBrush ImageSource="/Images/02.png" />
                     </Border.Background>
-                    <TextBlock x:Name="txt_device" Text="设备页面" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="14" FontWeight="Bold"></TextBlock>
+                    <TextBlock x:Name="txt_device" Text="设备" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="14" FontWeight="Bold"></TextBlock>
                 </Border>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="7,0" Grid.Column="1" HorizontalAlignment="Right">
@@ -117,8 +123,8 @@
             <local:Network x:Name="network" Visibility="Hidden"></local:Network>
             <local:Energy x:Name="energy" Visibility="Hidden"></local:Energy>
             <local:DevicePage x:Name="dvPage" Grid.Row="2" Visibility="Hidden"></local:DevicePage>
-            <!--<local:MyDataGrid x:Name="dvDevices" Grid.Row="2" Visibility="Hidden"></local:MyDataGrid>-->
-            <Image x:Name="img_link" Grid.Row="2" Visibility="Hidden" Source="/Monitor;component/Images/指示图.png"></Image>
+            <local:DeviceList x:Name="deviceList" Grid.Row="2" Visibility="Hidden"></local:DeviceList>
+            <Image x:Name="img_link" Grid.Row="2" Visibility="Hidden" Source="/EDS;component/Images/指示图.png"></Image>
             <local:Progress x:Name="progress" Grid.Row="2" Width="100" Height="100"></local:Progress>
         </Grid>
 

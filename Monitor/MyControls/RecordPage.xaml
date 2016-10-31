@@ -25,17 +25,17 @@
         <Label Name="txt_error" Grid.Row="1" Foreground="Red" Content="此类型设备暂未提供脱扣记录查询功能"></Label>
         <DataGrid x:Name="dg_trips" Grid.Row="1" CanUserAddRows="True" ItemsSource="{Binding}" SelectionUnit="FullRow"  AutoGenerateColumns="False" Visibility="Hidden" SelectionChanged="dg_trips_SelectionChanged">
             <DataGrid.Columns>
-                <DataGridTextColumn Width="150" Header="脱扣时间"  Binding="{Binding Time,StringFormat=\{0:yyyy/MM/dd HH:mm:ss\}}"/>
-                <DataGridTextColumn Width="90" Header="脱扣相极"  Binding="{Binding Phase}"/>
-                <DataGridTextColumn Width="90" Header="故障类型"  Binding="{Binding Type}"/>
-                <DataGridTextColumn Width="90" Header="Ia(A)"  Binding="{Binding Ia}"/>
-                <DataGridTextColumn Width="90" Header="Ib(A)"  Binding="{Binding Ib}"/>
-                <DataGridTextColumn Width="90" Header="Ic(A)"  Binding="{Binding Ic}"/>
-                <DataGridTextColumn Width="90" Header="IN(A)"  Binding="{Binding IN}"/>
-                <DataGridTextColumn Width="90" Header="整定电流(A)"  Binding="{Binding It}"/>
-                <DataGridTextColumn Width="90" Header="整定时间(S)"  Binding="{Binding Tt}"/>
-                <DataGridTextColumn Width="90" Header="故障电流(A)"  Binding="{Binding Ip}"/>
-                <DataGridTextColumn Width="90" Header="脱扣延时(S)"  Binding="{Binding Tp}"/>
+                <DataGridTextColumn Width="2*" Header="脱扣时间"  Binding="{Binding Time,StringFormat=\{0:yyyy/MM/dd HH:mm:ss\}}"/>
+                <DataGridTextColumn Width="1*" Header="脱扣相极"  Binding="{Binding Phase}"/>
+                <DataGridTextColumn Width="1*" Header="故障类型"  Binding="{Binding Type}"/>
+                <DataGridTextColumn Width="1*" Header="Ia(A)"  Binding="{Binding Ia}"/>
+                <DataGridTextColumn Width="1*" Header="Ib(A)"  Binding="{Binding Ib}"/>
+                <DataGridTextColumn Width="1*" Header="Ic(A)"  Binding="{Binding Ic}"/>
+                <DataGridTextColumn Width="1*" Header="IN(A)"  Binding="{Binding IN}"/>
+                <DataGridTextColumn Width="1*" Header="整定电流(A)"  Binding="{Binding It}"/>
+                <DataGridTextColumn Width="1*" Header="整定时间(S)"  Binding="{Binding Tt}"/>
+                <DataGridTextColumn Width="1*" Header="故障电流(A)"  Binding="{Binding Ip}"/>
+                <DataGridTextColumn Width="1*" Header="脱扣延时(S)"  Binding="{Binding Tp}"/>
             </DataGrid.Columns>
         </DataGrid>
         <WindowsFormsHost Name="myHost" Grid.Row="2">

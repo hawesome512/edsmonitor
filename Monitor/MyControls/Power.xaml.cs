@@ -37,31 +37,34 @@ namespace Monitor
                 /// </summary>
                 public void InitPower()
                 {
-                        bool hasUps = false;
-                        if (Common.IsServer)
+                        Task.Factory.StartNew(new Action(() =>
                         {
-                                hasUps = Tool.GetConfig("UPS") == "true";
-                                if (!hasUps)
+                                bool hasUps = false;
+                                if (Common.IsServer)
                                 {
-                                        UpsState = "no ups";
+                                        hasUps = Tool.GetConfig("UPS") == "true";
+                                        if (!hasUps)
+                                        {
+                                                UpsState = "no ups";
+                                        }
                                 }
-                        }
-                        else
-                        {
-                                UpsState = getUpsState();
-                                hasUps = UpsState != "no ups";
-                        }
-                        if (hasUps)
-                        {
-                                timer = new Timer((s) =>
+                                else
                                 {
-                                        updateUps();
-                                }, null, 0, 1000 * 60);
-                        }
-                        else
-                        {
-                                this.Visibility = Visibility.Hidden;
-                        }
+                                        UpsState = getUpsState();
+                                        hasUps = UpsState != "no ups"&&UpsState!=null;
+                                }
+                                if (hasUps)
+                                {
+                                        timer = new Timer((s) =>
+                                        {
+                                                updateUps();
+                                        }, null, 0, 1000 * 60);
+                                }
+                                else
+                                {
+                                        this.Visibility = Visibility.Hidden;
+                                }
+                        }));
                 }
 
                 void updateUps()
@@ -69,16 +72,23 @@ namespace Monitor
                         UpsState = getUpsState();
                         if (string.IsNullOrEmpty(UpsState))
                         {
-                                MsgBox.Show("请查看UPS设置是否正确；\r\n若无UPS请修改[系统设置]→[供电系统]，修改后重启生效", "UPS通信失败", MsgBox.Buttons.OK, MsgBox.Icon.Error, MsgBox.AnimateStyle.FadeIn);
                                 timer.Dispose();
                                 this.Dispatcher.Invoke(new Action(() =>
                                 {
+                                        if (Common.IsServer)
+                                        {
+                                                MsgBox.Show("请查看UPS设置是否正确；\r\n若无UPS请修改[系统设置]→[供电系统]，修改后重启生效", "UPS通信失败", MsgBox.Buttons.OK, MsgBox.Icons.Error);
+                                        }
                                         this.Visibility = Visibility.Hidden;
                                 }));
                                 return;
                         }
                         UpsState = UpsState.Substring(1, UpsState.Length - 2);
                         var states = UpsState.Split(' ');
+                        if (states.Length != 8)
+                        {
+                                return;
+                        }
                         int nState = int.Parse(states[7]);
                         string strState = null;
                         for (int i = 0; i < stateArray.Length; i++)
@@ -92,12 +102,12 @@ namespace Monitor
                         string strColor = "#009688";
                         if (strState == null)
                         {
-                                packUri = "pack://application:,,,/Monitor;component/Images/power_on.png";
+                                packUri = "pack://application:,,,/EDS;component/Images/power_on.png";
                                 strState = "正常";
                         }
                         else
                         {
-                                packUri = "pack://application:,,,/Monitor;component/Images/power_off.png";
+                                packUri = "pack://application:,,,/EDS;component/Images/power_off.png";
                                 strColor = "#f13737";
                                 if (lastSmsAlarmTime == null || (DateTime.Now - lastSmsAlarmTime).TotalHours > 1)
                                 {
@@ -119,18 +129,37 @@ namespace Monitor
                         {
                                 using (SerialPort sp = new SerialPort(Tool.GetConfig("UPSCom")))
                                 {
-                                        sp.BaudRate = 2400;
-                                        byte[] snd = new byte[] { 0x51, 0x31, 0x0d };
-                                        sp.Open();
-                                        sp.Write(snd, 0, snd.Length);
-                                        System.Threading.Thread.Sleep(500);
-                                        return sp.ReadExisting();
+                                        try
+                                        {
+                                                sp.BaudRate = 2400;
+                                                byte[] snd = new byte[] { 0x51, 0x31, 0x0d };
+                                                sp.Open();
+                                                sp.Write(snd, 0, snd.Length);
+                                                System.Threading.Thread.Sleep(500);
+                                                return sp.ReadExisting();
+                                        }
+                                        catch
+                                        {
+                                                return null;
+                                        }
                                 }
                         }
                         else
                         {
                                 ServiceReference1.EDSServiceClient wcf = new ServiceReference1.EDSServiceClient();
-                                string upsState = wcf.GetUpsState();
+                                //wcf.Endpoint.Binding.SendTimeout = new TimeSpan(0, 0, 3);
+                                string upsState = null;
+                                try
+                                {
+                                        upsState = wcf.GetUpsState();
+                                }
+                                catch
+                                {
+                                        this.Dispatcher.Invoke(new Action(() =>
+                                        {
+                                                MsgBox.Show("服务器未开启或已经关闭！", "连接失败", MsgBox.Buttons.OK, MsgBox.Icons.Error);
+                                        }));
+                                }
                                 wcf.Close();
                                 return upsState;
                         }

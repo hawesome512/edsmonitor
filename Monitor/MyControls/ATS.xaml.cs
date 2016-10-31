@@ -24,5 +24,23 @@ namespace Monitor
                 {
                         InitializeComponent();
                 }
+
+                public void InitATS(Device device,bool showImage)
+                {
+                        if (showImage)
+                        {
+                                ATSImage.Visibility = Visibility.Visible;
+                                ATSRect.Visibility = Visibility.Hidden;
+                        }
+                        else
+                        {
+                                ATSImage.Visibility = Visibility.Hidden;
+                                ATSRect.Visibility = Visibility.Visible;
+                                this.DataContext = device.Dependence;
+                                Binding binding = new Binding("[0].State");
+                                binding.Converter = new StateToATSConverter();
+                                ATS_State.SetBinding(Line.X2Property, binding);
+                        }
+                }
         }
 }

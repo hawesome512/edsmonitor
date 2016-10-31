@@ -24,5 +24,32 @@ namespace Monitor
                 {
                         InitializeComponent();
                 }
+
+                public void InitMIC(Device device,bool showImage)
+                {
+                        breakerMenu.InitMenu(device);
+                        List<string> sources = Tool.GetDeviceDependence(device);
+                        this.DataContext = device.Dependence;
+                        line_1.SetBinding(Line.StrokeProperty, Tool.addMulBinding(sources));
+                        line_2.SetBinding(Line.StrokeProperty, Tool.addMulBinding(sources));
+                        line_3.SetBinding(Line.StrokeProperty, Tool.addMulBinding(sources));
+                        line_4.SetBinding(Line.StrokeProperty, Tool.addMulBinding(sources));
+                        line_2.SetBinding(Line.OpacityProperty, Tool.addBinding("[0].State", new StateToCloseConverter()));
+                        if (showImage)
+                        {
+                                micImage.Visibility = Visibility.Visible;
+                                micRect.Visibility = Visibility.Hidden;
+                        }
+                        else
+                        {
+                                micImage.Visibility = Visibility.Hidden;
+                                micRect.Visibility = Visibility.Visible;
+                        }
+                }
+
+                private void Label_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+                {
+                        breakerMenu.menu.IsOpen = true;
+                }
         }
 }

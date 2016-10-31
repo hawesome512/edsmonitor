@@ -7,11 +7,11 @@ using System.Windows;
 // 关于程序集的一般信息通过以下 
 // 属性集来控制。请更改这些属性值以修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("Shihlin EDS")]
+[assembly: AssemblyTitle("士林电机电力监控系统")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Shihlin")]
-[assembly: AssemblyProduct("Monitor")]
+[assembly: AssemblyProduct("EDS")]
 [assembly: AssemblyCopyright("Copyright © Shihlin 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -51,5 +51,5 @@ using System.Windows;
 // 您可以指定所有值，或者可以默认修订号和内部版本号，
 // 方法是按如下方式使用 "*":
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.8.0")]
-[assembly: AssemblyFileVersion("1.0.8.0")]
+[assembly: AssemblyVersion("3.1.0.9")]
+[assembly: AssemblyFileVersion("3.1.0.9")]

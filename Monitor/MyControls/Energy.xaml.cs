@@ -134,6 +134,8 @@ namespace Monitor
                         XmlElement selNode = tree_area.SelectedItem as XmlElement;
                         if (selNode != null)
                         {
+                                progress.start();
+                                myHost1.Visibility = myHost2.Visibility = Visibility.Hidden;
                                 getDates();
                                 int num = selNode.ChildNodes.Count;
                                 int[] addrs = new int[num + 1];
@@ -153,6 +155,8 @@ namespace Monitor
 
                                         this.Dispatcher.Invoke(new Action(() =>
                                         {
+                                                progress.end();
+                                                myHost1.Visibility = myHost2.Visibility = Visibility.Visible;
                                                 title.Content = string.Format("{0}  能耗分析  {1}-{2}  (单位：kWh)", string.Join("/", selNode.Attributes["Name"].Value), start.ToString("yyyy/MM/dd"), end.ToString("yyyy/MM/dd"));
                                                 setColData(dataForCol);
                                                 setPieData(selNode, dataForPie);
@@ -190,7 +194,7 @@ namespace Monitor
                         }
                         else
                         {
-                                MsgBox.Show("请选择需要显示的区域.", "未选择区域", MsgBox.Buttons.OK, MsgBox.Icon.Error, MsgBox.AnimateStyle.FadeIn);
+                                MsgBox.Show("请选择需要显示的区域.", "未选择区域", MsgBox.Buttons.OK, MsgBox.Icons.Error);
                         }
                 }
 
@@ -209,7 +213,7 @@ namespace Monitor
 
                 private ImageSource getImgSource(double flag)
                 {
-                        string url = flag > 0 ? "pack://application:,,,/Monitor;component/Images/up.png" : "pack://application:,,,/Monitor;component/Images/down.png";
+                        string url = flag > 0 ? "pack://application:,,,/EDS;component/Images/up.png" : "pack://application:,,,/EDS;component/Images/down.png";
                         return (new ImageSourceConverter().ConvertFromString(url) as ImageSource);
                 }
 

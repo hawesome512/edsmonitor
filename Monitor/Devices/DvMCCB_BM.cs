@@ -123,9 +123,9 @@ namespace Monitor
                                                         if (nIn <= 250)
                                                         {
                                                                 nSwH = Tool.BitSet(nSwH, 0, 0);
-                                                                items[0] = "短路/Off/Off";
+                                                                items[0] = "短路/OFF/OFF";
                                                         }
-                                                        items[1] = "瞬动/On/On";
+                                                        items[1] = "瞬动/ON/ON";
                                                         nSwH = Tool.BitSet(nSwH, 1, 1);//瞬动不能关闭，但上位机可以修改铁电
                                                         d.ShowValue = (nSwH).ToString();
                                                         d.Tag = string.Join("_", items);
@@ -222,7 +222,7 @@ namespace Monitor
                 public override List<Record> QueryData(DateTime start, DateTime end)
                 {
                         if (!Common.IsServer)
-                                return MyCom.QueryData(Address, start, end);
+                                return MyCom.QueryData(ZID,Address, start, end);
                         using (EDSEntities context = new EDSEntities())
                         {
                                 var result = from m in context.Record_MCCB

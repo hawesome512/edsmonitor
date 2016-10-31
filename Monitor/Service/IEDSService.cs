@@ -11,22 +11,19 @@ namespace Monitor
         public interface IEDSService
         {
                 [OperationContract]
-                byte[] UpdateDevice(byte address,int zoneIndex);
+                byte[] UpdateDevice(byte zid,byte address,int zoneIndex);
 
                 [OperationContract]
-                byte[] RemoteControl(byte[] snd);
+                byte[] RemoteControl(byte zid,byte[] snd);
 
                 [OperationContract]
-                Record[] QueryData(byte address,DateTime start, DateTime end);
+                Record[] QueryData(byte zid,byte address,DateTime start, DateTime end);
 
                 [OperationContract]
-                EDSLot.Trip[] QueryTrip(byte address,DateTime start, DateTime end);
+                EDSLot.Trip[] QueryTrip(byte zid,byte address,DateTime start, DateTime end);
 
                 [OperationContract]
-                void ChangeSelAddress(byte address);
-
-                [OperationContract]
-                void ChangeSelZone(byte zid);
+                void ChangeDeviceLiveness(byte zid, byte address, int liveness);
 
                 [OperationContract]
                 EDSLot.Energy[] QueryEnergy(int[] addrs, DateTime start, DateTime end);

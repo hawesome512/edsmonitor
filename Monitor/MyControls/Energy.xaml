@@ -20,7 +20,7 @@
             </HierarchicalDataTemplate.ItemsSource>
         </HierarchicalDataTemplate>
     </UserControl.Resources>
-    <Grid>
+    <Grid Name="content">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="255"></ColumnDefinition>
             <ColumnDefinition Width="2*"></ColumnDefinition>
@@ -102,5 +102,6 @@
             <Label Name="txt_avg" Grid.Row="4" Grid.Column="1"  VerticalAlignment="Center" HorizontalAlignment="Left"/>
             <Label Name="txt_sum" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
         </Grid>
+        <local:Progress x:Name="progress" Grid.ColumnSpan="3" Grid.RowSpan="2" Width="100" Height="100"/>
     </Grid>
 </UserControl>

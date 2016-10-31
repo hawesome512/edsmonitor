@@ -8,55 +8,45 @@ namespace Monitor
 {
         public class EDSService:IEDSService
         {
-                public byte[] UpdateDevice(byte address,int zoneIndex)
+                public byte[] UpdateDevice(byte zid,byte address,int zoneIndex)
                 {
-                        Device dv = Common.SelDevices.Find(d => d.Address == address);
-                        if (dv == null)
+                        Device device = Common.ZoneDevices[zid].Find(d => d.Address == address);
+                        if (device == null)
                                 return null;
-                        return dv.DataList[zoneIndex];
+                        return device.DataList[zoneIndex];
                 }
 
-                public byte[] RemoteControl(byte[] snd)
+                public byte[] RemoteControl(byte zid,byte[] snd)
                 {
-                        Device dv = Common.SelDevices.Find(d => d.Address == snd[0]);
-                        if (dv == null)
+                        Device device = Common.ZoneDevices[zid].Find(d => d.Address == snd[0]);
+                        if (device == null)
                                 return null;
-                        return dv.Remote(snd);
+                        return device.Remote(snd);
                 }
 
-                public Record[] QueryData(byte address, DateTime start, DateTime end)
+                public Record[] QueryData(byte zid,byte address, DateTime start, DateTime end)
                 {
-                        Device dv = Common.SelDevices.Find(d => d.Address == address);
-                        if (dv == null)
+                        Device device = Common.ZoneDevices[zid].Find(d => d.Address == address);
+                        if (device == null)
                                 return null;
-                        return dv.QueryData(start, end).ToArray();
+                        return device.QueryData(start, end).ToArray();
                 }
 
-                public EDSLot.Trip[] QueryTrip(byte address, DateTime start, DateTime end)
+                public EDSLot.Trip[] QueryTrip(byte zid,byte address, DateTime start, DateTime end)
                 {
-                        Device dv = Common.SelDevices.Find(d => d.Address == address);
-                        if (dv == null)
+                        Device device = Common.ZoneDevices[zid].Find(d => d.Address == address);
+                        if (device == null)
                                 return null;
-                        return dv.QueryTrip(start, end).ToArray();
+                        return device.QueryTrip(start, end).ToArray();
                 }
 
-
-                public void ChangeSelAddress(byte address)
+                public void ChangeDeviceLiveness(byte zid, byte address, int liveness)
                 {
-                        Common.SelectedAddress = address;
-                }
-
-                public void ChangeSelZone(byte zid)
-                {
-                        if (zid == 0)
+                        Device device= Common.ZoneDevices[zid].Find(d => d.Address == address);
+                        if (device != null)
                         {
-                                Common.OrdDevices.AddRange(Common.SelDevices);
-                                Common.SelDevices.Clear();
-                        }
-                        else
-                        {
-                                Common.SelDevices = Common.OrdDevices.FindAll(d => d.ZID == zid);
-                                Common.OrdDevices.RemoveAll(d => d.ZID == zid);
+                                //        device.NeedParamsNum += liveness;
+                                device.NeedParamsNum = liveness;
                         }
                 }
 

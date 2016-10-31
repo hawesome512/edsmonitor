@@ -7,6 +7,64 @@ namespace Monitor
 {
         public class DvATS : Device
         {
+                protected override void simulateState(string command = null)
+                {
+                        NeedParamsNum = 0;
+                        DState state = new DState();
+                        state.ControlState = ControlMode.Remote;
+                        if (state.SwitchState != SwitchStatus.Open)
+                        {
+                                var children = Common.ZoneDevices[ZID].FindAll(d => d.ParentAddr == Address && d.DvType != DeviceType.ACREL);
+                                if (children.Count != 0)
+                                {
+                                        state.Ia = children.Sum(d => d.State.Ia);
+                                        state.Ib = children.Sum(d => d.State.Ib);
+                                        state.Ic = children.Sum(d => d.State.Ic);
+                                }
+                        }
+                        if (checkNState(3))
+                        {
+                                if (State.SwitchState == SwitchStatus.ATS_R)
+                                {
+                                        state.SwitchState = SwitchStatus.Open;
+                                        Common.SmsAlarm.SendSms(Address.ToString(), "ATS投市电");
+                                }
+                                else
+                                {
+                                        state.SwitchState = SwitchStatus.ATS_N;
+                                }
+                        }
+                        else
+                        {
+                                if (State.SwitchState == SwitchStatus.ATS_N)
+                                {
+                                        state.SwitchState = SwitchStatus.Open;
+                                        Common.SmsAlarm.SendSms(Address.ToString(), "ATS投备电");
+                                }
+                                else
+                                {
+                                        state.SwitchState = SwitchStatus.ATS_R;
+                                }
+                        }
+                        state.RunState = Run.Normal;
+                        State = state;
+                }
+
+                private bool checkNState(byte parent)
+                {
+                        Device dvP = this;
+                        dvP.ParentAddr = parent;
+                        while (dvP.ParentAddr != 0)
+                        {
+                                dvP = Common.ZoneDevices[ZID].Find(d => d.ZID == dvP.ZID && d.Address == dvP.ParentAddr);
+                                if (dvP.State.SwitchState == SwitchStatus.Open)
+                                {
+                                        return false;
+                                }
+                        }
+                        return true;
+                }
+
                 public override void updateState()
                 {
                         DState state = new DState();
@@ -41,16 +99,16 @@ namespace Monitor
                                 }
 
                                 data = int.Parse(RealData["SysErrType"].ShowValue);
-                                if (data> 0)
+                                if (data > 0)
                                         state.RunState = Run.Alarm;
                                 else
                                         state.RunState = Run.Normal;
                                 string[] items = RealData["SysErrType"].Tag.Split('_');
                                 for (int i = 0; i < items.Length; i++)
                                 {
-                                        if(Tool.isOne(data,i))
+                                        if (Tool.isOne(data, i))
                                         {
-                                                state.ErrorMsg += items[i]+" ";
+                                                state.ErrorMsg += items[i] + " ";
                                         }
                                 }
 
@@ -144,7 +202,7 @@ namespace Monitor
                 private string getTag(string tag, int index, int length)
                 {
                         List<string> tags = new List<string>(tag.Split('_'));
-                        tags = tags.Where((value, id) => id == 0 || (id>= index && id < index + length)).ToList();
+                        tags = tags.Where((value, id) => id == 0 || (id >= index && id < index + length)).ToList();
                         return string.Join("_", tags.ToArray());
                 }
 
@@ -170,11 +228,11 @@ namespace Monitor
                         else if (regex2.IsMatch(tag))
                         {
                                 var array1 = tag.Split('_');
-                                var array2 = array1[1].Split('*').ToList().ConvertAll(s => float.Parse(s)*10);
+                                var array2 = array1[1].Split('*').ToList().ConvertAll(s => float.Parse(s) * 10);
                                 List<string> array3 = new List<string>();
                                 for (float i = array2[0]; i <= array2[2]; i += array2[1])
                                 {
-                                        array3.Add((i/10).ToString("0.0"));
+                                        array3.Add((i / 10).ToString("0.0"));
                                 }
                                 return array1[0] + "_" + string.Join("_", array3.ToArray());
                         }

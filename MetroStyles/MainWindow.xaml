@@ -3,18 +3,20 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <Button Style="{StaticResource StandardButton}" Margin="10,10,402,253" Content="按钮Button"></Button>
-        <ComboBox Margin="156,10,180,281" Style="{StaticResource StandardComboBox}">
+        <Button  Margin="10,10,402,253" Content="按钮Button"></Button>
+        <ComboBox Margin="156,10,180,281">
             <ComboBoxItem>July</ComboBoxItem>
             <ComboBoxItem>July</ComboBoxItem>
             <ComboBoxItem>July</ComboBoxItem>
             <ComboBoxItem>July</ComboBoxItem>
         </ComboBox>
-        <ListBox Margin="365,10,10,128" Style="{StaticResource StandardListBox}">
+        <ListBox Margin="365,10,10,128">
             <ListBoxItem>1</ListBoxItem>
             <ListBoxItem>1</ListBoxItem>
             <ListBoxItem>1</ListBoxItem>
         </ListBox>
-        <TextBox Margin="10,87,402,201" Style="{StaticResource StandardTextBox}" Text="TextBox" VerticalAlignment="Center"></TextBox>
+        <TextBox Margin="10,87,402,201" Text="TextBox" VerticalAlignment="Center"></TextBox>
+        
+        <Slider HorizontalAlignment="Left" Margin="230,95,0,0" VerticalAlignment="Top" Height="205" Width="15" Orientation="Vertical" Minimum="3" Value="5" SmallChange="1" LargeChange="2" IsSnapToTickEnabled="True"/>
     </Grid>
 </Window>
