@@ -248,9 +248,11 @@ namespace Monitor
                                 string zoneName = zone.GetAttribute("ZoneName");
                                 ComType cType = ComType.WCF;
                                 string tag = "";
-                                if (Common.IsServer)
+
+                                string strCom = zone.GetAttribute("ComType");
+                                if (Common.IsServer||strCom=="SL")
                                 {
-                                        string strCom = zone.GetAttribute("ComType");
+                                        //string strCom = zone.GetAttribute("ComType");
                                         cType = (ComType)Enum.Parse(typeof(ComType), strCom);
                                         tag = zone.GetAttribute("Tag");
                                 }

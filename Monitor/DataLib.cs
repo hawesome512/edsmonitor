@@ -10,7 +10,7 @@ namespace Monitor
 {
         public class DataLib
         {
-                public static List<EDSLot.Energy> QueryEnergy(int[] addrs, DateTime start, DateTime end)
+                public static List<EDSLot.Energy> QueryEnergy(byte[] addrs, DateTime start, DateTime end)
                 {
                         if (!Common.IsServer)
                         {
@@ -70,7 +70,7 @@ namespace Monitor
                         });
                 }
 
-                private static void addChildrenData(EDSLot.EDSEntities context, List<EDSLot.Energy> dataList,int[] addrs,DateTime start,DateTime end)
+                private static void addChildrenData(EDSLot.EDSEntities context, List<EDSLot.Energy> dataList,byte[] addrs,DateTime start,DateTime end)
                 {
                         List<string> children = new List<string>();
                         List<double?> childValues = new List<double?>();

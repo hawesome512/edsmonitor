@@ -9,13 +9,31 @@
 
 namespace EDSLot
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class Energy
-    {
-        public System.DateTime Time { get; set; }
-        public int Address { get; set; }
-        public Nullable<double> PE { get; set; }
-    }
+        using System;
+        using System.Collections.Generic;
+        using System.ServiceModel;
+        using System.Runtime.Serialization;
+        
+        [DataContract]
+        public partial class Energy
+        {
+                [DataMember]
+                public System.DateTime Time
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public int Address
+                {
+                        get;
+                        set;
+                }
+                [DataMember]
+                public Nullable<double> PE
+                {
+                        get;
+                        set;
+                }
+        }
 }

@@ -63,11 +63,15 @@ namespace Monitor
                                 case 2:
                                         drawChengYu(showImage);
                                         break;
-                                case 3:
-                                        drawTest();
-                                        break;
                                 default:
-                                        drawSimulation(showImage);
+                                        if (devices[0].ZoneName == "模拟演示")
+                                        {
+                                                drawSimulation(showImage);
+                                        }
+                                        else
+                                        {
+                                                drawTest();
+                                        }
                                         break;
                         }
                         addSwitch(showImage);

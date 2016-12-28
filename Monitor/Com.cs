@@ -232,13 +232,16 @@ namespace Monitor
                         }
                 }
 
-                public List<EDSLot.Energy> QueryEnergy(int[] addrs, DateTime start, DateTime end)
+                public List<EDSLot.Energy> QueryEnergy(byte[] addrs, DateTime start, DateTime end)
                 {
                         if (wcf == null)
                         {
                                 wcf = new ServiceReference1.EDSServiceClient();
                         }
-                        return wcf.QueryEnergy(addrs, start, end).ToList();
+
+                        //临时试验 12/19
+                        var tmp = addrs.ToList().ConvertAll(a => Convert.ToInt32(a)).ToArray();
+                        return wcf.QueryEnergy(tmp, start, end).ToList();
                 }
         }
 }

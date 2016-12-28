@@ -138,11 +138,11 @@ namespace Monitor
                                 myHost1.Visibility = myHost2.Visibility = Visibility.Hidden;
                                 getDates();
                                 int num = selNode.ChildNodes.Count;
-                                int[] addrs = new int[num + 1];
-                                addrs[0] = int.Parse(selNode.Attributes["Address"].Value);
+                                byte[] addrs = new byte[num + 1];
+                                addrs[0] = byte.Parse(selNode.Attributes["Address"].Value);
                                 for (int i = 0; i < num; i++)
                                 {
-                                        addrs[i + 1] = int.Parse(selNode.ChildNodes[i].Attributes["Address"].Value);
+                                        addrs[i + 1] = byte.Parse(selNode.ChildNodes[i].Attributes["Address"].Value);
                                 }
                                 Task.Factory.StartNew(new Action(() =>
                                 {

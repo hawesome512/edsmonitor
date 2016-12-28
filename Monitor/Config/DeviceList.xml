@@ -67,7 +67,7 @@
       <Parent>1</Parent>
     </Device>
   </Zone>
-  <Zone ZID="3" ZoneName="测试" ComType="SP" Tag="COM10">
+  <!--<Zone ZID="3" ZoneName="测试" ComType="SP" Tag="COM10">
     <Device>
       <Type>MCCB_BMA</Type>
       <Name>BMA400</Name>
@@ -75,8 +75,8 @@
       <Address>1</Address>
       <Parent>0</Parent>
     </Device>
-  </Zone>
-  <Zone ZID="4" ZoneName="模拟演示" ComType="SL" Tag="">
+  </Zone>-->
+  <Zone ZID="3" ZoneName="模拟演示" ComType="SL" Tag="">
     <Device>
       <Type>ACB_2</Type>
       <Name>BW2000</Name>
